@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Firstname Lastname — Portfolio (Projects v2)">
+<BaseLayout title="Nicholas Theodorus Chan — Portfolio">
   <!-- ================== Hero ================== -->
   <section class="hero" aria-label="Intro">
     <h1>Building clean, testable products that ship.</h1>
@@ -270,13 +270,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </article>
 
       <article class="proj" data-kind="backend">
-        <div class="thumb" style="background-image:url('https://picsum.photos/800/450?random=33')"></div>
+        <div class="thumb" style="background-image:url('/ResumeAITool.png'); filter: blur(3px);"></div>
         <div class="body">
-          <div class="title">Packing Slip Gen — Spring Boot</div>
+          <div class="title">ResumeAI Tool — OpenAI</div>
           <div class="meta">
-            <span class="badge">Spring Boot</span><span class="badge">MySQL</span><span class="badge">Docker</span>
+            <span class="badge">OpenAI</span><span class="badge">Python</span><span class="badge">PDF</span>
           </div>
-          <div class="impact muted">"99.2% endpoint success; PDF batch export."</div>
+          <div class="impact muted">"+85% parsing accuracy; supports most resume formats."</div>
           <div class="row">
             <button class="quick" data-modal="m3">Quick-view</button>
             <div class="actions"><a class="link" href="#">Case Study →</a></div>
@@ -289,17 +289,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <!-- ================== About ================== -->
   <section id="about" class="about" aria-labelledby="about-title">
     <h2 id="about-title">About</h2>
-    <p class="muted">Short story about you (2–3 sentences). Add a sentence on how you work—tests, docs, clean interfaces—and what you're exploring now.</p>
-    <p class="muted"><strong>Skills:</strong> Frontend (React/JS/HTML/CSS) · Backend (Flask, Spring Boot) · Data/Infra (MySQL, Docker) · Tools (Git, CI, Linux)</p>
+    <p class="muted">
+      I am a senior CS student at UCSD with internship experience building fast, reliable web apps end-to-end. 
+      I've shipped AI résumé tools (Flask + React + MongoDB), built Spring Boot REST APIs with solid validation and low latency, 
+      and launched production sites with WordPress/Elementor, JavaScript, and Cloudflare, cutting up load times and errors while collaborating in small teams. 
+      I work test-first, write clear docs, and care about clean, practical interfaces. I'm eager to learn, open to feedback, and excited to grow into an SWE/SDE role while exploring scalable backends, 
+      workflow automation, and data-aware UX for real users.
+    </p>
+    <p class="muted"><strong>Skills:</strong> Frontend (React/JS/HTML/CSS, WordPress/Elementor) · Backend (Flask, Spring Boot, Django, Node/Express, PHP) · Data/Infra (MySQL/SQLite, MongoDB, Docker, Cloudflare) · Tools (Git/GitHub, REST APIs, CI, Linux, Bash)</p>
   </section>
 
   <!-- ================== Contact & Footer ================== -->
   <section id="contact" style="margin-top:48px">
     <h2>Contact</h2>
-    <p class="muted">Email me at <a class="link" href="mailto:email@example.com">email@example.com</a>. Based in City, State.</p>
+    <p class="muted">Email me at <a class="link" href="mailto:nicholastc14@gmail.com">nicholastc14@gmail.com</a>. Currently based in San Diego, CA.</p>
   </section>
 
-  <footer>© 2025 • Firstname Lastname</footer>
+  <footer>© 2025 • Nicholas Theodorus Chan</footer>
 </BaseLayout>
 
 <!-- ================== Quick-View Modals ================== -->
@@ -344,14 +350,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <dialog id="m3" class="modal">
   <div class="dialog" role="document" aria-labelledby="m3-title">
     <header>
-      <h3 id="m3-title">Packing Slip Generation — Spring Boot</h3>
+      <h3 id="m3-title">ResumeAI Tool — OpenAI</h3>
       <button class="modal-close" data-close="m3" aria-label="Close">✕</button>
     </header>
-    <p class="muted">Microservice to generate packing slips with batch PDF export.</p>
+    <p class="muted">AI-powered resume parsing tool with improved accuracy for multiple formats. <strong>In progress for intern work.</strong></p>
     <ul class="list">
-      <li>Shipped 7 endpoints; 99.2% success rate.</li>
-      <li>Dockerized; GitHub Actions for test & deploy.</li>
-      <li>MySQL migrations with Flyway; seed fixtures for QA.</li>
+      <li>Improved PDF parsing accuracy by 85% using advanced text extraction techniques.</li>
+      <li>Supports multiple resume formats including Word, PDF, and plain text documents.</li>
+      <li>Integrated OpenAI API for intelligent content analysis and structured data extraction.</li>
     </ul>
     <div class="actions">
       <a class="btn primary" href="#"><span class="shine"></span>Case Study →</a>
