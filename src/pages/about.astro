@@ -1,0 +1,512 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About — Nicholas Theodorus Chan">
+  <!-- ================== Main Hero ================== -->
+  <section class="hero" aria-label="Intro">
+    <h1>Hi, I'm Nicholas.</h1>
+    <p class="lead">Senior CS @ UCSD who ships clean, testable products. I build fast interfaces, solid backends, and sweat the tiny UX details that make apps feel "done".</p>
+    <div class="cta">
+      <a class="btn primary" href="#">Download Résumé<span class="shine"></span></a>
+      <a class="btn" href="#">Email Me<span class="shine"></span></a>
+    </div>
+  </section>
+
+  <!-- ================== About Hero ================== -->
+  <section class="about-hero" aria-label="About">
+    <div class="about-grid">
+      <!-- Placeholder Image -->
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=800&fit=crop" alt="Placeholder - Your photo here" />
+      </div>
+
+      <!-- About Card -->
+      <div class="about-card">
+        <h1>Builder, teammate, and systems thinker.</h1>
+        <p class="muted">
+          I've shipped AI résumé tools (Flask + React), built Spring Boot APIs with low latency, and launched WordPress/Elementor widgets with accessible, clean CSS. I work test-first, document decisions, and measure performance.
+        </p>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">99.2%</span>
+            <span class="stat-label">uptime across student projects</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">−42%</span>
+            <span class="stat-label">query time on a fitness app</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">3×</span>
+            <span class="stat-label">faster delivery with better CI</span>
+          </div>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="/#projects">See Projects<span class="shine"></span></a>
+          <a class="btn" href="#toolbox">Jump to Skills<span class="shine"></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================== Toolbox ================== -->
+  <section id="toolbox" class="toolbox" aria-labelledby="toolbox-title">
+    <div class="toolbox-header">
+      <div>
+        <h2 id="toolbox-title">Toolbox</h2>
+        <p class="muted">Stacks I use most often.</p>
+      </div>
+      <div class="layout-toggle" role="toolbar" aria-label="Layout">
+        <button id="gridViewBtn" aria-pressed="true" title="Grid">▦</button>
+        <button id="listViewBtn" aria-pressed="false" title="List">⋯</button>
+      </div>
+    </div>
+
+    <div class="toolbox-grid" id="toolboxGrid">
+      <div class="tool-card">
+        <h3>Frontend</h3>
+        <p class="muted">React, JS/TS, HTML/CSS, a11y, performance, charts.</p>
+        <div class="tags">
+          <span class="tag">React</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">ARIA</span>
+          <span class="tag">Chart.js</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <h3>Backend</h3>
+        <p class="muted">Flask, Spring Boot, Node/Express, auth, testing, CI.</p>
+        <div class="tags">
+          <span class="tag">Flask</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">Node</span>
+          <span class="tag">Pytest</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <h3>Data & Infra</h3>
+        <p class="muted">SQLite/MySQL, MongoDB, Docker, Cloudflare, caching.</p>
+        <div class="tags">
+          <span class="tag">SQLite</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">MongoDB</span>
+          <span class="tag">Docker</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <h3>Platforms</h3>
+        <p class="muted">WordPress/Elementor widgets, API integrations, SEO.</p>
+        <div class="tags">
+          <span class="tag">WordPress</span>
+          <span class="tag">Elementor</span>
+          <span class="tag">REST</span>
+          <span class="tag">SEO</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================== Timeline ================== -->
+  <section class="timeline" aria-labelledby="timeline-title">
+    <h2 id="timeline-title">Timeline</h2>
+
+    <div class="timeline-list">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>2025 — Weather/AQI Widget</h3>
+          <p class="muted">WP/Elementor widget combining Google Pollen & Air Quality with accessible charts.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>2024 — ResumeAI Tool</h3>
+          <p class="muted">Python + OpenAI PDF parsing with improved cross-format accuracy.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>2023 — GymApp</h3>
+          <p class="muted">Flask + React fitness tracker; −42% query time via indexing + caching.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================== Values ================== -->
+  <section class="values" aria-labelledby="values-title">
+    <h2 id="values-title">Values</h2>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <h3>Clarity</h3>
+        <p class="muted">Readable code, explicit contracts, good docs.</p>
+      </div>
+
+      <div class="value-card">
+        <h3>Performance</h3>
+        <p class="muted">Measure, fix bottlenecks, verify with data.</p>
+      </div>
+
+      <div class="value-card">
+        <h3>Accessibility</h3>
+        <p class="muted">Keyboard-first, labeled controls, real contrast.</p>
+      </div>
+
+      <div class="value-card">
+        <h3>Care</h3>
+        <p class="muted">Small UI touches that make tools feel friendly.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2025 • Nicholas Theodorus Chan</footer>
+</BaseLayout>
+
+<style is:global>
+  /* ================== About Hero ================== */
+  .about-hero {
+    padding: 48px 0 48px;
+  }
+
+  .about-grid {
+    display: grid !important;
+    grid-template-columns: 340px 1fr !important;
+    gap: 24px !important;
+    align-items: stretch !important;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .about-image {
+    border-radius: var(--radius);
+    overflow: hidden;
+    min-height: 400px;
+    max-height: 480px;
+    background: var(--surface);
+    border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    box-shadow: var(--shadow);
+  }
+
+  .about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-card {
+    background: var(--surface);
+    border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .about-card h1 {
+    font-size: clamp(26px, 3.5vw, 36px);
+    line-height: 1.2;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .about-card > .muted {
+    font-size: 15px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  /* Stats */
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat {
+    background: color-mix(in oklab, var(--surface) 85%, transparent);
+    border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-value {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ================== Toolbox ================== */
+  .toolbox {
+    margin-top: 48px;
+  }
+
+  .toolbox-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .toolbox-header h2 {
+    margin: 0 0 4px;
+  }
+
+  .layout-toggle {
+    display: flex;
+    gap: 6px;
+    border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    border-radius: 999px;
+    padding: 4px;
+    background: var(--surface);
+  }
+
+  .layout-toggle button {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    padding: 8px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .layout-toggle button[aria-pressed="true"] {
+    background: color-mix(in oklab, var(--accent) 18%, transparent);
+    color: var(--text);
+  }
+
+  .toolbox-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  @media (max-width: 1024px) {
+    .toolbox-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .toolbox-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .tool-card h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  .tool-card > .muted {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 12px;
+    color: var(--muted);
+    background: color-mix(in oklab, var(--surface) 60%, var(--bg));
+    border: 1px solid color-mix(in oklab, var(--line) 50%, transparent);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  /* ================== Timeline ================== */
+  .timeline {
+    margin-top: 64px;
+  }
+
+  .timeline h2 {
+    margin: 0 0 24px;
+  }
+
+  .timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 24px;
+  }
+
+  .timeline-list::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: color-mix(in oklab, var(--line) 80%, transparent);
+    border-radius: 2px;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -24px;
+    top: 24px;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px color-mix(in oklab, var(--accent) 60%, transparent);
+  }
+
+  .timeline-content {
+    background: var(--surface);
+    border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .timeline-content h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  .timeline-content .muted {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  /* ================== Values ================== */
+  .values {
+    margin-top: 64px;
+  }
+
+  .values h2 {
+    margin: 0 0 24px;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  @media (max-width: 1024px) {
+    .values-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .value-card {
+    background: var(--surface);
+    border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .value-card h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  .value-card .muted {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  /* ================== Footer ================== */
+  footer {
+    border-top: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    margin-top: 64px;
+    padding: 22px 0;
+    color: var(--muted);
+  }
+</style>
+
+<script>
+  /* ============= Toolbox layout toggle ============= */
+  (function(){
+    const gridBtn = document.getElementById('gridViewBtn');
+    const listBtn = document.getElementById('listViewBtn');
+    const grid = document.getElementById('toolboxGrid');
+    
+    if (!gridBtn || !listBtn || !grid) return;
+    
+    function setLayout(mode) {
+      const isList = mode === 'list';
+      grid.style.gridTemplateColumns = isList ? '1fr' : '';
+      gridBtn.setAttribute('aria-pressed', !isList);
+      listBtn.setAttribute('aria-pressed', isList);
+    }
+    
+    gridBtn.addEventListener('click', () => setLayout('grid'));
+    listBtn.addEventListener('click', () => setLayout('list'));
+  })();
+
+  /* ============= CTA cursor-light + ripple ============= */
+  (function(){
+    const btns = document.querySelectorAll('.btn');
+    const pos = (e, el) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+      el.style.setProperty('--mx', x + 'px'); el.style.setProperty('--my', y + 'px');
+    };
+    btns.forEach(el=>{
+      ['mousemove','touchmove'].forEach(ev => el.addEventListener(ev, (e)=>pos(e, el), {passive:true}));
+      el.addEventListener('mouseleave', ()=>{ el.style.removeProperty('--mx'); el.style.removeProperty('--my'); });
+      el.addEventListener('click', (e)=>{
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX ?? (e.touches?.[0]?.clientX)) - r.left;
+        const y = (e.clientY ?? (e.touches?.[0]?.clientY)) - r.top;
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple'; ripple.style.left = x + 'px'; ripple.style.top  = y + 'px';
+        el.appendChild(ripple); ripple.addEventListener('animationend', ()=> ripple.remove());
+      });
+    });
+  })();
+</script>
+
