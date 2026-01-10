@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio Design Proposal — 3D Minimal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ================== CSS Variables (Same as 2D) ================== */
+      :root {
+        --bg-primary: #06080d;
+        --bg-secondary: #0a0e17;
+        --bg-tertiary: #0f1520;
+        --surface: rgba(255, 255, 255, 0.03);
+        --surface-hover: rgba(255, 255, 255, 0.06);
+        --glass: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --accent-blue: #60a5fa;
+        --accent-purple: #a78bfa;
+        --accent-cyan: #22d3ee;
+        --glow-blue: rgba(96, 165, 250, 0.4);
+        --glow-purple: rgba(167, 139, 250, 0.4);
+        --gradient-text: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #a78bfa 50%,
+          #60a5fa 100%
+        );
+        --gradient-bg: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #818cf8 50%,
+          #a78bfa 100%
+        );
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 20px;
+        --radius-xl: 28px;
+        --shadow-glow: 0 0 60px -12px var(--glow-blue);
+        --font-sans: "Outfit", system-ui, -apple-system, sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+
+      /* ================== Reset & Base ================== */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* ================== Background Effects ================== */
+      .bg-grid {
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.015) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.015) 1px,
+            transparent 1px
+          );
+        background-size: 80px 80px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .bg-gradient-orbs {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.3;
+        animation: orbFloat 25s ease-in-out infinite;
+      }
+
+      .orb-1 {
+        width: 600px;
+        height: 600px;
+        background: var(--accent-blue);
+        top: -200px;
+        right: -100px;
+      }
+
+      .orb-2 {
+        width: 500px;
+        height: 500px;
+        background: var(--accent-purple);
+        bottom: -150px;
+        left: -100px;
+        animation-delay: -8s;
+      }
+
+      @keyframes orbFloat {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        33% {
+          transform: translate(20px, -20px) scale(1.02);
+        }
+        66% {
+          transform: translate(-15px, 15px) scale(0.98);
+        }
+      }
+
+      /* ================== Navigation (Same as 2D) ================== */
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 16px 32px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav.scrolled {
+        background: rgba(6, 8, 13, 0.85);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .nav-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--text-primary);
+      }
+
+      .logo-mark {
+        width: 42px;
+        height: 42px;
+        background: var(--gradient-bg);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        box-shadow: var(--shadow-glow);
+        position: relative;
+      }
+
+      .logo-text {
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: -0.02em;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-link {
+        padding: 10px 18px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-link:hover {
+        color: var(--text-primary);
+        background: var(--surface-hover);
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--gradient-bg);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-link:hover::after {
+        width: calc(100% - 36px);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .mode-toggle {
+        display: flex;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-sm);
+        padding: 4px;
+        gap: 4px;
+      }
+
+      .mode-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        font-family: var(--font-mono);
+      }
+
+      .mode-btn.active {
+        background: var(--gradient-bg);
+        color: white;
+        box-shadow: 0 2px 12px var(--glow-blue);
+      }
+
+      .mode-btn:not(.active):hover {
+        color: var(--text-secondary);
+        background: var(--surface-hover);
+      }
+
+      /* ================== Hero Section ================== */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 120px 32px 80px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+
+      .hero-content {
+        position: relative;
+      }
+
+      /* Floating Badges */
+      .floating-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+
+      .badge {
+        padding: 8px 16px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        backdrop-filter: blur(10px);
+        animation: badgeFloat 5s ease-in-out infinite;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .badge:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .badge:nth-child(2) {
+        animation-delay: -1s;
+      }
+      .badge:nth-child(3) {
+        animation-delay: -2s;
+      }
+      .badge:nth-child(4) {
+        animation-delay: -3s;
+      }
+
+      .badge-dot {
+        width: 6px;
+        height: 6px;
+        background: #22c55e;
+        border-radius: 50%;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes badgeFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .badge.accent {
+        background: linear-gradient(
+          135deg,
+          rgba(96, 165, 250, 0.15),
+          rgba(167, 139, 250, 0.15)
+        );
+        border-color: rgba(96, 165, 250, 0.3);
+        color: var(--accent-blue);
+      }
+
+      /* Hero Heading */
+      .hero-heading {
+        font-size: clamp(48px, 6vw, 76px);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin-bottom: 24px;
+      }
+
+      .hero-heading .line {
+        display: block;
+        overflow: hidden;
+      }
+
+      .hero-heading .line span {
+        display: inline-block;
+        animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        opacity: 0;
+        transform: translateY(100%);
+      }
+
+      .hero-heading .line:nth-child(1) span {
+        animation-delay: 0.1s;
+      }
+      .hero-heading .line:nth-child(2) span {
+        animation-delay: 0.2s;
+      }
+
+      @keyframes slideUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .gradient-text {
+        background: var(--gradient-text);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 6s ease-in-out infinite;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .hero-description {
+        font-size: 18px;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        max-width: 500px;
+        margin-bottom: 36px;
+        animation: fadeIn 0.8s ease 0.4s forwards;
+        opacity: 0;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* CTA Buttons */
+      .hero-cta {
+        display: flex;
+        gap: 16px;
+        animation: fadeIn 0.8s ease 0.5s forwards;
+        opacity: 0;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: var(--radius-md);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        border: none;
+        font-family: var(--font-sans);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary {
+        background: var(--gradient-bg);
+        color: white;
+        box-shadow: 0 4px 24px var(--glow-blue);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 40px var(--glow-blue);
+      }
+
+      .btn-secondary {
+        background: var(--glass);
+        color: var(--text-primary);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(10px);
+      }
+
+      .btn-secondary:hover {
+        background: var(--surface-hover);
+        border-color: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .btn-icon {
+        transition: transform 0.3s ease;
+      }
+
+      .btn:hover .btn-icon {
+        transform: translateX(4px);
+      }
+
+      /* ================== 3D Hero Visual ================== */
+      .hero-visual {
+        position: relative;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        perspective: 1000px;
+      }
+
+      .hero-3d-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.1s ease-out;
+      }
+
+      /* 3D Floating Geometric Shape */
+      .geo-shape {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 280px;
+        height: 280px;
+        transform-style: preserve-3d;
+        animation: geoRotate 20s linear infinite;
+      }
+
+      @keyframes geoRotate {
+        0% {
+          transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotateX(360deg) rotateY(360deg);
+        }
+      }
+
+      .geo-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(96, 165, 250, 0.08),
+          rgba(167, 139, 250, 0.08)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(2px);
+      }
+
+      .geo-face.front {
+        transform: translateZ(140px);
+      }
+      .geo-face.back {
+        transform: rotateY(180deg) translateZ(140px);
+      }
+      .geo-face.left {
+        transform: rotateY(-90deg) translateZ(140px);
+      }
+      .geo-face.right {
+        transform: rotateY(90deg) translateZ(140px);
+      }
+      .geo-face.top {
+        transform: rotateX(90deg) translateZ(140px);
+      }
+      .geo-face.bottom {
+        transform: rotateX(-90deg) translateZ(140px);
+      }
+
+      /* Inner Sphere */
+      .inner-sphere {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120px;
+        height: 120px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(96, 165, 250, 0.4),
+          rgba(167, 139, 250, 0.2) 50%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        box-shadow: 0 0 60px rgba(96, 165, 250, 0.3),
+          0 0 120px rgba(167, 139, 250, 0.2),
+          inset 0 0 40px rgba(255, 255, 255, 0.1);
+        animation: spherePulse 4s ease-in-out infinite;
+      }
+
+      @keyframes spherePulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 0.8;
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.05);
+          opacity: 1;
+        }
+      }
+
+      /* Floating Rings */
+      .orbit-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        transform-style: preserve-3d;
+      }
+
+      .orbit-ring.ring-1 {
+        width: 350px;
+        height: 350px;
+        transform: translate(-50%, -50%) rotateX(75deg);
+        animation: ringOrbit 15s linear infinite;
+      }
+
+      .orbit-ring.ring-2 {
+        width: 400px;
+        height: 400px;
+        transform: translate(-50%, -50%) rotateX(75deg) rotateY(45deg);
+        animation: ringOrbit 20s linear infinite reverse;
+      }
+
+      .orbit-ring.ring-3 {
+        width: 320px;
+        height: 320px;
+        transform: translate(-50%, -50%) rotateX(60deg) rotateZ(30deg);
+        animation: ringOrbit 12s linear infinite;
+      }
+
+      @keyframes ringOrbit {
+        0% {
+          transform: translate(-50%, -50%) rotateX(75deg) rotateZ(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotateX(75deg) rotateZ(360deg);
+        }
+      }
+
+      /* Floating Particles */
+      .particle-3d {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: var(--accent-blue);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--accent-blue);
+      }
+
+      .particle-3d:nth-child(1) {
+        top: 20%;
+        left: 20%;
+        animation: particleFloat3d 8s ease-in-out infinite;
+      }
+
+      .particle-3d:nth-child(2) {
+        top: 70%;
+        right: 25%;
+        background: var(--accent-purple);
+        box-shadow: 0 0 10px var(--accent-purple);
+        animation: particleFloat3d 10s ease-in-out infinite -2s;
+      }
+
+      .particle-3d:nth-child(3) {
+        top: 40%;
+        right: 15%;
+        animation: particleFloat3d 7s ease-in-out infinite -4s;
+      }
+
+      .particle-3d:nth-child(4) {
+        bottom: 25%;
+        left: 30%;
+        background: var(--accent-purple);
+        box-shadow: 0 0 10px var(--accent-purple);
+        animation: particleFloat3d 9s ease-in-out infinite -1s;
+      }
+
+      @keyframes particleFloat3d {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+          opacity: 0.6;
+        }
+        25% {
+          transform: translate(10px, -15px) scale(1.2);
+          opacity: 1;
+        }
+        50% {
+          transform: translate(-5px, 10px) scale(0.8);
+          opacity: 0.8;
+        }
+        75% {
+          transform: translate(15px, 5px) scale(1.1);
+          opacity: 0.9;
+        }
+      }
+
+      /* Glassmorphism Info Card */
+      .info-card-3d {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-md);
+        padding: 16px 24px;
+        backdrop-filter: blur(20px);
+        display: flex;
+        gap: 24px;
+        animation: fadeIn 1s ease 0.8s forwards;
+        opacity: 0;
+      }
+
+      .info-item {
+        text-align: center;
+      }
+
+      .info-value {
+        font-size: 20px;
+        font-weight: 700;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .info-label {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      /* ================== Scroll Indicator ================== */
+      .scroll-indicator {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-muted);
+        font-size: 12px;
+        animation: fadeIn 1s ease 1s forwards;
+        opacity: 0;
+      }
+
+      .scroll-mouse {
+        width: 24px;
+        height: 38px;
+        border: 2px solid var(--text-muted);
+        border-radius: 12px;
+        position: relative;
+      }
+
+      .scroll-wheel {
+        width: 4px;
+        height: 8px;
+        background: var(--text-muted);
+        border-radius: 2px;
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: scrollBounce 1.5s ease-in-out infinite;
+      }
+
+      @keyframes scrollBounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+          opacity: 1;
+        }
+        50% {
+          transform: translateX(-50%) translateY(8px);
+          opacity: 0.3;
+        }
+      }
+
+      /* ================== Projects Section ================== */
+      .section {
+        padding: 120px 32px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .section-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 64px;
+      }
+
+      .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--accent-blue);
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: clamp(32px, 5vw, 48px);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 16px;
+      }
+
+      .section-description {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Bento Grid */
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 280px);
+        gap: 24px;
+      }
+
+      .bento-card {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+        padding: 28px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bento-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.4),
+          0 0 40px -10px var(--glow-blue);
+      }
+
+      .bento-card.featured {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+
+      .bento-card.featured .card-image {
+        flex: 1;
+        background: linear-gradient(
+          135deg,
+          var(--bg-tertiary),
+          var(--bg-secondary)
+        );
+        border-radius: var(--radius-md);
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        color: var(--text-muted);
+      }
+
+      .card-tag {
+        display: inline-flex;
+        padding: 6px 12px;
+        background: rgba(96, 165, 250, 0.1);
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--accent-blue);
+        margin-bottom: 16px;
+        width: fit-content;
+      }
+
+      .card-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .card-arrow {
+        width: 32px;
+        height: 32px;
+        background: var(--surface);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .bento-card:hover .card-arrow {
+        background: var(--gradient-bg);
+        transform: translateX(4px);
+      }
+
+      .card-description {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      .card-stack {
+        display: flex;
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 16px;
+      }
+
+      .stack-item {
+        padding: 6px 12px;
+        background: var(--surface);
+        border-radius: 6px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+      }
+
+      /* ================== Footer ================== */
+      .footer {
+        padding: 48px 32px;
+        border-top: 1px solid var(--glass-border);
+        position: relative;
+        z-index: 1;
+      }
+
+      .footer-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .footer-text {
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 24px;
+      }
+
+      .footer-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+      }
+
+      .footer-link:hover {
+        color: var(--accent-blue);
+      }
+
+      /* ================== Responsive ================== */
+      @media (max-width: 1024px) {
+        .hero-inner {
+          grid-template-columns: 1fr;
+          gap: 60px;
+        }
+
+        .hero-visual {
+          height: 400px;
+        }
+
+        .bento-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .bento-card.featured {
+          grid-column: span 2;
+          grid-row: span 1;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .hero {
+          padding: 100px 20px 60px;
+        }
+
+        .hero-visual {
+          height: 300px;
+        }
+
+        .geo-shape {
+          width: 200px;
+          height: 200px;
+        }
+
+        .bento-grid {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto;
+        }
+
+        .bento-card.featured {
+          grid-column: span 1;
+        }
+
+        .info-card-3d {
+          display: none;
+        }
+      }
+
+      /* ================== Design Label ================== */
+      .design-label {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--gradient-bg);
+        padding: 12px 20px;
+        border-radius: var(--radius-md);
+        font-size: 13px;
+        font-weight: 600;
+        color: white;
+        z-index: 9999;
+        box-shadow: 0 4px 24px var(--glow-blue);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background Effects -->
+    <div class="bg-grid"></div>
+    <div class="bg-gradient-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <div class="logo-mark">N</div>
+          <span class="logo-text">Nicholas Chan</span>
+        </a>
+
+        <div class="nav-links">
+          <a href="#" class="nav-link">Home</a>
+          <a href="#" class="nav-link">Projects</a>
+          <a href="#" class="nav-link">About</a>
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <div class="mode-toggle">
+            <button class="mode-btn">2D</button>
+            <button class="mode-btn active">3D</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-content">
+          <div class="floating-badges">
+            <div class="badge">
+              <span class="badge-dot"></span>
+              Open to Work
+            </div>
+            <div class="badge accent">UCSD '25</div>
+            <div class="badge">React</div>
+            <div class="badge">Flask</div>
+          </div>
+
+          <h1 class="hero-heading">
+            <span class="line"><span>Hi, I'm</span></span>
+            <span class="line"
+              ><span class="gradient-text">Nicholas.</span></span
+            >
+          </h1>
+
+          <p class="hero-description">
+            Senior CS @ UCSD who ships clean, testable products. I build fast
+            interfaces, solid backends, and sweat the tiny UX details that make
+            apps feel "done".
+          </p>
+
+          <div class="hero-cta">
+            <a href="#" class="btn btn-primary">
+              Download Résumé
+              <svg
+                class="btn-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+            <a href="#" class="btn btn-secondary"> Email Me </a>
+          </div>
+        </div>
+
+        <!-- 3D Hero Visual -->
+        <div class="hero-visual" id="heroVisual">
+          <div class="hero-3d-container" id="hero3d">
+            <!-- Floating Particles -->
+            <div class="particle-3d"></div>
+            <div class="particle-3d"></div>
+            <div class="particle-3d"></div>
+            <div class="particle-3d"></div>
+
+            <!-- Orbit Rings -->
+            <div class="orbit-ring ring-1"></div>
+            <div class="orbit-ring ring-2"></div>
+            <div class="orbit-ring ring-3"></div>
+
+            <!-- 3D Geometric Shape -->
+            <div class="geo-shape" id="geoShape">
+              <div class="geo-face front"></div>
+              <div class="geo-face back"></div>
+              <div class="geo-face left"></div>
+              <div class="geo-face right"></div>
+              <div class="geo-face top"></div>
+              <div class="geo-face bottom"></div>
+            </div>
+
+            <!-- Inner Glowing Sphere -->
+            <div class="inner-sphere"></div>
+          </div>
+
+          <!-- Info Card -->
+          <div class="info-card-3d">
+            <div class="info-item">
+              <div class="info-value">12+</div>
+              <div class="info-label">Projects</div>
+            </div>
+            <div class="info-item">
+              <div class="info-value">3</div>
+              <div class="info-label">Years Exp</div>
+            </div>
+            <div class="info-item">
+              <div class="info-value">15+</div>
+              <div class="info-label">Technologies</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <div class="scroll-mouse">
+          <div class="scroll-wheel"></div>
+        </div>
+        <span>Scroll to explore</span>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+      <div class="section-inner">
+        <div class="section-header">
+          <div class="section-label"><span>📂</span> Selected Work</div>
+          <h2 class="section-title">Featured Projects</h2>
+          <p class="section-description">
+            A collection of projects I've built, from AI tools to full-stack
+            applications.
+          </p>
+        </div>
+
+        <div class="bento-grid">
+          <article class="bento-card featured">
+            <div class="card-image">🏋️</div>
+            <div class="card-tag">Full-Stack</div>
+            <h3 class="card-title">
+              GymApp — Flask + React
+              <span class="card-arrow">→</span>
+            </h3>
+            <p class="card-description">
+              A comprehensive fitness tracker with exercise builder, progress
+              predictions, and workout planning.
+            </p>
+            <div class="card-stack">
+              <span class="stack-item">Flask</span>
+              <span class="stack-item">React</span>
+              <span class="stack-item">MongoDB</span>
+            </div>
+          </article>
+
+          <article class="bento-card">
+            <div class="card-tag">AI / ML</div>
+            <h3 class="card-title">
+              ResumeAI Tool
+              <span class="card-arrow">→</span>
+            </h3>
+            <p class="card-description">
+              AI-powered resume parsing with 85% improved accuracy.
+            </p>
+            <div class="card-stack">
+              <span class="stack-item">OpenAI</span>
+              <span class="stack-item">Python</span>
+            </div>
+          </article>
+
+          <article class="bento-card">
+            <div class="card-tag">WordPress</div>
+            <h3 class="card-title">
+              Pollen Atlas
+              <span class="card-arrow">→</span>
+            </h3>
+            <p class="card-description">
+              Elementor widget with Google APIs and charts.
+            </p>
+            <div class="card-stack">
+              <span class="stack-item">PHP</span>
+              <span class="stack-item">JS</span>
+            </div>
+          </article>
+
+          <article class="bento-card">
+            <div class="card-tag">Productivity</div>
+            <h3 class="card-title">
+              ProductivityHelper
+              <span class="card-arrow">→</span>
+            </h3>
+            <p class="card-description">
+              Task management with focus mode and planning.
+            </p>
+            <div class="card-stack">
+              <span class="stack-item">React</span>
+              <span class="stack-item">Node.js</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <p class="footer-text">
+          © 2025 Nicholas Chan. Built with ♥ and lots of coffee.
+        </p>
+        <div class="footer-links">
+          <a href="#" class="footer-link">GitHub</a>
+          <a href="#" class="footer-link">LinkedIn</a>
+          <a href="#" class="footer-link">Email</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Design Label -->
+    <div class="design-label">3D Minimal Design Proposal (v2)</div>
+
+    <script>
+      // ================== Navbar Scroll Effect ================== //
+      const nav = document.getElementById("nav");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          nav.classList.add("scrolled");
+        } else {
+          nav.classList.remove("scrolled");
+        }
+      });
+
+      // ================== 3D Mouse Tracking ================== //
+      const hero3d = document.getElementById("hero3d");
+      const geoShape = document.getElementById("geoShape");
+      const heroVisual = document.getElementById("heroVisual");
+
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+
+      document.addEventListener("mousemove", (e) => {
+        const { innerWidth, innerHeight } = window;
+        mouseX = (e.clientX / innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / innerHeight - 0.5) * 2;
+      });
+
+      function animate() {
+        // Smooth interpolation
+        targetX += (mouseX - targetX) * 0.05;
+        targetY += (mouseY - targetY) * 0.05;
+
+        // Apply subtle rotation to 3D container
+        if (hero3d) {
+          hero3d.style.transform = `
+          rotateY(${targetX * 10}deg)
+          rotateX(${-targetY * 8}deg)
+        `;
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      // ================== Scroll Animations ================== //
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".bento-card").forEach((card, i) => {
+        card.style.opacity = "0";
+        card.style.transform = "translateY(30px)";
+        card.style.transition = `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${
+          i * 0.1
+        }s`;
+        observer.observe(card);
+      });
+
+      // ================== Floating Badges Parallax ================== //
+      const badges = document.querySelectorAll(".badge");
+
+      document.addEventListener("mousemove", (e) => {
+        const { innerWidth, innerHeight } = window;
+        const x = (e.clientX / innerWidth - 0.5) * 2;
+        const y = (e.clientY / innerHeight - 0.5) * 2;
+
+        badges.forEach((badge, i) => {
+          const offset = (i + 1) * 3;
+          badge.style.transform = `translateX(${x * offset}px) translateY(${
+            y * offset
+          }px)`;
+        });
+      });
+    </script>
+  </body>
+</html>

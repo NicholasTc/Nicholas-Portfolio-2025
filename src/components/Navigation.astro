@@ -1,0 +1,225 @@
+---
+// Navigation component with new premium design
+// Dark/Light mode toggle is a placeholder for now
+---
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="logo-mark">N</div>
+      <span class="logo-text">Nicholas Chan</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/#projects" class="nav-link">Projects</a>
+      <a href="/#about" class="nav-link">About</a>
+      <a href="/#contact" class="nav-link">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="lightModeBtn" aria-label="Light mode">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        </button>
+        <button class="mode-btn" id="darkModeBtn" aria-label="Dark mode">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 16px 32px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav.scrolled {
+    background: rgba(6, 8, 13, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .logo-mark {
+    width: 42px;
+    height: 42px;
+    background: var(--gradient-bg);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: var(--shadow-glow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .logo-mark::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: var(--gradient-bg);
+    border-radius: inherit;
+    z-index: -1;
+    animation: logoGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes logoGlow {
+    0%, 100% { opacity: 0.5; filter: blur(8px); }
+    50% { opacity: 0.8; filter: blur(12px); }
+  }
+
+  .logo-text {
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-link {
+    padding: 10px 18px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+    background: var(--surface-hover);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-bg);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  .nav-link:hover::after {
+    width: calc(100% - 36px);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mode-toggle {
+    display: flex;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .mode-btn {
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mode-btn.active {
+    background: var(--gradient-bg);
+    color: white;
+    box-shadow: 0 2px 12px var(--glow-blue);
+  }
+
+  .mode-btn:not(.active):hover {
+    color: var(--text-secondary);
+    background: var(--surface-hover);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .nav {
+      padding: 12px 20px;
+    }
+    
+    .nav-links {
+      display: none;
+    }
+
+    .logo-text {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Navbar scroll effect
+  const nav = document.getElementById('nav');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav?.classList.add('scrolled');
+    } else {
+      nav?.classList.remove('scrolled');
+    }
+  });
+
+  // Placeholder toggle (non-functional for now)
+  const lightBtn = document.getElementById('lightModeBtn');
+  const darkBtn = document.getElementById('darkModeBtn');
+  
+  lightBtn?.addEventListener('click', () => {
+    lightBtn.classList.add('active');
+    darkBtn?.classList.remove('active');
+  });
+  
+  darkBtn?.addEventListener('click', () => {
+    darkBtn.classList.add('active');
+    lightBtn?.classList.remove('active');
+  });
+</script>
+

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option A — Subtle Background Code Rain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #06080d;
+      --bg-secondary: #0a0e17;
+      --surface: rgba(255, 255, 255, 0.03);
+      --glass: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #60a5fa;
+      --accent-purple: #a78bfa;
+      --glow-blue: rgba(96, 165, 250, 0.4);
+      --gradient-text: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #60a5fa 100%);
+      --gradient-bg: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
+      --radius-md: 12px;
+      --font-sans: 'Outfit', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ================== CODE RAIN BACKGROUND ================== */
+    .code-rain-bg {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.06; /* Very subtle */
+    }
+
+    .rain-column {
+      position: absolute;
+      top: -100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: rainFall linear infinite;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--accent-blue);
+    }
+
+    .rain-column:nth-child(1) { left: 5%; animation-duration: 15s; animation-delay: 0s; }
+    .rain-column:nth-child(2) { left: 15%; animation-duration: 18s; animation-delay: -3s; }
+    .rain-column:nth-child(3) { left: 25%; animation-duration: 12s; animation-delay: -7s; }
+    .rain-column:nth-child(4) { left: 35%; animation-duration: 20s; animation-delay: -2s; }
+    .rain-column:nth-child(5) { left: 45%; animation-duration: 16s; animation-delay: -5s; }
+    .rain-column:nth-child(6) { left: 55%; animation-duration: 14s; animation-delay: -8s; }
+    .rain-column:nth-child(7) { left: 65%; animation-duration: 19s; animation-delay: -1s; }
+    .rain-column:nth-child(8) { left: 75%; animation-duration: 13s; animation-delay: -6s; }
+    .rain-column:nth-child(9) { left: 85%; animation-duration: 17s; animation-delay: -4s; }
+    .rain-column:nth-child(10) { left: 95%; animation-duration: 21s; animation-delay: -9s; }
+
+    @keyframes rainFall {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(200vh); }
+    }
+
+    .rain-char {
+      opacity: 0.8;
+      text-shadow: 0 0 10px var(--accent-blue);
+    }
+
+    .rain-char.highlight {
+      color: var(--accent-purple);
+      text-shadow: 0 0 15px var(--accent-purple);
+      opacity: 1;
+    }
+
+    /* ================== Background Orbs ================== */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.3;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--accent-blue);
+      top: -200px;
+      right: -100px;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--accent-purple);
+      bottom: -150px;
+      left: -100px;
+    }
+
+    /* ================== Hero ================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 32px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .floating-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      padding: 8px 16px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+    }
+
+    .badge.accent {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(167, 139, 250, 0.15));
+      border-color: rgba(96, 165, 250, 0.3);
+      color: var(--accent-blue);
+    }
+
+    .hero-heading {
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    .gradient-text {
+      background: var(--gradient-text);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 5s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-description {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      font-family: var(--font-sans);
+    }
+
+    .btn-primary {
+      background: var(--gradient-bg);
+      color: white;
+      box-shadow: 0 4px 24px var(--glow-blue);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px var(--glow-blue);
+    }
+
+    .btn-secondary {
+      background: var(--glass);
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Code Window */
+    .hero-visual {
+      perspective: 1000px;
+    }
+
+    .code-display {
+      transform: rotateY(-8deg) rotateX(4deg);
+      transition: transform 0.3s ease;
+    }
+
+    .code-display:hover {
+      transform: rotateY(-4deg) rotateX(2deg);
+    }
+
+    .code-window {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5), 0 0 60px -10px var(--glow-blue);
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .code-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .code-dot.red { background: #ff5f57; }
+    .code-dot.yellow { background: #ffbd2e; }
+    .code-dot.green { background: #28c840; }
+
+    .code-title {
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .code-body {
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .code-line { display: flex; gap: 16px; }
+    .line-number { color: var(--text-muted); min-width: 24px; text-align: right; }
+    .keyword { color: #c792ea; }
+    .string { color: #c3e88d; }
+    .variable { color: #f78c6c; }
+    .property { color: #ffcb6b; }
+    .bracket { color: #89ddff; }
+    .comment { color: #546e7a; font-style: italic; }
+    .function { color: #82aaff; }
+
+    /* Label */
+    .option-label {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--gradient-bg);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      z-index: 9999;
+      box-shadow: 0 4px 24px var(--glow-blue);
+    }
+
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .code-display { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- CODE RAIN - VERY SUBTLE BACKGROUND -->
+  <div class="code-rain-bg">
+    <div class="rain-column">
+      <span class="rain-char">const</span>
+      <span class="rain-char">function</span>
+      <span class="rain-char highlight">React</span>
+      <span class="rain-char">import</span>
+      <span class="rain-char">export</span>
+      <span class="rain-char">=></span>
+      <span class="rain-char">useState</span>
+      <span class="rain-char">props</span>
+      <span class="rain-char">async</span>
+      <span class="rain-char">await</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">class</span>
+      <span class="rain-char">extends</span>
+      <span class="rain-char">this</span>
+      <span class="rain-char highlight">Flask</span>
+      <span class="rain-char">new</span>
+      <span class="rain-char">for</span>
+      <span class="rain-char">while</span>
+      <span class="rain-char">if</span>
+      <span class="rain-char">else</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">let</span>
+      <span class="rain-char">var</span>
+      <span class="rain-char">true</span>
+      <span class="rain-char">false</span>
+      <span class="rain-char highlight">API</span>
+      <span class="rain-char">null</span>
+      <span class="rain-char">Array</span>
+      <span class="rain-char">Object</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">console</span>
+      <span class="rain-char">log</span>
+      <span class="rain-char">error</span>
+      <span class="rain-char">fetch</span>
+      <span class="rain-char highlight">MongoDB</span>
+      <span class="rain-char">JSON</span>
+      <span class="rain-char">parse</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">return</span>
+      <span class="rain-char">async</span>
+      <span class="rain-char">await</span>
+      <span class="rain-char">Promise</span>
+      <span class="rain-char highlight">Node</span>
+      <span class="rain-char">module</span>
+      <span class="rain-char">exports</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">import</span>
+      <span class="rain-char">from</span>
+      <span class="rain-char highlight">TypeScript</span>
+      <span class="rain-char">interface</span>
+      <span class="rain-char">type</span>
+      <span class="rain-char">enum</span>
+      <span class="rain-char">string</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">function</span>
+      <span class="rain-char">arrow</span>
+      <span class="rain-char">callback</span>
+      <span class="rain-char highlight">Python</span>
+      <span class="rain-char">def</span>
+      <span class="rain-char">class</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">map</span>
+      <span class="rain-char">filter</span>
+      <span class="rain-char">reduce</span>
+      <span class="rain-char highlight">SQL</span>
+      <span class="rain-char">SELECT</span>
+      <span class="rain-char">FROM</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">useState</span>
+      <span class="rain-char">useEffect</span>
+      <span class="rain-char highlight">Docker</span>
+      <span class="rain-char">container</span>
+      <span class="rain-char">image</span>
+    </div>
+    <div class="rain-column">
+      <span class="rain-char">git</span>
+      <span class="rain-char">commit</span>
+      <span class="rain-char">push</span>
+      <span class="rain-char highlight">GitHub</span>
+      <span class="rain-char">merge</span>
+    </div>
+  </div>
+
+  <!-- Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="floating-badges">
+          <div class="badge"><span class="badge-dot"></span> Open to Work</div>
+          <div class="badge accent">UCSD '25</div>
+          <div class="badge">React</div>
+          <div class="badge">Flask</div>
+        </div>
+
+        <h1 class="hero-heading">
+          <span>Hi, I'm</span><br>
+          <span class="gradient-text">Nicholas.</span>
+        </h1>
+
+        <p class="hero-description">
+          Senior CS @ UCSD who ships clean, testable products. I build fast interfaces, solid backends, and sweat the tiny UX details that make apps feel "done".
+        </p>
+
+        <div class="hero-cta">
+          <a href="#" class="btn btn-primary">Download Résumé →</a>
+          <a href="#" class="btn btn-secondary">Email Me</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="code-display">
+          <div class="code-window">
+            <div class="code-header">
+              <div class="code-dot red"></div>
+              <div class="code-dot yellow"></div>
+              <div class="code-dot green"></div>
+              <span class="code-title">portfolio.tsx</span>
+            </div>
+            <div class="code-body">
+              <div class="code-line"><span class="line-number">1</span><span><span class="keyword">const</span> <span class="variable">developer</span> <span class="bracket">=</span> <span class="bracket">{</span></span></div>
+              <div class="code-line"><span class="line-number">2</span><span>  <span class="property">name</span>: <span class="string">'Nicholas Chan'</span>,</span></div>
+              <div class="code-line"><span class="line-number">3</span><span>  <span class="property">role</span>: <span class="string">'Full-Stack Developer'</span>,</span></div>
+              <div class="code-line"><span class="line-number">4</span><span>  <span class="property">skills</span>: [<span class="string">'React'</span>, <span class="string">'Flask'</span>, <span class="string">'TS'</span>],</span></div>
+              <div class="code-line"><span class="line-number">5</span><span>  <span class="property">passion</span>: <span class="string">'Building products'</span>,</span></div>
+              <div class="code-line"><span class="line-number">6</span><span><span class="bracket">}</span>;</span></div>
+              <div class="code-line"><span class="line-number">7</span><span></span></div>
+              <div class="code-line"><span class="line-number">8</span><span><span class="comment">// Let's build something amazing</span></span></div>
+              <div class="code-line"><span class="line-number">9</span><span><span class="function">buildAwesome</span><span class="bracket">(</span><span class="variable">developer</span><span class="bracket">)</span>;</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="option-label">Option A — Subtle Background (6% opacity)</div>
+</body>
+</html>
+

@@ -1,0 +1,1088 @@
+---
+// Hero component with animated code window, dissolve effect, and matrix rain
+---
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="floating-badges">
+        <div class="badge"><span class="badge-dot"></span> Open to Work</div>
+        <div class="badge accent">UCSD '25</div>
+        <div class="badge">React</div>
+        <div class="badge">Flask</div>
+      </div>
+
+      <h1 class="hero-heading">
+        <span class="line"><span>Hi, I'm</span></span>
+        <span class="line"><span class="gradient-text">Nicholas.</span></span>
+      </h1>
+
+      <p class="hero-description">
+        Senior CS @ UCSD who ships clean, testable products. I build fast interfaces, 
+        solid backends, and sweat the tiny UX details that make apps feel "done".
+      </p>
+
+      <div class="hero-cta">
+        <a href="#" class="btn btn-primary">
+          Download Résumé
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="mailto:nicholastc14@gmail.com" class="btn btn-secondary">Email Me</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="code-display">
+        <div class="code-window">
+          <!-- Editor Header with Tabs -->
+          <div class="code-header">
+            <div class="window-controls">
+              <div class="code-dot red"></div>
+              <div class="code-dot yellow"></div>
+              <div class="code-dot green"></div>
+            </div>
+
+            <div class="editor-tabs">
+              <button class="editor-tab active" id="tabDetails">
+                <span class="tab-icon">📄</span>
+                Details
+              </button>
+              <button class="editor-tab" id="tabMatrix">
+                <span class="tab-icon">⚡</span>
+                Matrix
+              </button>
+            </div>
+
+            <span class="file-name">portfolio.tsx</span>
+          </div>
+
+          <!-- Code Body -->
+          <div class="code-body">
+            <!-- Static Code (Details View) -->
+            <div class="static-code" id="staticCode">
+              <div class="code-line">
+                <span class="line-number">1</span>
+                <span class="code-content"><span class="keyword">const</span> <span class="variable">developer</span> <span class="bracket">=</span> <span class="bracket">{</span></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">2</span>
+                <span class="code-content">  <span class="property">name</span>: <span class="string">'Nicholas Chan'</span>,</span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">3</span>
+                <span class="code-content">  <span class="property">role</span>: <span class="string">'Full-Stack Developer'</span>,</span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">4</span>
+                <span class="code-content">  <span class="property">skills</span>: [<span class="string">'React'</span>, <span class="string">'Flask'</span>, <span class="string">'TypeScript'</span>],</span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">5</span>
+                <span class="code-content">  <span class="property">passion</span>: <span class="string">'Building products'</span>,</span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">6</span>
+                <span class="code-content"><span class="bracket">}</span>;</span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">7</span>
+                <span class="code-content"></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">8</span>
+                <span class="code-content"><span class="comment">// Let's build something amazing</span></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">9</span>
+                <span class="code-content"><span class="function">buildAwesome</span><span class="bracket">(</span><span class="variable">developer</span><span class="bracket">)</span>;</span>
+              </div>
+            </div>
+
+            <!-- Dissolve Animation Container -->
+            <div class="dissolve-container" id="dissolveContainer"></div>
+
+            <!-- Matrix Rain View -->
+            <div class="matrix-view" id="matrixView">
+              <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Elements -->
+        <div class="float-element top-right">
+          <span class="icon">⚡</span> Fast & Reliable
+        </div>
+        <div class="float-element bottom-left">
+          <span class="icon">🎯</span> Detail-Oriented
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll-indicator">
+    <div class="scroll-mouse">
+      <div class="scroll-wheel"></div>
+    </div>
+    <span>SCROLL TO EXPLORE</span>
+  </div>
+</section>
+
+<style>
+  /* ================== Hero Section ================== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 32px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .hero-content {
+    position: relative;
+  }
+
+  /* Floating Badges */
+  .floating-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .badge {
+    padding: 8px 16px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    backdrop-filter: blur(10px);
+    animation: badgeFloat 4s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .badge:nth-child(1) { animation-delay: 0s; }
+  .badge:nth-child(2) { animation-delay: -0.5s; }
+  .badge:nth-child(3) { animation-delay: -1s; }
+  .badge:nth-child(4) { animation-delay: -1.5s; }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes badgeFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .badge.accent {
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(167, 139, 250, 0.15));
+    border-color: rgba(96, 165, 250, 0.3);
+    color: var(--accent-blue);
+  }
+
+  /* Hero Heading */
+  .hero-heading {
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+
+  .hero-heading .line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .hero-heading .line span {
+    display: inline-block;
+    animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  .hero-heading .line:nth-child(1) span { animation-delay: 0.1s; }
+  .hero-heading .line:nth-child(2) span { animation-delay: 0.2s; }
+
+  @keyframes slideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .gradient-text {
+    background: var(--gradient-text);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 5s ease-in-out infinite;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .hero-description {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin-bottom: 36px;
+    animation: fadeIn 0.8s ease 0.4s forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* CTA Buttons */
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    animation: fadeIn 0.8s ease 0.5s forwards;
+    opacity: 0;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border: none;
+    font-family: var(--font-sans);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: var(--gradient-bg);
+    color: white;
+    box-shadow: 0 4px 24px var(--glow-blue);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px var(--glow-blue);
+  }
+
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .btn-primary:hover::before {
+    opacity: 1;
+  }
+
+  .btn-secondary {
+    background: var(--glass);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface-hover);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .btn-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .btn:hover .btn-icon {
+    transform: translateX(4px);
+  }
+
+  /* Hero Visual */
+  .hero-visual {
+    position: relative;
+    perspective: 1000px;
+  }
+
+  .code-display {
+    position: relative;
+    transform: rotateY(-8deg) rotateX(4deg);
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+  }
+
+  .code-display:hover {
+    transform: rotateY(-4deg) rotateX(2deg);
+  }
+
+  .code-window {
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 
+      0 50px 100px -20px rgba(0, 0, 0, 0.5),
+      0 0 60px -10px var(--glow-purple),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Editor Header with Tabs */
+  .code-header {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .window-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+    border-right: 1px solid var(--glass-border);
+  }
+
+  .code-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .code-dot.red { background: #ff5f57; }
+  .code-dot.yellow { background: #ffbd2e; }
+  .code-dot.green { background: #28c840; }
+
+  .editor-tabs {
+    display: flex;
+    flex: 1;
+  }
+
+  .editor-tab {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .editor-tab:hover {
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .editor-tab.active {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom-color: var(--accent-blue);
+  }
+
+  .editor-tab .tab-icon {
+    font-size: 14px;
+  }
+
+  .file-name {
+    padding: 14px 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-left: auto;
+  }
+
+  /* Code Body */
+  .code-body {
+    position: relative;
+    min-height: 320px;
+    overflow: hidden;
+  }
+
+  .static-code {
+    position: absolute;
+    inset: 0;
+    padding: 24px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.8;
+    transition: opacity 0.5s ease;
+    z-index: 10;
+    background: var(--bg-secondary);
+  }
+
+  .static-code.hidden {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .code-line {
+    display: flex;
+    gap: 16px;
+  }
+
+  .line-number {
+    color: var(--text-muted);
+    user-select: none;
+    min-width: 24px;
+    text-align: right;
+  }
+
+  .code-content {
+    flex: 1;
+  }
+
+  .keyword { color: #c792ea; }
+  .function { color: #82aaff; }
+  .string { color: #c3e88d; }
+  .variable { color: #f78c6c; }
+  .comment { color: #546e7a; font-style: italic; }
+  .bracket { color: #89ddff; }
+  .property { color: #ffcb6b; }
+
+  /* Dissolve Animation */
+  .dissolve-container {
+    position: absolute;
+    inset: 0;
+    padding: 24px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.8;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 15;
+  }
+
+  .dissolve-container.active {
+    opacity: 1;
+  }
+
+  .dissolve-char {
+    display: inline-block;
+  }
+
+  .dissolve-char.falling {
+    animation: charFall 2.2s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+  }
+
+  @keyframes charFall {
+    0% {
+      transform: translateY(0) rotate(0deg) scale(1);
+      opacity: 1;
+      filter: blur(0);
+    }
+    10% {
+      transform: translateY(2px) rotate(0.5deg) scale(1);
+      opacity: 1;
+    }
+    25% {
+      transform: translateY(15px) rotate(2deg) scale(0.98);
+      opacity: 1;
+      filter: blur(0);
+    }
+    50% {
+      transform: translateY(80px) rotate(8deg) scale(0.95);
+      opacity: 0.85;
+      filter: blur(0.3px);
+    }
+    75% {
+      transform: translateY(220px) rotate(18deg) scale(0.88);
+      opacity: 0.5;
+      filter: blur(1px);
+    }
+    100% {
+      transform: translateY(400px) rotate(30deg) scale(0.75);
+      opacity: 0;
+      filter: blur(2px);
+    }
+  }
+
+  .dissolve-line-number {
+    display: inline-block;
+    min-width: 24px;
+    text-align: right;
+    color: var(--text-muted);
+  }
+
+  .dissolve-line-number.falling {
+    animation: lineNumFall 2s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+  }
+
+  @keyframes lineNumFall {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+    15% {
+      transform: translateY(5px) rotate(-1deg);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(100px) rotate(-5deg);
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateY(400px) rotate(-15deg);
+      opacity: 0;
+    }
+  }
+
+  /* Matrix Rain View */
+  .matrix-view {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: 5;
+  }
+
+  .matrix-view.visible {
+    opacity: 1;
+  }
+
+  .matrix-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .matrix-view::before,
+  .matrix-view::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 50px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .matrix-view::before {
+    top: 0;
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, transparent 100%);
+  }
+
+  .matrix-view::after {
+    bottom: 0;
+    background: linear-gradient(0deg, var(--bg-secondary) 0%, transparent 100%);
+  }
+
+  /* Floating Elements */
+  .float-element {
+    position: absolute;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: float 5s ease-in-out infinite;
+    z-index: 10;
+  }
+
+  .float-element.top-right {
+    top: -30px;
+    right: -60px;
+    animation-delay: -1s;
+  }
+
+  .float-element.bottom-left {
+    bottom: -20px;
+    left: -60px;
+    animation-delay: -2.5s;
+  }
+
+  .float-element .icon {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(1deg); }
+  }
+
+  /* Scroll Indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    animation: fadeIn 1s ease 1s forwards;
+    opacity: 0;
+  }
+
+  .scroll-mouse {
+    width: 24px;
+    height: 38px;
+    border: 2px solid var(--text-muted);
+    border-radius: 12px;
+    position: relative;
+  }
+
+  .scroll-wheel {
+    width: 4px;
+    height: 8px;
+    background: var(--text-muted);
+    border-radius: 2px;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scrollBounce 1.5s ease-in-out infinite;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateX(-50%) translateY(8px);
+      opacity: 0.3;
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 60px;
+    }
+
+    .code-display {
+      transform: none;
+    }
+
+    .code-display:hover {
+      transform: none;
+    }
+
+    .float-element {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 100px 20px 60px;
+    }
+
+    .editor-tabs {
+      flex-wrap: wrap;
+    }
+
+    .file-name {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // ================== STATE ================== //
+  let currentView = 'details';
+  let autoSwitchTimeout: number | null = null;
+  let hasAutoSwitched = false;
+  let hasPlayedDissolve = false;
+  let matrixAnimationId: number | null = null;
+
+  // Elements
+  const staticCode = document.getElementById('staticCode');
+  const dissolveContainer = document.getElementById('dissolveContainer');
+  const matrixView = document.getElementById('matrixView');
+  const matrixCanvas = document.getElementById('matrixCanvas') as HTMLCanvasElement;
+  const tabDetails = document.getElementById('tabDetails');
+  const tabMatrix = document.getElementById('tabMatrix');
+
+  // ================== SIMPLE MATRIX RAIN ================== //
+  const ctx = matrixCanvas?.getContext('2d');
+
+  const codeWords = [
+    'const', 'function', 'React', 'import', 'export', 'return', '=>',
+    'useState', 'useEffect', 'props', 'async', 'await', 'fetch',
+    'Flask', 'class', 'def', 'Python', 'map', 'filter', 'API', 'JSON'
+  ];
+
+  const columns = [
+    { x: 0.08, speed: 0.4, delay: 0 },
+    { x: 0.22, speed: 0.55, delay: 2000 },
+    { x: 0.38, speed: 0.45, delay: 1000 },
+    { x: 0.55, speed: 0.5, delay: 3000 },
+    { x: 0.72, speed: 0.42, delay: 1500 },
+    { x: 0.88, speed: 0.48, delay: 500 }
+  ];
+
+  let drops: Array<{ x: number; y: number; speed: number; chars: Array<{ text: string; isBright: boolean }> }> = [];
+  const fontSize = 14;
+  const lineHeight = 24;
+
+  function initMatrix() {
+    if (!matrixCanvas || !ctx) return;
+    const rect = matrixCanvas.parentElement?.getBoundingClientRect();
+    if (!rect) return;
+    
+    matrixCanvas.width = rect.width;
+    matrixCanvas.height = rect.height;
+
+    drops = columns.map(col => {
+      const chars = [];
+      const charCount = 8 + Math.floor(Math.random() * 5);
+      for (let j = 0; j < charCount; j++) {
+        chars.push({
+          text: codeWords[Math.floor(Math.random() * codeWords.length)],
+          isBright: Math.random() > 0.85
+        });
+      }
+      return {
+        x: col.x * matrixCanvas.width,
+        y: -charCount * lineHeight - col.delay * 0.1,
+        speed: col.speed,
+        chars: chars
+      };
+    });
+  }
+
+  function drawMatrix() {
+    if (!ctx || !matrixCanvas) return;
+    
+    ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+
+    drops.forEach(drop => {
+      drop.chars.forEach((char, charIndex) => {
+        const y = drop.y + charIndex * lineHeight;
+
+        if (y > -lineHeight && y < matrixCanvas.height + lineHeight) {
+          let opacity = 0.6;
+          if (y < 50) opacity *= y / 50;
+          if (y > matrixCanvas.height - 50) opacity *= (matrixCanvas.height - y) / 50;
+
+          if (char.isBright) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${opacity + 0.3})`;
+            ctx.shadowColor = '#60a5fa';
+            ctx.shadowBlur = 3;
+          } else {
+            ctx.fillStyle = `rgba(96, 165, 250, ${opacity})`;
+            ctx.shadowColor = '#60a5fa';
+            ctx.shadowBlur = 2;
+          }
+
+          ctx.fillText(char.text, drop.x, y);
+          ctx.shadowBlur = 0;
+        }
+      });
+
+      drop.y += drop.speed;
+
+      if (drop.y > matrixCanvas.height + 50) {
+        drop.y = -drop.chars.length * lineHeight - Math.random() * 100;
+        drop.chars.forEach(char => {
+          if (Math.random() > 0.5) {
+            char.text = codeWords[Math.floor(Math.random() * codeWords.length)];
+            char.isBright = Math.random() > 0.85;
+          }
+        });
+      }
+    });
+
+    matrixAnimationId = requestAnimationFrame(drawMatrix);
+  }
+
+  function startMatrix() {
+    initMatrix();
+    drawMatrix();
+  }
+
+  function stopMatrix() {
+    if (matrixAnimationId) {
+      cancelAnimationFrame(matrixAnimationId);
+      matrixAnimationId = null;
+    }
+    if (ctx && matrixCanvas) {
+      ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    }
+  }
+
+  // ================== DISSOLVE EFFECT ================== //
+  function createDissolveEffect() {
+    if (!staticCode || !dissolveContainer) return { totalChars: 0, maxCharDelay: 0 };
+    
+    const codeLines = staticCode.querySelectorAll('.code-line');
+    dissolveContainer.innerHTML = '';
+
+    let totalChars = 0;
+    let maxCharDelay = 0;
+
+    codeLines.forEach((line, lineIndex) => {
+      const lineClone = document.createElement('div');
+      lineClone.className = 'code-line';
+      lineClone.style.display = 'flex';
+      lineClone.style.gap = '16px';
+
+      const lineNumber = line.querySelector('.line-number');
+      const lineContent = line.querySelector('.code-content');
+
+      const numSpan = document.createElement('span');
+      numSpan.className = 'dissolve-line-number';
+      numSpan.textContent = lineNumber ? lineNumber.textContent : '';
+      numSpan.dataset.lineIndex = String(lineIndex);
+      lineClone.appendChild(numSpan);
+
+      const contentSpan = document.createElement('span');
+
+      if (lineContent) {
+        const html = lineContent.innerHTML;
+        let charIndex = 0;
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+
+        function processNode(node: Node): DocumentFragment | HTMLSpanElement | Text {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent || '';
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < text.length; i++) {
+              const char = text[i];
+              if (char === ' ') {
+                fragment.appendChild(document.createTextNode(' '));
+              } else {
+                const charSpan = document.createElement('span');
+                charSpan.className = 'dissolve-char';
+                charSpan.textContent = char;
+                const delay = lineIndex * 60 + charIndex * 25;
+                charSpan.dataset.delay = String(delay);
+                maxCharDelay = Math.max(maxCharDelay, delay);
+                charIndex++;
+                totalChars++;
+                fragment.appendChild(charSpan);
+              }
+            }
+            return fragment;
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as Element;
+            const newNode = document.createElement('span');
+            newNode.className = element.className;
+            element.childNodes.forEach(child => {
+              newNode.appendChild(processNode(child));
+            });
+            return newNode;
+          }
+          return document.createTextNode('');
+        }
+
+        tempDiv.childNodes.forEach(child => {
+          contentSpan.appendChild(processNode(child));
+        });
+      }
+
+      lineClone.appendChild(contentSpan);
+      dissolveContainer.appendChild(lineClone);
+    });
+
+    return { totalChars, maxCharDelay };
+  }
+
+  function triggerDissolve() {
+    if (!dissolveContainer || !staticCode || !matrixView) return;
+    
+    const { maxCharDelay } = createDissolveEffect();
+
+    dissolveContainer.classList.add('active');
+    staticCode.classList.add('hidden');
+
+    const chars = dissolveContainer.querySelectorAll('.dissolve-char');
+    let maxDelay = 0;
+
+    chars.forEach(char => {
+      const el = char as HTMLElement;
+      const delay = parseInt(el.dataset.delay || '0');
+      maxDelay = Math.max(maxDelay, delay);
+
+      setTimeout(() => {
+        char.classList.add('falling');
+      }, delay);
+    });
+
+    const lineNumbers = dissolveContainer.querySelectorAll('.dissolve-line-number');
+    const lineNumberStartDelay = maxDelay + 50;
+
+    lineNumbers.forEach((num, index) => {
+      const delay = lineNumberStartDelay + index * 60;
+      setTimeout(() => {
+        num.classList.add('falling');
+      }, delay);
+    });
+
+    const lastNumberDelay = lineNumberStartDelay + lineNumbers.length * 60;
+    const dissolveCompleteTime = lastNumberDelay + 2200;
+
+    setTimeout(() => {
+      matrixView.classList.add('visible');
+      startMatrix();
+    }, dissolveCompleteTime);
+
+    setTimeout(() => {
+      dissolveContainer.classList.remove('active');
+      dissolveContainer.innerHTML = '';
+    }, dissolveCompleteTime + 500);
+  }
+
+  // ================== VIEW SWITCHING ================== //
+  function showMatrix() {
+    if (currentView === 'matrix') return;
+    currentView = 'matrix';
+
+    tabDetails?.classList.remove('active');
+    tabMatrix?.classList.add('active');
+
+    if (autoSwitchTimeout) {
+      clearTimeout(autoSwitchTimeout);
+      autoSwitchTimeout = null;
+    }
+
+    if (!hasPlayedDissolve) {
+      hasPlayedDissolve = true;
+      triggerDissolve();
+    } else {
+      staticCode?.classList.add('hidden');
+      matrixView?.classList.add('visible');
+      startMatrix();
+    }
+  }
+
+  function showDetails() {
+    if (currentView === 'details') return;
+    currentView = 'details';
+
+    tabMatrix?.classList.remove('active');
+    tabDetails?.classList.add('active');
+
+    stopMatrix();
+
+    if (matrixView) {
+      matrixView.style.transition = 'none';
+      matrixView.classList.remove('visible');
+      matrixView.offsetHeight; // Force reflow
+      matrixView.style.transition = '';
+    }
+
+    if (staticCode) {
+      staticCode.classList.remove('hidden');
+      staticCode.style.opacity = '1';
+    }
+
+    if (dissolveContainer) {
+      dissolveContainer.classList.remove('active');
+      dissolveContainer.innerHTML = '';
+    }
+  }
+
+  // ================== AUTO-SWITCH AFTER 2 SECONDS ================== //
+  function startAutoSwitch() {
+    autoSwitchTimeout = window.setTimeout(() => {
+      if (!hasAutoSwitched && currentView === 'details') {
+        hasAutoSwitched = true;
+        showMatrix();
+      }
+    }, 2000);
+  }
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (currentView === 'matrix') {
+      initMatrix();
+    }
+  });
+
+  // Tab click handlers
+  tabDetails?.addEventListener('click', showDetails);
+  tabMatrix?.addEventListener('click', showMatrix);
+
+  // Listen for intro animation completion before starting auto-switch
+  window.addEventListener('introComplete', () => {
+    startAutoSwitch();
+  }, { once: true });
+
+  // Fallback: If no intro animation exists, start after checking
+  const introOverlay = document.getElementById('introOverlay');
+  if (!introOverlay || introOverlay.classList.contains('hidden')) {
+    startAutoSwitch();
+  }
+
+  // Parallax effect on mouse move
+  const codeDisplay = document.querySelector('.code-display') as HTMLElement;
+
+  document.addEventListener('mousemove', (e) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+
+    const xPercent = (clientX / innerWidth - 0.5) * 2;
+    const yPercent = (clientY / innerHeight - 0.5) * 2;
+
+    if (codeDisplay && window.innerWidth > 1024) {
+      codeDisplay.style.transform = `rotateY(${-8 + xPercent * 4}deg) rotateX(${4 + yPercent * 2}deg)`;
+    }
+
+    const badges = document.querySelectorAll('.floating-badges .badge');
+    badges.forEach((badge, i) => {
+      const el = badge as HTMLElement;
+      const offset = (i + 1) * 2;
+      el.style.transform = `translateY(${Math.sin(Date.now() / 1000 + i) * 6}px) translateX(${xPercent * offset}px)`;
+    });
+  });
+</script>
+

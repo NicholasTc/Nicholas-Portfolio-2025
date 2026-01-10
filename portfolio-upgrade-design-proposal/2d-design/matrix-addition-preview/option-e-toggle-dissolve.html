@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Option E — Toggle with Dissolve Transition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-primary: #06080d;
+        --bg-secondary: #0a0e17;
+        --surface: rgba(255, 255, 255, 0.03);
+        --glass: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --accent-blue: #60a5fa;
+        --accent-purple: #a78bfa;
+        --glow-blue: rgba(96, 165, 250, 0.4);
+        --gradient-text: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #a78bfa 50%,
+          #60a5fa 100%
+        );
+        --gradient-bg: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #818cf8 50%,
+          #a78bfa 100%
+        );
+        --radius-md: 12px;
+        --font-sans: "Outfit", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Background Orbs */
+      .bg-orbs {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.3;
+      }
+
+      .orb-1 {
+        width: 600px;
+        height: 600px;
+        background: var(--accent-blue);
+        top: -200px;
+        right: -100px;
+      }
+
+      .orb-2 {
+        width: 500px;
+        height: 500px;
+        background: var(--accent-purple);
+        bottom: -150px;
+        left: -100px;
+      }
+
+      /* Hero */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 80px 32px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .hero-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+      }
+
+      .floating-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+
+      .badge {
+        padding: 8px 16px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .badge-dot {
+        width: 6px;
+        height: 6px;
+        background: #22c55e;
+        border-radius: 50%;
+      }
+
+      .badge.accent {
+        background: linear-gradient(
+          135deg,
+          rgba(96, 165, 250, 0.15),
+          rgba(167, 139, 250, 0.15)
+        );
+        border-color: rgba(96, 165, 250, 0.3);
+        color: var(--accent-blue);
+      }
+
+      .hero-heading {
+        font-size: clamp(48px, 7vw, 80px);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin-bottom: 24px;
+      }
+
+      .gradient-text {
+        background: var(--gradient-text);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 5s ease-in-out infinite;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .hero-description {
+        font-size: 18px;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        max-width: 520px;
+        margin-bottom: 36px;
+      }
+
+      .hero-cta {
+        display: flex;
+        gap: 16px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: var(--radius-md);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        font-family: var(--font-sans);
+      }
+
+      .btn-primary {
+        background: var(--gradient-bg);
+        color: white;
+        box-shadow: 0 4px 24px var(--glow-blue);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 40px var(--glow-blue);
+      }
+
+      .btn-secondary {
+        background: var(--glass);
+        color: var(--text-primary);
+        border: 1px solid var(--glass-border);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      /* Code Window */
+      .hero-visual {
+        perspective: 1000px;
+      }
+
+      .code-display {
+        transform: rotateY(-8deg) rotateX(4deg);
+        transition: transform 0.3s ease;
+      }
+
+      .code-display:hover {
+        transform: rotateY(-4deg) rotateX(2deg);
+      }
+
+      .code-window {
+        background: var(--bg-secondary);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5),
+          0 0 60px -10px var(--glow-blue);
+      }
+
+      /* ================== EDITOR-STYLE HEADER WITH TABS ================== */
+      .code-header {
+        display: flex;
+        align-items: center;
+        padding: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .window-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 16px;
+        border-right: 1px solid var(--glass-border);
+      }
+
+      .code-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .code-dot.red {
+        background: #ff5f57;
+      }
+      .code-dot.yellow {
+        background: #ffbd2e;
+      }
+      .code-dot.green {
+        background: #28c840;
+      }
+
+      /* Editor Tabs */
+      .editor-tabs {
+        display: flex;
+        flex: 1;
+      }
+
+      .editor-tab {
+        padding: 14px 20px;
+        font-size: 13px;
+        font-family: var(--font-mono);
+        color: var(--text-muted);
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+      }
+
+      .editor-tab:hover {
+        color: var(--text-secondary);
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .editor-tab.active {
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.03);
+        border-bottom-color: var(--accent-blue);
+      }
+
+      .editor-tab .tab-icon {
+        font-size: 14px;
+      }
+
+      .editor-tab .tab-indicator {
+        width: 6px;
+        height: 6px;
+        background: var(--accent-blue);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .editor-tab.active .tab-indicator {
+        opacity: 1;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .file-name {
+        padding: 14px 20px;
+        font-size: 12px;
+        font-family: var(--font-mono);
+        color: var(--text-muted);
+        margin-left: auto;
+      }
+
+      /* ================== CODE BODY CONTAINER ================== */
+      .code-body {
+        position: relative;
+        height: 320px;
+        overflow: hidden;
+      }
+
+      /* Static Code View */
+      .static-code {
+        position: absolute;
+        inset: 0;
+        padding: 24px;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        line-height: 1.8;
+        transition: opacity 0.5s ease;
+        z-index: 10;
+        background: var(--bg-secondary);
+      }
+
+      .static-code.hidden {
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .code-line {
+        display: flex;
+        gap: 16px;
+      }
+      .line-number {
+        color: var(--text-muted);
+        min-width: 24px;
+        text-align: right;
+        user-select: none;
+      }
+      .keyword {
+        color: #c792ea;
+      }
+      .string {
+        color: #c3e88d;
+      }
+      .variable {
+        color: #f78c6c;
+      }
+      .property {
+        color: #ffcb6b;
+      }
+      .bracket {
+        color: #89ddff;
+      }
+      .comment {
+        color: #546e7a;
+        font-style: italic;
+      }
+      .function {
+        color: #82aaff;
+      }
+
+      /* ================== DISSOLVE ANIMATION ================== */
+      .dissolve-container {
+        position: absolute;
+        inset: 0;
+        padding: 24px;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        line-height: 1.8;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 3;
+      }
+
+      .dissolve-container.active {
+        opacity: 1;
+      }
+
+      .dissolve-char {
+        display: inline-block;
+        transition: none;
+      }
+
+      .dissolve-char.falling {
+        animation: charFall 2.2s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+      }
+
+      /* Start slow, then accelerate (ease-in physics) */
+      @keyframes charFall {
+        0% {
+          transform: translateY(0) rotate(0deg) scale(1);
+          opacity: 1;
+          filter: blur(0);
+        }
+        10% {
+          transform: translateY(2px) rotate(0.5deg) scale(1);
+          opacity: 1;
+        }
+        25% {
+          transform: translateY(15px) rotate(2deg) scale(0.98);
+          opacity: 1;
+          filter: blur(0);
+        }
+        50% {
+          transform: translateY(80px) rotate(8deg) scale(0.95);
+          opacity: 0.85;
+          filter: blur(0.3px);
+        }
+        75% {
+          transform: translateY(220px) rotate(18deg) scale(0.88);
+          opacity: 0.5;
+          filter: blur(1px);
+        }
+        100% {
+          transform: translateY(400px) rotate(30deg) scale(0.75);
+          opacity: 0;
+          filter: blur(2px);
+        }
+      }
+
+      /* Line numbers fall with same animation */
+      .dissolve-line-number {
+        display: inline-block;
+        min-width: 24px;
+        text-align: right;
+        color: var(--text-muted);
+      }
+
+      .dissolve-line-number.falling {
+        animation: lineNumFall 2s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+      }
+
+      @keyframes lineNumFall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        15% {
+          transform: translateY(5px) rotate(-1deg);
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(100px) rotate(-5deg);
+          opacity: 0.7;
+        }
+        100% {
+          transform: translateY(400px) rotate(-15deg);
+          opacity: 0;
+        }
+      }
+
+      /* ================== MATRIX RAIN VIEW (Canvas-based) ================== */
+      .matrix-view {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 1s ease;
+        z-index: 1;
+      }
+
+      .matrix-view.visible {
+        opacity: 1;
+      }
+
+      .matrix-canvas {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Gradient fade at edges */
+      .matrix-view::before,
+      .matrix-view::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 50px;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .matrix-view::before {
+        top: 0;
+        background: linear-gradient(
+          180deg,
+          var(--bg-secondary) 0%,
+          transparent 100%
+        );
+      }
+
+      .matrix-view::after {
+        bottom: 0;
+        background: linear-gradient(
+          0deg,
+          var(--bg-secondary) 0%,
+          transparent 100%
+        );
+      }
+
+      /* Label */
+      .option-label {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--gradient-bg);
+        padding: 12px 20px;
+        border-radius: var(--radius-md);
+        font-size: 13px;
+        font-weight: 600;
+        color: white;
+        z-index: 9999;
+        box-shadow: 0 4px 24px var(--glow-blue);
+      }
+
+      /* Status indicator */
+      .status-text {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        z-index: 9999;
+      }
+
+      @media (max-width: 1024px) {
+        .hero-inner {
+          grid-template-columns: 1fr;
+        }
+        .code-display {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background Orbs -->
+    <div class="bg-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-content">
+          <div class="floating-badges">
+            <div class="badge">
+              <span class="badge-dot"></span> Open to Work
+            </div>
+            <div class="badge accent">UCSD '25</div>
+            <div class="badge">React</div>
+            <div class="badge">Flask</div>
+          </div>
+
+          <h1 class="hero-heading">
+            <span>Hi, I'm</span><br />
+            <span class="gradient-text">Nicholas.</span>
+          </h1>
+
+          <p class="hero-description">
+            Senior CS @ UCSD who ships clean, testable products. I build fast
+            interfaces, solid backends, and sweat the tiny UX details that make
+            apps feel "done".
+          </p>
+
+          <div class="hero-cta">
+            <a href="#" class="btn btn-primary">Download Résumé →</a>
+            <a href="#" class="btn btn-secondary">Email Me</a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="code-display">
+            <div class="code-window">
+              <!-- EDITOR-STYLE HEADER WITH TABS -->
+              <div class="code-header">
+                <div class="window-controls">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+
+                <div class="editor-tabs">
+                  <button
+                    class="editor-tab active"
+                    id="tabDetails"
+                    onclick="showDetails()"
+                  >
+                    <span class="tab-icon">📄</span>
+                    Details
+                    <span class="tab-indicator"></span>
+                  </button>
+                  <button
+                    class="editor-tab"
+                    id="tabMatrix"
+                    onclick="showMatrix()"
+                  >
+                    <span class="tab-icon">⚡</span>
+                    Matrix
+                    <span class="tab-indicator"></span>
+                  </button>
+                </div>
+
+                <span class="file-name">portfolio.tsx</span>
+              </div>
+
+              <!-- CODE BODY -->
+              <div class="code-body">
+                <!-- Static Code (Details View) -->
+                <div class="static-code" id="staticCode">
+                  <div class="code-line">
+                    <span class="line-number">1</span
+                    ><span
+                      ><span class="keyword">const</span>
+                      <span class="variable">developer</span>
+                      <span class="bracket">=</span>
+                      <span class="bracket">{</span></span
+                    >
+                  </div>
+                  <div class="code-line">
+                    <span class="line-number">2</span
+                    ><span>
+                      <span class="property">name</span>:
+                      <span class="string">'Nicholas Chan'</span>,</span
+                    >
+                  </div>
+                  <div class="code-line">
+                    <span class="line-number">3</span
+                    ><span>
+                      <span class="property">role</span>:
+                      <span class="string">'Full-Stack Developer'</span>,</span
+                    >
+                  </div>
+                  <div class="code-line">
+                    <span class="line-number">4</span
+                    ><span>
+                      <span class="property">skills</span>: [<span
+                        class="string"
+                        >'React'</span
+                      >, <span class="string">'Flask'</span>,
+                      <span class="string">'TS'</span>],</span
+                    >
+                  </div>
+                  <div class="code-line">
+                    <span class="line-number">5</span
+                    ><span>
+                      <span class="property">passion</span>:
+                      <span class="string">'Building products'</span>,</span
+                    >
+                  </div>
+                  <div class="code-line">
+                    <span class="line-number">6</span
+                    ><span><span class="bracket">}</span>;</span>
+                  </div>
+                  <div class="code-line">
+                    <span class="line-number">7</span><span></span>
+                  </div>
+                  <div class="code-line">
+                    <span class="line-number">8</span
+                    ><span
+                      ><span class="comment"
+                        >// Let's build something amazing</span
+                      ></span
+                    >
+                  </div>
+                  <div class="code-line">
+                    <span class="line-number">9</span
+                    ><span
+                      ><span class="function">buildAwesome</span
+                      ><span class="bracket">(</span
+                      ><span class="variable">developer</span
+                      ><span class="bracket">)</span>;</span
+                    >
+                  </div>
+                </div>
+
+                <!-- Dissolve Animation Container -->
+                <div class="dissolve-container" id="dissolveContainer"></div>
+
+                <!-- Matrix Rain View (Canvas-based for seamless animation) -->
+                <div class="matrix-view" id="matrixView">
+                  <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="option-label">Option E — Toggle + Dissolve Transition</div>
+    <div class="status-text" id="statusText">Auto-switching in 2s...</div>
+
+    <script>
+      // ================== STATE ================== //
+      let currentView = "details"; // 'details' or 'matrix'
+      let autoSwitchTimeout = null;
+      let hasAutoSwitched = false;
+      let hasPlayedDissolve = false; // Track if dissolve has played
+      let matrixAnimationId = null;
+
+      // Elements
+      const staticCode = document.getElementById("staticCode");
+      const dissolveContainer = document.getElementById("dissolveContainer");
+      const matrixView = document.getElementById("matrixView");
+      const matrixCanvas = document.getElementById("matrixCanvas");
+      const tabDetails = document.getElementById("tabDetails");
+      const tabMatrix = document.getElementById("tabMatrix");
+      const statusText = document.getElementById("statusText");
+
+      // ================== SIMPLE MATRIX RAIN (Like Original Portfolio) ================== //
+      const ctx = matrixCanvas.getContext("2d");
+
+      // Code keywords for rain (simpler list)
+      const codeWords = [
+        "const",
+        "function",
+        "React",
+        "import",
+        "export",
+        "return",
+        "=>",
+        "useState",
+        "useEffect",
+        "props",
+        "async",
+        "await",
+        "fetch",
+        "Flask",
+        "class",
+        "def",
+        "Python",
+        "map",
+        "filter",
+        "API",
+        "JSON",
+      ];
+
+      // Fewer columns, more spread out
+      const columns = [
+        { x: 0.08, speed: 0.4, delay: 0 },
+        { x: 0.22, speed: 0.55, delay: 2000 },
+        { x: 0.38, speed: 0.45, delay: 1000 },
+        { x: 0.55, speed: 0.5, delay: 3000 },
+        { x: 0.72, speed: 0.42, delay: 1500 },
+        { x: 0.88, speed: 0.48, delay: 500 },
+      ];
+
+      let drops = [];
+      const fontSize = 14;
+      const lineHeight = 24; // More vertical spacing
+
+      function initMatrix() {
+        const rect = matrixCanvas.parentElement.getBoundingClientRect();
+        matrixCanvas.width = rect.width;
+        matrixCanvas.height = rect.height;
+
+        // Initialize 6 simple columns
+        drops = columns.map((col, i) => {
+          const chars = [];
+          // Fewer characters per column (8-12)
+          const charCount = 8 + Math.floor(Math.random() * 5);
+          for (let j = 0; j < charCount; j++) {
+            chars.push({
+              text: codeWords[Math.floor(Math.random() * codeWords.length)],
+              isBright: Math.random() > 0.85,
+            });
+          }
+          return {
+            x: col.x * matrixCanvas.width,
+            y: -charCount * lineHeight - col.delay * 0.1,
+            speed: col.speed,
+            chars: chars,
+          };
+        });
+      }
+
+      function drawMatrix() {
+        // Clear completely (no trail effect that causes gray columns)
+        ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+        ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+
+        drops.forEach((drop) => {
+          drop.chars.forEach((char, charIndex) => {
+            const y = drop.y + charIndex * lineHeight;
+
+            if (y > -lineHeight && y < matrixCanvas.height + lineHeight) {
+              // Simple fade at edges
+              let opacity = 0.6;
+              if (y < 50) opacity *= y / 50;
+              if (y > matrixCanvas.height - 50)
+                opacity *= (matrixCanvas.height - y) / 50;
+
+              // Clean text with minimal blur
+              if (char.isBright) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity + 0.3})`;
+                ctx.shadowColor = "#60a5fa";
+                ctx.shadowBlur = 3; // Reduced blur
+              } else {
+                ctx.fillStyle = `rgba(96, 165, 250, ${opacity})`;
+                ctx.shadowColor = "#60a5fa";
+                ctx.shadowBlur = 2; // Minimal blur
+              }
+
+              ctx.fillText(char.text, drop.x, y);
+              ctx.shadowBlur = 0;
+            }
+          });
+
+          // Move down
+          drop.y += drop.speed;
+
+          // Seamless reset
+          if (drop.y > matrixCanvas.height + 50) {
+            drop.y = -drop.chars.length * lineHeight - Math.random() * 100;
+            // Shuffle some words
+            drop.chars.forEach((char) => {
+              if (Math.random() > 0.5) {
+                char.text =
+                  codeWords[Math.floor(Math.random() * codeWords.length)];
+                char.isBright = Math.random() > 0.85;
+              }
+            });
+          }
+        });
+
+        matrixAnimationId = requestAnimationFrame(drawMatrix);
+      }
+
+      function startMatrix() {
+        initMatrix();
+        drawMatrix();
+      }
+
+      function stopMatrix() {
+        if (matrixAnimationId) {
+          cancelAnimationFrame(matrixAnimationId);
+          matrixAnimationId = null;
+        }
+        ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      }
+
+      // ================== DISSOLVE EFFECT ================== //
+      function createDissolveEffect() {
+        const codeLines = staticCode.querySelectorAll(".code-line");
+        dissolveContainer.innerHTML = "";
+
+        let totalChars = 0;
+        let maxCharDelay = 0;
+
+        codeLines.forEach((line, lineIndex) => {
+          const lineClone = document.createElement("div");
+          lineClone.className = "code-line";
+          lineClone.style.display = "flex";
+          lineClone.style.gap = "16px";
+
+          const lineNumber = line.querySelector(".line-number");
+          const lineContent =
+            line.querySelector("span:not(.line-number)") ||
+            line.lastElementChild;
+
+          // Add line number as a falling element
+          const numSpan = document.createElement("span");
+          numSpan.className = "dissolve-line-number";
+          numSpan.textContent = lineNumber ? lineNumber.textContent : "";
+          numSpan.dataset.lineIndex = lineIndex;
+          lineClone.appendChild(numSpan);
+
+          const contentSpan = document.createElement("span");
+
+          if (lineContent) {
+            const html = lineContent.innerHTML;
+            let charIndex = 0;
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+
+            function processNode(node) {
+              if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent;
+                const fragment = document.createDocumentFragment();
+
+                for (let i = 0; i < text.length; i++) {
+                  const char = text[i];
+                  if (char === " ") {
+                    fragment.appendChild(document.createTextNode(" "));
+                  } else {
+                    const charSpan = document.createElement("span");
+                    charSpan.className = "dissolve-char";
+                    charSpan.textContent = char;
+                    // Stagger: 25ms between chars, 60ms between lines
+                    const delay = lineIndex * 60 + charIndex * 25;
+                    charSpan.dataset.delay = delay;
+                    maxCharDelay = Math.max(maxCharDelay, delay);
+                    charIndex++;
+                    totalChars++;
+                    fragment.appendChild(charSpan);
+                  }
+                }
+                return fragment;
+              } else if (node.nodeType === Node.ELEMENT_NODE) {
+                const newNode = document.createElement("span");
+                newNode.className = node.className;
+
+                node.childNodes.forEach((child) => {
+                  newNode.appendChild(processNode(child));
+                });
+
+                return newNode;
+              }
+              return document.createTextNode("");
+            }
+
+            tempDiv.childNodes.forEach((child) => {
+              contentSpan.appendChild(processNode(child));
+            });
+          }
+
+          lineClone.appendChild(contentSpan);
+          dissolveContainer.appendChild(lineClone);
+        });
+
+        return { totalChars, maxCharDelay };
+      }
+
+      function triggerDissolve() {
+        // Create the dissolve elements
+        const { totalChars, maxCharDelay } = createDissolveEffect();
+
+        // Show dissolve container
+        dissolveContainer.classList.add("active");
+
+        // Hide static code immediately
+        staticCode.classList.add("hidden");
+
+        // DIAGONAL CASCADE: Letters fall with staggered timing
+        // Each letter starts slow then accelerates (handled by CSS)
+        const chars = dissolveContainer.querySelectorAll(".dissolve-char");
+        let maxLetterDelay = 0;
+
+        chars.forEach((char) => {
+          const delay = parseInt(char.dataset.delay);
+          maxLetterDelay = Math.max(maxLetterDelay, delay);
+
+          setTimeout(() => {
+            char.classList.add("falling");
+          }, delay);
+        });
+
+        // Line numbers fall TOP TO BOTTOM after all letters have STARTED falling
+        const lineNumbers = dissolveContainer.querySelectorAll(
+          ".dissolve-line-number"
+        );
+        const lineNumberStartDelay = maxLetterDelay + 50; // Start right after last letter begins
+
+        lineNumbers.forEach((num, index) => {
+          // Stagger: each number starts 60ms after the previous
+          const delay = lineNumberStartDelay + index * 60;
+
+          setTimeout(() => {
+            num.classList.add("falling");
+          }, delay);
+        });
+
+        // Calculate when dissolve animation completes
+        // Last number starts at: lineNumberStartDelay + (numLines * 60)
+        // Plus animation duration (2s) + buffer
+        const lastNumberDelay = lineNumberStartDelay + lineNumbers.length * 60;
+        const dissolveCompleteTime = lastNumberDelay + 2200;
+
+        // Show matrix only AFTER dissolve completes
+        setTimeout(() => {
+          matrixView.classList.add("visible");
+          startMatrix();
+        }, dissolveCompleteTime);
+
+        // Clean up dissolve container after animation
+        setTimeout(() => {
+          dissolveContainer.classList.remove("active");
+          dissolveContainer.innerHTML = "";
+        }, dissolveCompleteTime + 500);
+      }
+
+      // ================== VIEW SWITCHING ================== //
+      function showMatrix() {
+        if (currentView === "matrix") return;
+        currentView = "matrix";
+
+        // Update tabs
+        tabDetails.classList.remove("active");
+        tabMatrix.classList.add("active");
+
+        // Clear auto-switch
+        if (autoSwitchTimeout) {
+          clearTimeout(autoSwitchTimeout);
+          autoSwitchTimeout = null;
+        }
+
+        // Only play dissolve animation ONCE (on first switch)
+        if (!hasPlayedDissolve) {
+          hasPlayedDissolve = true;
+          statusText.textContent = "Dissolving...";
+
+          // Trigger dissolve effect
+          triggerDissolve();
+
+          // Update status after dissolve
+          setTimeout(() => {
+            statusText.textContent = "Matrix view active";
+          }, 3000);
+        } else {
+          // Instant switch (no animation) on subsequent toggles
+          staticCode.classList.add("hidden");
+          matrixView.classList.add("visible");
+          startMatrix();
+          statusText.textContent = "Matrix view active";
+        }
+      }
+
+      function showDetails() {
+        if (currentView === "details") return;
+        currentView = "details";
+
+        // Update tabs
+        tabMatrix.classList.remove("active");
+        tabDetails.classList.add("active");
+
+        // Stop matrix animation FIRST
+        stopMatrix();
+
+        // Immediately hide matrix (no transition delay)
+        matrixView.style.transition = "none";
+        matrixView.classList.remove("visible");
+
+        // Force reflow to apply immediate hide
+        matrixView.offsetHeight;
+
+        // Restore transition for next time
+        matrixView.style.transition = "";
+
+        // Show static code
+        staticCode.classList.remove("hidden");
+        staticCode.style.opacity = "1";
+
+        // Clean up any dissolve
+        dissolveContainer.classList.remove("active");
+        dissolveContainer.innerHTML = "";
+
+        statusText.textContent = "Details view active";
+      }
+
+      // ================== AUTO-SWITCH AFTER 2 SECONDS ================== //
+      function startAutoSwitch() {
+        statusText.textContent = "Auto-switching in 2s...";
+
+        autoSwitchTimeout = setTimeout(() => {
+          if (!hasAutoSwitched && currentView === "details") {
+            hasAutoSwitched = true;
+            showMatrix();
+          }
+        }, 2000);
+      }
+
+      // Handle window resize
+      window.addEventListener("resize", () => {
+        if (currentView === "matrix") {
+          initMatrix();
+        }
+      });
+
+      // Start auto-switch on page load
+      startAutoSwitch();
+    </script>
+  </body>
+</html>

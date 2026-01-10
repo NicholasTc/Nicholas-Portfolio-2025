@@ -1,0 +1,367 @@
+---
+// Projects section with bento grid layout
+---
+
+<section class="section" id="projects">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">
+        <span>📂</span> Selected Work
+      </div>
+      <h2 class="section-title">Featured Projects</h2>
+      <p class="section-description">
+        A collection of projects I've built, from AI tools to full-stack applications.
+      </p>
+    </div>
+
+    <div class="bento-grid">
+      <!-- Featured Project: GymApp -->
+      <article class="bento-card featured" data-kind="backend web">
+        <div class="card-image">
+          <img src="/GymAppScreenshot.png" alt="GymApp Dashboard Screenshot" loading="lazy" />
+        </div>
+        <div class="card-tag">Full-Stack</div>
+        <h3 class="card-title">
+          GymApp — Flask + React
+          <span class="card-arrow">→</span>
+        </h3>
+        <p class="card-description">
+          A comprehensive fitness tracker with exercise builder, progress predictions, and workout planning. Features real-time analytics and personalized training programs.
+        </p>
+        <div class="card-stack">
+          <span class="stack-item">Flask</span>
+          <span class="stack-item">React</span>
+          <span class="stack-item">MongoDB</span>
+        </div>
+      </article>
+
+      <!-- ResumeAI Tool -->
+      <article class="bento-card" data-kind="backend ml">
+        <div class="card-image-small">
+          <img src="/ResumeAITool.png" alt="ResumeAI Tool Screenshot" loading="lazy" />
+        </div>
+        <div class="card-tag">AI / ML</div>
+        <h3 class="card-title">
+          ResumeAI Tool
+          <span class="card-arrow">→</span>
+        </h3>
+        <p class="card-description">
+          AI-powered resume parsing with 85% improved accuracy for multiple formats.
+        </p>
+        <div class="card-stack">
+          <span class="stack-item">OpenAI</span>
+          <span class="stack-item">Python</span>
+        </div>
+      </article>
+
+      <!-- Pollen Atlas Widget -->
+      <article class="bento-card" data-kind="wordpress web">
+        <div class="card-image-small">
+          <img src="/PollenAtlas.png" alt="Pollen Atlas Widget Screenshot" loading="lazy" />
+        </div>
+        <div class="card-tag">WordPress</div>
+        <h3 class="card-title">
+          Pollen Atlas Widget
+          <span class="card-arrow">→</span>
+        </h3>
+        <p class="card-description">
+          Elementor widget combining Google Pollen & Air Quality APIs with charts.
+        </p>
+        <div class="card-stack">
+          <span class="stack-item">PHP</span>
+          <span class="stack-item">JS</span>
+        </div>
+      </article>
+
+      <!-- ProductivityHelper -->
+      <article class="bento-card" data-kind="web">
+        <div class="card-image-small">
+          <img src="/ProductivityHelper.png" alt="ProductivityHelper Screenshot" loading="lazy" />
+        </div>
+        <div class="card-tag">Productivity</div>
+        <h3 class="card-title">
+          ProductivityHelper
+          <span class="card-arrow">→</span>
+        </h3>
+        <p class="card-description">
+          Task management app with focus mode and weekly planning features.
+        </p>
+        <div class="card-stack">
+          <span class="stack-item">React</span>
+          <span class="stack-item">Node.js</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ================== Projects Section ================== */
+  .section {
+    padding: 120px 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-blue);
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+
+  .section-description {
+    font-size: 18px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Bento Grid */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 280px);
+    gap: 24px;
+  }
+
+  .bento-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: var(--delay, 0s);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .bento-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .bento-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.05), rgba(167, 139, 250, 0.05));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .bento-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.4), 0 0 40px -10px var(--glow-blue);
+  }
+
+  .bento-card:hover::before {
+    opacity: 1;
+  }
+
+  .bento-card.featured {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  /* Featured card image */
+  .bento-card.featured .card-image {
+    flex: 1;
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 200px;
+  }
+
+  .bento-card.featured .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    transition: transform 0.4s ease;
+  }
+
+  .bento-card.featured:hover .card-image img {
+    transform: scale(1.02);
+  }
+
+  /* Smaller card images */
+  .card-image-small {
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .card-image-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    filter: blur(0);
+  }
+
+  .bento-card:hover .card-image-small img {
+    transform: scale(1.05);
+  }
+
+  .card-tag {
+    display: inline-flex;
+    padding: 6px 12px;
+    background: rgba(96, 165, 250, 0.1);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    margin-bottom: 16px;
+    width: fit-content;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-primary);
+  }
+
+  .card-arrow {
+    width: 32px;
+    height: 32px;
+    background: var(--surface);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .bento-card:hover .card-arrow {
+    background: var(--gradient-bg);
+    transform: translateX(4px);
+  }
+
+  .card-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .card-stack {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stack-item {
+    padding: 6px 12px;
+    background: var(--surface);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  /* ================== Responsive ================== */
+  @media (max-width: 1024px) {
+    .bento-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+
+    .bento-card.featured {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+
+    .bento-card.featured .card-image {
+      min-height: 180px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section {
+      padding: 80px 20px;
+    }
+
+    .bento-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+
+    .bento-card.featured {
+      grid-column: span 1;
+    }
+  }
+</style>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const target = entry.target as HTMLElement;
+        target.classList.add('visible');
+        obs.unobserve(entry.target); // Stop observing once visible
+      }
+    });
+  }, observerOptions);
+
+  // Use requestAnimationFrame to ensure DOM is ready
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.bento-card').forEach((card, i) => {
+      const element = card as HTMLElement;
+      element.style.setProperty('--delay', `${i * 0.1}s`);
+      observer.observe(card);
+    });
+  });
+</script>
+

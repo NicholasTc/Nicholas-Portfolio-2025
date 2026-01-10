@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio Intro Animation V2 - With Hand</title>
+    <style>
+      /* ================== Base Styles ================== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        overflow: hidden;
+        background: #0b0f17;
+      }
+
+      /* ================== Intro Overlay ================== */
+      .intro-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: linear-gradient(
+          135deg,
+          #1e3a5f 0%,
+          #0d1b2a 50%,
+          #1b263b 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .intro-overlay.fade-out {
+        animation: overlayFadeOut 0.8s ease-out forwards;
+        animation-delay: 0.2s;
+      }
+
+      @keyframes overlayFadeOut {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+
+      /* ================== Skip Button ================== */
+      .skip-btn {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+      }
+
+      .skip-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      /* ================== Hand Silhouette ================== */
+      .hand-container {
+        position: absolute;
+        left: -300px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 280px;
+        height: 200px;
+        z-index: 10;
+        opacity: 0;
+      }
+
+      .hand-container.entering {
+        animation: handEnter 0.5s ease-out forwards;
+      }
+
+      .hand-container.flicking {
+        animation: handFlick 0.3s ease-in-out forwards;
+      }
+
+      .hand-container.exiting {
+        animation: handExit 0.4s ease-in forwards;
+      }
+
+      @keyframes handEnter {
+        0% {
+          left: -300px;
+          opacity: 0;
+        }
+        100% {
+          left: -60px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes handFlick {
+        0% {
+          transform: translateY(-50%) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-50%) rotate(-15deg);
+        }
+        100% {
+          transform: translateY(-50%) rotate(5deg);
+        }
+      }
+
+      @keyframes handExit {
+        0% {
+          left: -60px;
+          opacity: 1;
+        }
+        100% {
+          left: -300px;
+          opacity: 0;
+        }
+      }
+
+      .hand-svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+      }
+
+      /* ================== Revealed Text ================== */
+      .revealed-text-container {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .revealed-text {
+        font-size: clamp(32px, 8vw, 72px);
+        font-weight: 700;
+        color: white;
+        letter-spacing: -0.02em;
+        text-align: center;
+        opacity: 0;
+        clip-path: inset(0 100% 0 0);
+      }
+
+      .revealed-text.revealing {
+        animation: textReveal 1.2s ease-out forwards;
+      }
+
+      @keyframes textReveal {
+        0% {
+          opacity: 0;
+          clip-path: inset(0 100% 0 0);
+        }
+        30% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+          clip-path: inset(0 0% 0 0);
+        }
+      }
+
+      .revealed-text span {
+        background: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #a78bfa 50%,
+          #60a5fa 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ================== Business Card ================== */
+      .card-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        pointer-events: none;
+      }
+
+      .business-card {
+        position: absolute;
+        left: 80px;
+        top: 50%;
+        transform: translateY(-50%) scale(0.8);
+        width: 180px;
+        height: 110px;
+        background: linear-gradient(
+          145deg,
+          #ffffff 0%,
+          #f0f4ff 50%,
+          #e8efff 100%
+        );
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+          0 0 40px rgba(96, 165, 250, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        opacity: 0;
+      }
+
+      .business-card.ready {
+        opacity: 1;
+        animation: cardReady 0.3s ease-out forwards;
+      }
+
+      .business-card.thrown {
+        animation: cardThrown 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      }
+
+      .business-card.exploding {
+        animation: cardExplode 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes cardReady {
+        0% {
+          transform: translateY(-50%) scale(0.8) rotate(-5deg);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(-50%) scale(1) rotate(0deg);
+          opacity: 1;
+        }
+      }
+
+      @keyframes cardThrown {
+        0% {
+          left: 80px;
+          top: 50%;
+          transform: translateY(-50%) rotateY(0deg) rotateZ(0deg);
+        }
+        10% {
+          transform: translateY(-50%) rotateY(90deg) rotateZ(30deg);
+        }
+        100% {
+          left: calc(50% - 90px);
+          top: 50%;
+          transform: translateY(-50%) rotateY(1080deg) rotateZ(360deg);
+        }
+      }
+
+      @keyframes cardExplode {
+        0% {
+          left: calc(50% - 90px);
+          top: 50%;
+          width: 180px;
+          height: 110px;
+          border-radius: 12px;
+          opacity: 1;
+          transform: translateY(-50%);
+        }
+        50% {
+          opacity: 1;
+          border-radius: 24px;
+          transform: translateY(-50%) scale(1.1);
+        }
+        100% {
+          left: 0;
+          top: 0;
+          width: 100vw;
+          height: 100vh;
+          border-radius: 0;
+          opacity: 0;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* Card Content - Cartoonish Style */
+      .card-logo {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        border-radius: 10px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 800;
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
+
+      .card-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1e293b;
+        letter-spacing: -0.01em;
+      }
+
+      .card-title {
+        font-size: 9px;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-top: 2px;
+      }
+
+      /* Card Trail Effect */
+      .card-trail {
+        position: absolute;
+        left: 80px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(96, 165, 250, 0.1) 20%,
+          rgba(96, 165, 250, 0.5) 60%,
+          rgba(139, 92, 246, 0.8) 100%
+        );
+        border-radius: 4px;
+        width: 0;
+        opacity: 0;
+        box-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+      }
+
+      .card-trail.active {
+        animation: trailGrow 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      }
+
+      @keyframes trailGrow {
+        0% {
+          width: 0;
+          opacity: 0;
+        }
+        20% {
+          opacity: 1;
+        }
+        100% {
+          width: calc(50% - 90px + 10px);
+          opacity: 0.6;
+        }
+      }
+
+      /* Sparkle particles */
+      .sparkles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      }
+
+      .sparkle.burst {
+        animation: sparkleBurst 0.8s ease-out forwards;
+      }
+
+      @keyframes sparkleBurst {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--tx), var(--ty)) scale(0);
+        }
+      }
+
+      /* Motion blur on card during throw */
+      .business-card.thrown::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: inherit;
+        border-radius: inherit;
+        filter: blur(8px);
+        opacity: 0.3;
+        transform: translateX(-20px);
+      }
+
+      /* ================== Main Portfolio Content ================== */
+      .portfolio-content {
+        min-height: 100vh;
+        background: #0b0f17;
+        color: #e5e7eb;
+        padding: 80px 24px;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .portfolio-content.visible {
+        opacity: 1;
+      }
+
+      .portfolio-content h1 {
+        font-size: clamp(40px, 6vw, 72px);
+        line-height: 1.06;
+        letter-spacing: -0.02em;
+        margin-bottom: 16px;
+      }
+
+      .portfolio-content .lead {
+        color: #94a3b8;
+        font-size: clamp(16px, 2.2vw, 20px);
+        max-width: 720px;
+        margin-bottom: 24px;
+      }
+
+      .portfolio-content .cta {
+        display: flex;
+        gap: 12px;
+      }
+
+      .portfolio-content .btn {
+        padding: 14px 22px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
+        border: none;
+        transition: transform 0.2s ease;
+      }
+
+      .portfolio-content .btn.primary {
+        background: linear-gradient(135deg, #87a6f3 0%, #60a5fa 100%);
+        color: #0f172a;
+      }
+
+      .portfolio-content .btn.secondary {
+        background: #121827;
+        color: #e9edf8;
+        border: 1px solid #1e2a3d;
+      }
+
+      .portfolio-content .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      /* ================== Reduced Motion ================== */
+      @media (prefers-reduced-motion: reduce) {
+        .business-card,
+        .card-trail,
+        .revealed-text,
+        .sparkle,
+        .intro-overlay,
+        .hand-container {
+          animation: none !important;
+          transition: none !important;
+        }
+
+        .intro-overlay {
+          display: none;
+        }
+
+        .portfolio-content {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Intro Animation Overlay -->
+    <div class="intro-overlay" id="introOverlay">
+      <button class="skip-btn" id="skipBtn">Skip Intro</button>
+
+      <!-- Hand Silhouette -->
+      <div class="hand-container" id="handContainer">
+        <svg
+          class="hand-svg"
+          viewBox="0 0 200 150"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Minimalist hand silhouette - open palm facing right, ready to flick -->
+          <defs>
+            <linearGradient
+              id="handGradient"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
+              <stop offset="0%" style="stop-color: rgba(255, 255, 255, 0.95)" />
+              <stop
+                offset="100%"
+                style="stop-color: rgba(255, 255, 255, 0.7)"
+              />
+            </linearGradient>
+          </defs>
+          <!-- Palm and fingers - stylized, cartoonish silhouette -->
+          <path
+            d="M40 85 
+               Q35 75 40 65 
+               L55 45 Q60 40 65 45 L70 60
+               L75 35 Q80 28 88 32 L90 55
+               L95 30 Q102 22 110 28 L108 58
+               L115 35 Q122 28 130 35 L125 65
+               L140 55 Q150 52 155 60 L145 80
+               Q155 85 160 95 
+               L155 110 
+               Q150 125 130 130 
+               L80 135 
+               Q55 133 45 120 
+               L40 100 
+               Z"
+            fill="url(#handGradient)"
+            opacity="0.9"
+          />
+          <!-- Subtle wrist/arm -->
+          <path
+            d="M40 100 
+               Q35 110 25 115 
+               L10 120 
+               Q5 122 5 130 
+               L5 145 
+               L45 145 
+               Q50 140 50 130 
+               L45 120 
+               Z"
+            fill="url(#handGradient)"
+            opacity="0.85"
+          />
+        </svg>
+      </div>
+
+      <!-- Trail Effect -->
+      <div class="card-trail" id="cardTrail"></div>
+
+      <!-- Revealed Text -->
+      <div class="revealed-text-container">
+        <div class="revealed-text" id="revealedText">
+          <span>Nicholas' Portfolio</span>
+        </div>
+      </div>
+
+      <!-- Business Card -->
+      <div class="card-container">
+        <div class="business-card" id="businessCard">
+          <div class="card-logo">N</div>
+          <div class="card-name">Nicholas Chan</div>
+          <div class="card-title">Software Developer</div>
+        </div>
+      </div>
+
+      <!-- Sparkles Container -->
+      <div class="sparkles" id="sparkles"></div>
+    </div>
+
+    <!-- Main Portfolio Content (placeholder) -->
+    <div class="portfolio-content" id="portfolioContent">
+      <h1>Hi, I'm Nicholas.</h1>
+      <p class="lead">
+        Senior CS @ UCSD who ships clean, testable products. I build fast
+        interfaces, solid backends, and sweat the tiny UX details that make apps
+        feel "done".
+      </p>
+      <div class="cta">
+        <button class="btn primary">Download Résumé</button>
+        <button class="btn secondary">Email Me</button>
+      </div>
+    </div>
+
+    <script>
+      // ================== Animation Controller ================== //
+      const intro = document.getElementById("introOverlay");
+      const hand = document.getElementById("handContainer");
+      const card = document.getElementById("businessCard");
+      const trail = document.getElementById("cardTrail");
+      const text = document.getElementById("revealedText");
+      const sparkles = document.getElementById("sparkles");
+      const portfolio = document.getElementById("portfolioContent");
+      const skipBtn = document.getElementById("skipBtn");
+
+      let animationComplete = false;
+
+      // Create sparkle particles
+      function createSparkles() {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        for (let i = 0; i < 24; i++) {
+          const sparkle = document.createElement("div");
+          sparkle.className = "sparkle";
+          sparkle.style.left = centerX + "px";
+          sparkle.style.top = centerY + "px";
+
+          // Random direction
+          const angle = (Math.PI * 2 * i) / 24 + Math.random() * 0.3;
+          const distance = 80 + Math.random() * 250;
+          const tx = Math.cos(angle) * distance;
+          const ty = Math.sin(angle) * distance;
+
+          sparkle.style.setProperty("--tx", tx + "px");
+          sparkle.style.setProperty("--ty", ty + "px");
+
+          sparkles.appendChild(sparkle);
+
+          // Trigger animation with slight delay variation
+          setTimeout(
+            () => sparkle.classList.add("burst"),
+            30 + Math.random() * 50
+          );
+
+          // Remove after animation
+          setTimeout(() => sparkle.remove(), 950);
+        }
+      }
+
+      // Skip animation
+      function skipAnimation() {
+        if (animationComplete) return;
+        animationComplete = true;
+
+        intro.classList.add("fade-out");
+        portfolio.classList.add("visible");
+
+        setTimeout(() => {
+          intro.style.display = "none";
+        }, 1000);
+      }
+
+      // Start animation sequence
+      function startAnimation() {
+        // Step 1: Hand enters from left
+        setTimeout(() => {
+          hand.classList.add("entering");
+        }, 100);
+
+        // Step 2: Card appears in hand position
+        setTimeout(() => {
+          card.classList.add("ready");
+        }, 500);
+
+        // Step 3: Hand flicks
+        setTimeout(() => {
+          hand.classList.remove("entering");
+          hand.classList.add("flicking");
+        }, 700);
+
+        // Step 4: Card is thrown + trail starts
+        setTimeout(() => {
+          card.classList.remove("ready");
+          card.classList.add("thrown");
+          trail.classList.add("active");
+        }, 850);
+
+        // Step 5: Hand exits
+        setTimeout(() => {
+          hand.classList.remove("flicking");
+          hand.classList.add("exiting");
+        }, 950);
+
+        // Step 6: Text reveals as card moves
+        setTimeout(() => {
+          text.classList.add("revealing");
+        }, 1000);
+
+        // Step 7: Card reaches center, explodes with sparkles
+        setTimeout(() => {
+          card.classList.remove("thrown");
+          card.classList.add("exploding");
+          createSparkles();
+        }, 2350);
+
+        // Step 8: Fade out overlay, show portfolio
+        setTimeout(() => {
+          if (!animationComplete) {
+            animationComplete = true;
+            intro.classList.add("fade-out");
+            portfolio.classList.add("visible");
+          }
+        }, 2750);
+
+        // Step 9: Remove overlay from DOM
+        setTimeout(() => {
+          intro.style.display = "none";
+        }, 3750);
+      }
+
+      // Event Listeners
+      skipBtn.addEventListener("click", skipAnimation);
+
+      // Keyboard skip (Escape or Space)
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" || e.key === " ") {
+          skipAnimation();
+        }
+      });
+
+      // Start animation on load
+      window.addEventListener("load", () => {
+        setTimeout(startAnimation, 300);
+      });
+    </script>
+  </body>
+</html>
