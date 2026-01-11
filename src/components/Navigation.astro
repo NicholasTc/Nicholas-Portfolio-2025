@@ -1,20 +1,23 @@
 ---
 // Navigation component matching the design proposal
 // 2D/3D mode toggle (visual placeholder for now)
+
+// Get the current path to highlight active link
+const currentPath = Astro.url.pathname;
 ---
 
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#" class="nav-logo">
+    <a href="/" class="nav-logo">
       <div class="logo-mark">N</div>
       <span class="logo-text">Nicholas Chan</span>
     </a>
 
     <div class="nav-links">
-      <a href="#" class="nav-link">Home</a>
-      <a href="#" class="nav-link">Projects</a>
-      <a href="#" class="nav-link">About</a>
-      <a href="#" class="nav-link">Contact</a>
+      <a href="/" class={`nav-link ${currentPath === '/' ? 'active' : ''}`}>Home</a>
+      <a href="/projects" class={`nav-link ${currentPath === '/projects' || currentPath === '/projects/' ? 'active' : ''}`}>Projects</a>
+      <a href="/about" class={`nav-link ${currentPath === '/about' || currentPath === '/about/' ? 'active' : ''}`}>About</a>
+      <a href="/#contact" class="nav-link">Contact</a>
     </div>
 
     <div class="nav-actions">
@@ -121,7 +124,8 @@
     position: relative;
   }
 
-  .nav-link:hover {
+  .nav-link:hover,
+  .nav-link.active {
     color: var(--text-primary);
     background: var(--surface-hover);
   }

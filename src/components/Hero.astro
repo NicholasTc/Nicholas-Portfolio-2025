@@ -63,14 +63,12 @@
                 class="editor-tab active"
                 id="tabDetails"
               >
-                <span class="tab-icon">📄</span>
                 Details
               </button>
               <button
                 class="editor-tab"
                 id="tabMatrix"
               >
-                <span class="tab-icon">⚡</span>
                 Matrix
               </button>
             </div>
@@ -464,9 +462,6 @@
     border-bottom: 2px solid transparent;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
 
   .editor-tab:hover {
@@ -478,10 +473,6 @@
     color: var(--text-primary);
     background: rgba(255, 255, 255, 0.03);
     border-bottom-color: var(--accent-blue);
-  }
-
-  .editor-tab .tab-icon {
-    font-size: 14px;
   }
 
   .code-title {
@@ -553,6 +544,7 @@
     opacity: 0;
     pointer-events: none;
     z-index: 15;
+    background: var(--bg-secondary);
   }
 
   .dissolve-container.active {
@@ -688,7 +680,7 @@
   }
 
   .float-element.top-right {
-    top: -40px;
+    top: -35px;
     right: -40px;
     animation-delay: -1s;
   }
@@ -1080,7 +1072,6 @@
 
     if (staticCode) {
       staticCode.classList.remove('hidden');
-      staticCode.style.opacity = '1';
     }
 
     if (dissolveContainer) {
