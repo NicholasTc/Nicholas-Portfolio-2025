@@ -419,6 +419,13 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
+  [data-theme="light"] .code-window {
+    box-shadow: 
+      0 50px 100px -20px rgba(0, 0, 0, 0.08),
+      0 0 60px -10px var(--glow-purple),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
   /* ================== EDITOR-STYLE HEADER WITH TABS ================== */
   .code-header {
     display: flex;
@@ -426,6 +433,10 @@
     padding: 0;
     background: rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid var(--glass-border);
+  }
+
+  [data-theme="light"] .code-header {
+    background: rgba(0, 0, 0, 0.02);
   }
 
   .window-controls {
@@ -469,10 +480,18 @@
     background: rgba(255, 255, 255, 0.02);
   }
 
+  [data-theme="light"] .editor-tab:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
+
   .editor-tab.active {
     color: var(--text-primary);
     background: rgba(255, 255, 255, 0.03);
     border-bottom-color: var(--accent-blue);
+  }
+
+  [data-theme="light"] .editor-tab.active {
+    background: rgba(0, 0, 0, 0.03);
   }
 
   .code-title {
@@ -532,6 +551,14 @@
   .comment { color: #546e7a; font-style: italic; }
   .bracket { color: #89ddff; }
   .property { color: #ffcb6b; }
+
+  [data-theme="light"] .keyword { color: #9333ea; }
+  [data-theme="light"] .function { color: #2563eb; }
+  [data-theme="light"] .string { color: #16a34a; }
+  [data-theme="light"] .variable { color: #ea580c; }
+  [data-theme="light"] .comment { color: #94a3b8; font-style: italic; }
+  [data-theme="light"] .bracket { color: #0891b2; }
+  [data-theme="light"] .property { color: #d97706; }
 
   /* ================== DISSOLVE ANIMATION ================== */
   .dissolve-container {
@@ -852,6 +879,8 @@
     ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
     ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
 
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
     drops.forEach(drop => {
       drop.chars.forEach((char, charIndex) => {
         const y = drop.y + charIndex * lineHeight;
@@ -862,12 +891,22 @@
           if (y > matrixCanvas.height - 50) opacity *= (matrixCanvas.height - y) / 50;
 
           if (char.isBright) {
-            ctx.fillStyle = `rgba(255, 255, 255, ${opacity + 0.3})`;
-            ctx.shadowColor = '#60a5fa';
+            if (isLight) {
+              ctx.fillStyle = `rgba(15, 23, 42, ${opacity + 0.3})`;
+              ctx.shadowColor = '#2563eb';
+            } else {
+              ctx.fillStyle = `rgba(255, 255, 255, ${opacity + 0.3})`;
+              ctx.shadowColor = '#60a5fa';
+            }
             ctx.shadowBlur = 3;
           } else {
-            ctx.fillStyle = `rgba(96, 165, 250, ${opacity})`;
-            ctx.shadowColor = '#60a5fa';
+            if (isLight) {
+              ctx.fillStyle = `rgba(37, 99, 235, ${opacity})`;
+              ctx.shadowColor = '#2563eb';
+            } else {
+              ctx.fillStyle = `rgba(96, 165, 250, ${opacity})`;
+              ctx.shadowColor = '#60a5fa';
+            }
             ctx.shadowBlur = 2;
           }
 

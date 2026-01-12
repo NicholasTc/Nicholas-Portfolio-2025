@@ -55,6 +55,10 @@ const currentPath = Astro.url.pathname;
     border-bottom: 1px solid var(--glass-border);
   }
 
+  [data-theme="light"] .nav.scrolled {
+    background: rgba(250, 251, 252, 0.85);
+  }
+
   .nav-inner {
     max-width: 1400px;
     margin: 0 auto;
@@ -206,17 +210,56 @@ const currentPath = Astro.url.pathname;
     }
   });
 
-  // Placeholder toggle (non-functional for now)
+  // Theme management
+  const getTheme = () => {
+    const stored = localStorage.getItem('theme');
+    if (stored) return stored;
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  };
+
+  const setTheme = (theme: 'light' | 'dark') => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    updateButtonStates(theme);
+  };
+
+  const updateButtonStates = (theme: 'light' | 'dark') => {
+    const lightBtn = document.getElementById('lightModeBtn');
+    const darkBtn = document.getElementById('darkModeBtn');
+    
+    if (theme === 'light') {
+      lightBtn?.classList.add('active');
+      darkBtn?.classList.remove('active');
+    } else {
+      darkBtn?.classList.add('active');
+      lightBtn?.classList.remove('active');
+    }
+  };
+
+  // Initialize theme on load
+  const currentTheme = getTheme();
+  if (document.documentElement.getAttribute('data-theme') !== currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    localStorage.setItem('theme', currentTheme);
+  }
+  updateButtonStates(currentTheme as 'light' | 'dark');
+
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      setTheme(e.matches ? 'light' : 'dark');
+    }
+  });
+
+  // Toggle buttons
   const lightBtn = document.getElementById('lightModeBtn');
   const darkBtn = document.getElementById('darkModeBtn');
   
   lightBtn?.addEventListener('click', () => {
-    lightBtn.classList.add('active');
-    darkBtn?.classList.remove('active');
+    setTheme('light');
   });
   
   darkBtn?.addEventListener('click', () => {
-    darkBtn.classList.add('active');
-    lightBtn?.classList.remove('active');
+    setTheme('dark');
   });
 </script>

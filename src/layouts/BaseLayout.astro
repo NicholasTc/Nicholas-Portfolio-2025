@@ -20,6 +20,20 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Theme detection script -->
+  <script is:inline>
+    (function() {
+      const getTheme = () => {
+        const stored = localStorage.getItem('theme');
+        if (stored) return stored;
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      };
+      
+      const theme = getTheme();
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
     <slot />
@@ -89,6 +103,35 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
     height: auto;
   }
 
+  /* ================== Light Mode Variables ================== */
+  [data-theme="light"] {
+    --bg-primary: #fafbfc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f7f9fc;
+    --surface: rgba(0, 0, 0, 0.02);
+    --surface-hover: rgba(0, 0, 0, 0.04);
+    --glass: rgba(0, 0, 0, 0.02);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --accent-blue: #2563eb;
+    --accent-purple: #7c3aed;
+    --accent-cyan: #0891b2;
+    --accent-green: #16a34a;
+    --accent-amber: #d97706;
+    --accent-rose: #e11d48;
+    --glow-blue: rgba(37, 99, 235, 0.15);
+    --glow-purple: rgba(124, 58, 237, 0.15);
+    --gradient-text: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #2563eb 100%);
+    --gradient-bg: linear-gradient(135deg, #2563eb 0%, #5b21b6 50%, #7c3aed 100%);
+  }
+
+  [data-theme="light"] body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
   /* ================== Background Effects ================== */
   .bg-grid {
     position: fixed;
@@ -99,6 +142,12 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
     background-size: 60px 60px;
     pointer-events: none;
     z-index: 0;
+  }
+
+  [data-theme="light"] .bg-grid {
+    background-image: 
+      linear-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.015) 1px, transparent 1px);
   }
 
   .bg-gradient-orbs {
@@ -115,6 +164,10 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
     filter: blur(80px);
     opacity: 0.4;
     animation: orbFloat 20s ease-in-out infinite;
+  }
+
+  [data-theme="light"] .orb {
+    opacity: 0.2;
   }
 
   .orb-1 {
@@ -225,6 +278,10 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
     padding: 20px;
   }
 
+  [data-theme="light"] .modal {
+    background: rgba(15, 23, 42, 0.5);
+  }
+
   .modal[open] {
     display: flex;
   }
@@ -238,6 +295,10 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
     padding: 28px;
     position: relative;
+  }
+
+  [data-theme="light"] .dialog {
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
   }
 
   .dialog header {
@@ -336,6 +397,10 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
   .dialog .btn:not(.primary):hover {
     background: var(--surface-hover);
     border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  [data-theme="light"] .dialog .btn:not(.primary):hover {
+    border-color: rgba(0, 0, 0, 0.12);
   }
 
   .dialog .btn .shine {
