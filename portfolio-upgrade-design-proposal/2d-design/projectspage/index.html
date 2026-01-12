@@ -6,7 +6,10 @@
     <title>Projects Page Design Proposal — Nicholas Chan</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <style>
       /* ================== CSS Variables ================== */
       :root {
@@ -28,8 +31,18 @@
         --accent-rose: #fb7185;
         --glow-blue: rgba(96, 165, 250, 0.4);
         --glow-purple: rgba(167, 139, 250, 0.4);
-        --gradient-text: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #60a5fa 100%);
-        --gradient-bg: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
+        --gradient-text: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #a78bfa 50%,
+          #60a5fa 100%
+        );
+        --gradient-bg: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #818cf8 50%,
+          #a78bfa 100%
+        );
         --radius-sm: 8px;
         --radius-md: 12px;
         --radius-lg: 20px;
@@ -39,8 +52,16 @@
         --font-mono: "JetBrains Mono", monospace;
       }
 
-      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
       body {
         font-family: var(--font-sans);
         background: var(--bg-primary);
@@ -51,222 +72,632 @@
 
       /* Background Effects */
       .bg-grid {
-        position: fixed; inset: 0;
-        background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                          linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
         background-size: 60px 60px;
-        pointer-events: none; z-index: 0;
+        pointer-events: none;
+        z-index: 0;
       }
-      .bg-gradient-orbs { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-      .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3; }
-      .orb-1 { width: 500px; height: 500px; background: var(--accent-blue); top: -100px; left: 30%; }
-      .orb-2 { width: 400px; height: 400px; background: var(--accent-purple); bottom: 10%; right: -100px; }
+      .bg-gradient-orbs {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.3;
+      }
+      .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: var(--accent-blue);
+        top: -100px;
+        left: 30%;
+      }
+      .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: var(--accent-purple);
+        bottom: 10%;
+        right: -100px;
+      }
 
       /* Navigation */
       .nav {
-        position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
         padding: 16px 32px;
         background: rgba(6, 8, 13, 0.8);
         backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--glass-border);
       }
-      .nav-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-      .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-primary); }
+      .nav-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--text-primary);
+      }
       .logo-mark {
-        width: 42px; height: 42px; background: var(--gradient-bg); border-radius: var(--radius-md);
-        display: flex; align-items: center; justify-content: center;
-        font-weight: 700; font-size: 18px; box-shadow: var(--shadow-glow);
+        width: 42px;
+        height: 42px;
+        background: var(--gradient-bg);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        box-shadow: var(--shadow-glow);
       }
-      .logo-text { font-weight: 600; font-size: 16px; letter-spacing: -0.02em; }
-      .nav-links { display: flex; align-items: center; gap: 8px; }
+      .logo-text {
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: -0.02em;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
       .nav-link {
-        padding: 10px 18px; color: var(--text-secondary); text-decoration: none;
-        font-size: 14px; font-weight: 500; border-radius: var(--radius-sm); transition: all 0.3s ease;
+        padding: 10px 18px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
       }
-      .nav-link:hover, .nav-link.active { color: var(--text-primary); background: var(--surface-hover); }
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--text-primary);
+        background: var(--surface-hover);
+      }
 
       /* Page Header */
-      .page-header { padding: 140px 32px 60px; position: relative; z-index: 1; }
-      .page-header-inner { max-width: 1400px; margin: 0 auto; }
-      .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; font-size: 14px; color: var(--text-muted); }
-      .breadcrumb a { color: var(--text-secondary); text-decoration: none; transition: color 0.3s; }
-      .breadcrumb a:hover { color: var(--accent-blue); }
-      .page-title { font-size: clamp(48px, 6vw, 72px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 20px; line-height: 1.1; }
-      .page-title .gradient-text { background: var(--gradient-text); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-      .page-subtitle { font-size: 20px; color: var(--text-secondary); max-width: 600px; line-height: 1.6; margin-bottom: 40px; }
+      .page-header {
+        padding: 140px 32px 60px;
+        position: relative;
+        z-index: 1;
+      }
+      .page-header-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 24px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+      .breadcrumb a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      .breadcrumb a:hover {
+        color: var(--accent-blue);
+      }
+      .page-title {
+        font-size: clamp(48px, 6vw, 72px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin-bottom: 20px;
+        line-height: 1.1;
+      }
+      .page-title .gradient-text {
+        background: var(--gradient-text);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .page-subtitle {
+        font-size: 20px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        line-height: 1.6;
+        margin-bottom: 40px;
+      }
 
       /* Filter Tabs */
-      .filter-tabs { display: flex; flex-wrap: wrap; gap: 10px; }
-      .filter-tab {
-        padding: 10px 20px; background: var(--glass); border: 1px solid var(--glass-border);
-        border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--text-secondary);
-        cursor: pointer; transition: all 0.3s ease;
+      .filter-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
       }
-      .filter-tab:hover { background: var(--surface-hover); color: var(--text-primary); }
-      .filter-tab.active { background: var(--gradient-bg); border-color: transparent; color: white; box-shadow: 0 4px 20px var(--glow-blue); }
+      .filter-tab {
+        padding: 10px 20px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .filter-tab:hover {
+        background: var(--surface-hover);
+        color: var(--text-primary);
+      }
+      .filter-tab.active {
+        background: var(--gradient-bg);
+        border-color: transparent;
+        color: white;
+        box-shadow: 0 4px 20px var(--glow-blue);
+      }
 
       /* Projects Section */
-      .projects-section { padding: 60px 32px 120px; position: relative; z-index: 1; }
-      .projects-inner { max-width: 1400px; margin: 0 auto; }
+      .projects-section {
+        padding: 60px 32px 120px;
+        position: relative;
+        z-index: 1;
+      }
+      .projects-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
       /* Masonry Grid */
       .projects-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
       }
 
       .project-card {
-        background: var(--glass); border: 1px solid var(--glass-border);
-        border-radius: var(--radius-xl); overflow: hidden;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative; cursor: pointer;
+        position: relative;
+        cursor: pointer;
       }
       .project-card::before {
-        content: ''; position: absolute; inset: 0;
-        background: linear-gradient(135deg, rgba(96,165,250,0.05), rgba(167,139,250,0.05));
-        opacity: 0; transition: opacity 0.4s ease;
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(96, 165, 250, 0.05),
+          rgba(167, 139, 250, 0.05)
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
       }
-      .project-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.15); box-shadow: 0 30px 80px -20px rgba(0,0,0,0.5), 0 0 50px -15px var(--glow-blue); }
-      .project-card:hover::before { opacity: 1; }
+      .project-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.5),
+          0 0 50px -15px var(--glow-blue);
+      }
+      .project-card:hover::before {
+        opacity: 1;
+      }
 
-      .project-card.featured { grid-column: span 2; grid-row: span 2; }
-      .project-card.tall { grid-row: span 2; }
+      .project-card.featured {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+      .project-card.tall {
+        grid-row: span 2;
+      }
 
       .project-image {
-        width: 100%; height: 220px;
-        background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
-        overflow: hidden; position: relative;
+        width: 100%;
+        height: 220px;
+        background: linear-gradient(
+          135deg,
+          var(--bg-tertiary),
+          var(--bg-secondary)
+        );
+        overflow: hidden;
+        position: relative;
       }
-      .project-card.featured .project-image { height: 400px; }
-      .project-card.tall .project-image { height: 280px; }
-      .project-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-      .project-card:hover .project-image img { transform: scale(1.05); }
+      .project-card.featured .project-image {
+        height: 400px;
+      }
+      .project-card.tall .project-image {
+        height: 280px;
+      }
+      .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+      }
+      .project-card:hover .project-image img {
+        transform: scale(1.05);
+      }
 
       .project-image-overlay {
-        position: absolute; inset: 0;
-        background: linear-gradient(0deg, rgba(6,8,13,0.9) 0%, transparent 50%);
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          0deg,
+          rgba(6, 8, 13, 0.9) 0%,
+          transparent 50%
+        );
       }
 
-      .project-content { padding: 28px; position: relative; z-index: 1; }
-      .project-card.featured .project-content { padding: 36px; }
+      .project-content {
+        padding: 28px;
+        position: relative;
+        z-index: 1;
+      }
+      .project-card.featured .project-content {
+        padding: 36px;
+      }
 
-      .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
       .project-tag {
-        padding: 6px 14px; background: rgba(96,165,250,0.1); border-radius: 999px;
-        font-size: 12px; font-weight: 600; color: var(--accent-blue);
+        padding: 6px 14px;
+        background: rgba(96, 165, 250, 0.1);
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--accent-blue);
       }
-      .project-tag.backend { background: rgba(167,139,250,0.1); color: var(--accent-purple); }
-      .project-tag.ai { background: rgba(34,211,238,0.1); color: var(--accent-cyan); }
-      .project-tag.mobile { background: rgba(251,113,133,0.1); color: var(--accent-rose); }
+      .project-tag.backend {
+        background: rgba(167, 139, 250, 0.1);
+        color: var(--accent-purple);
+      }
+      .project-tag.ai {
+        background: rgba(34, 211, 238, 0.1);
+        color: var(--accent-cyan);
+      }
+      .project-tag.mobile {
+        background: rgba(251, 113, 133, 0.1);
+        color: var(--accent-rose);
+      }
 
       .project-title {
-        font-size: 24px; font-weight: 700; margin-bottom: 12px;
-        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
       }
-      .project-card.featured .project-title { font-size: 32px; }
+      .project-card.featured .project-title {
+        font-size: 32px;
+      }
 
       .project-arrow {
-        width: 40px; height: 40px; background: var(--surface); border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 18px; flex-shrink: 0; transition: all 0.3s ease;
+        width: 40px;
+        height: 40px;
+        background: var(--surface);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
       }
-      .project-card:hover .project-arrow { background: var(--gradient-bg); transform: translateX(4px); }
+      .project-card:hover .project-arrow {
+        background: var(--gradient-bg);
+        transform: translateX(4px);
+      }
 
-      .project-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
-      .project-card.featured .project-desc { font-size: 16px; }
+      .project-desc {
+        font-size: 15px;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+      .project-card.featured .project-desc {
+        font-size: 16px;
+      }
 
-      .project-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-      .stack-item { padding: 6px 12px; background: var(--surface); border-radius: 6px; font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); }
+      .project-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+      .stack-item {
+        padding: 6px 12px;
+        background: var(--surface);
+        border-radius: 6px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+      }
 
-      .project-meta { display: flex; align-items: center; gap: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border); }
-      .meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); }
-      .meta-icon { font-size: 16px; }
+      .project-meta {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--glass-border);
+      }
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+      .meta-icon {
+        font-size: 16px;
+      }
 
-      .project-links { display: flex; gap: 12px; margin-left: auto; }
+      .project-links {
+        display: flex;
+        gap: 12px;
+        margin-left: auto;
+      }
       .project-link {
-        width: 36px; height: 36px; background: var(--surface); border: 1px solid var(--glass-border);
-        border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
-        color: var(--text-secondary); text-decoration: none; transition: all 0.3s ease;
+        width: 36px;
+        height: 36px;
+        background: var(--surface);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: all 0.3s ease;
       }
-      .project-link:hover { background: var(--gradient-bg); color: white; border-color: transparent; }
+      .project-link:hover {
+        background: var(--gradient-bg);
+        color: white;
+        border-color: transparent;
+      }
 
       /* Stats Bar */
       .stats-bar {
-        display: flex; justify-content: center; gap: 60px;
-        padding: 60px 32px; margin-top: 60px;
-        border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        padding: 60px 32px;
+        margin-top: 60px;
+        border-top: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--glass-border);
       }
-      .stat-item { text-align: center; }
-      .stat-value { font-size: 48px; font-weight: 800; background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-      .stat-label { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
+      .stat-item {
+        text-align: center;
+      }
+      .stat-value {
+        font-size: 48px;
+        font-weight: 800;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .stat-label {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-top: 8px;
+      }
 
       /* CTA Section */
-      .cta-section { padding: 100px 32px; position: relative; z-index: 1; }
-      .cta-card {
-        max-width: 900px; margin: 0 auto;
-        background: var(--glass); border: 1px solid var(--glass-border);
-        border-radius: var(--radius-xl); padding: 60px; text-align: center;
-        position: relative; overflow: hidden;
+      .cta-section {
+        padding: 100px 32px;
+        position: relative;
+        z-index: 1;
       }
-      .cta-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(96,165,250,0.08), rgba(167,139,250,0.08)); }
-      .cta-title { font-size: clamp(28px, 4vw, 40px); font-weight: 700; margin-bottom: 16px; position: relative; z-index: 1; }
-      .cta-desc { font-size: 18px; color: var(--text-secondary); max-width: 500px; margin: 0 auto 32px; position: relative; z-index: 1; }
-      .cta-buttons { display: flex; justify-content: center; gap: 16px; position: relative; z-index: 1; }
+      .cta-card {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-xl);
+        padding: 60px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(96, 165, 250, 0.08),
+          rgba(167, 139, 250, 0.08)
+        );
+      }
+      .cta-title {
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 700;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 1;
+      }
+      .cta-desc {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 500px;
+        margin: 0 auto 32px;
+        position: relative;
+        z-index: 1;
+      }
+      .cta-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        position: relative;
+        z-index: 1;
+      }
 
       .btn {
-        display: inline-flex; align-items: center; gap: 10px;
-        padding: 16px 28px; font-size: 15px; font-weight: 600;
-        text-decoration: none; border-radius: var(--radius-md);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: var(--radius-md);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer; border: none; font-family: var(--font-sans);
+        cursor: pointer;
+        border: none;
+        font-family: var(--font-sans);
       }
-      .btn-primary { background: var(--gradient-bg); color: white; box-shadow: 0 4px 24px var(--glow-blue); }
-      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px var(--glow-blue); }
-      .btn-secondary { background: var(--glass); color: var(--text-primary); border: 1px solid var(--glass-border); }
-      .btn-secondary:hover { background: var(--surface-hover); transform: translateY(-2px); }
+      .btn-primary {
+        background: var(--gradient-bg);
+        color: white;
+        box-shadow: 0 4px 24px var(--glow-blue);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 40px var(--glow-blue);
+      }
+      .btn-secondary {
+        background: var(--glass);
+        color: var(--text-primary);
+        border: 1px solid var(--glass-border);
+      }
+      .btn-secondary:hover {
+        background: var(--surface-hover);
+        transform: translateY(-2px);
+      }
 
       /* Footer */
-      .footer { padding: 48px 32px; border-top: 1px solid var(--glass-border); position: relative; z-index: 1; }
-      .footer-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-      .footer-text { color: var(--text-muted); font-size: 14px; }
-      .footer-links { display: flex; gap: 24px; }
-      .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 14px; transition: color 0.3s; }
-      .footer-link:hover { color: var(--accent-blue); }
+      .footer {
+        padding: 48px 32px;
+        border-top: 1px solid var(--glass-border);
+        position: relative;
+        z-index: 1;
+      }
+      .footer-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .footer-text {
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+      .footer-links {
+        display: flex;
+        gap: 24px;
+      }
+      .footer-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s;
+      }
+      .footer-link:hover {
+        color: var(--accent-blue);
+      }
 
       /* Design Label */
       .design-label {
-        position: fixed; bottom: 20px; right: 20px;
-        background: var(--gradient-bg); padding: 12px 20px;
-        border-radius: var(--radius-md); font-size: 13px; font-weight: 600;
-        color: white; z-index: 9999; box-shadow: 0 4px 24px var(--glow-blue);
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--gradient-bg);
+        padding: 12px 20px;
+        border-radius: var(--radius-md);
+        font-size: 13px;
+        font-weight: 600;
+        color: white;
+        z-index: 9999;
+        box-shadow: 0 4px 24px var(--glow-blue);
       }
 
       /* Responsive */
       @media (max-width: 1200px) {
-        .projects-grid { grid-template-columns: repeat(2, 1fr); }
-        .project-card.featured { grid-column: span 2; grid-row: span 1; }
-        .project-card.featured .project-image { height: 280px; }
+        .projects-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .project-card.featured {
+          grid-column: span 2;
+          grid-row: span 1;
+        }
+        .project-card.featured .project-image {
+          height: 280px;
+        }
       }
       @media (max-width: 768px) {
-        .nav-links { display: none; }
-        .page-header { padding: 120px 20px 40px; }
-        .projects-section { padding: 40px 20px 80px; }
-        .projects-grid { grid-template-columns: 1fr; }
-        .project-card.featured, .project-card.tall { grid-column: span 1; grid-row: span 1; }
-        .project-card.featured .project-image, .project-card.tall .project-image { height: 220px; }
-        .stats-bar { flex-wrap: wrap; gap: 40px; }
-        .cta-buttons { flex-direction: column; }
-        .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+        .nav-links {
+          display: none;
+        }
+        .page-header {
+          padding: 120px 20px 40px;
+        }
+        .projects-section {
+          padding: 40px 20px 80px;
+        }
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+        .project-card.featured,
+        .project-card.tall {
+          grid-column: span 1;
+          grid-row: span 1;
+        }
+        .project-card.featured .project-image,
+        .project-card.tall .project-image {
+          height: 220px;
+        }
+        .stats-bar {
+          flex-wrap: wrap;
+          gap: 40px;
+        }
+        .cta-buttons {
+          flex-direction: column;
+        }
+        .footer-inner {
+          flex-direction: column;
+          gap: 20px;
+          text-align: center;
+        }
       }
     </style>
   </head>
   <body>
     <div class="bg-grid"></div>
-    <div class="bg-gradient-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    <div class="bg-gradient-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+    </div>
 
     <!-- Navigation -->
     <nav class="nav">
       <div class="nav-inner">
-        <a href="#" class="nav-logo"><div class="logo-mark">N</div><span class="logo-text">Nicholas Chan</span></a>
+        <a href="#" class="nav-logo"
+          ><div class="logo-mark">N</div>
+          <span class="logo-text">Nicholas Chan</span></a
+        >
         <div class="nav-links">
           <a href="#" class="nav-link">Home</a>
           <a href="#" class="nav-link active">Projects</a>
@@ -279,9 +710,16 @@
     <!-- Page Header -->
     <header class="page-header">
       <div class="page-header-inner">
-        <div class="breadcrumb"><a href="#">Home</a><span>→</span><span>Projects</span></div>
-        <h1 class="page-title">Crafted with <span class="gradient-text">precision.</span></h1>
-        <p class="page-subtitle">A curated collection of projects showcasing my journey through full-stack development, AI integration, and thoughtful UX design.</p>
+        <div class="breadcrumb">
+          <a href="#">Home</a><span>→</span><span>Projects</span>
+        </div>
+        <h1 class="page-title">
+          Crafted with <span class="gradient-text">precision.</span>
+        </h1>
+        <p class="page-subtitle">
+          A curated collection of projects showcasing my journey through
+          full-stack development, AI integration, and thoughtful UX design.
+        </p>
         <div class="filter-tabs">
           <button class="filter-tab active">All Projects</button>
           <button class="filter-tab">Full-Stack</button>
@@ -299,7 +737,10 @@
           <!-- Featured: GymApp -->
           <article class="project-card featured">
             <div class="project-image">
-              <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=500&fit=crop" alt="Gym fitness tracking app" />
+              <img
+                src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=500&fit=crop"
+                alt="Gym fitness tracking app"
+              />
               <div class="project-image-overlay"></div>
             </div>
             <div class="project-content">
@@ -307,8 +748,15 @@
                 <span class="project-tag">Full-Stack</span>
                 <span class="project-tag backend">Flask + React</span>
               </div>
-              <h3 class="project-title">GymApp — Fitness Tracker<span class="project-arrow">→</span></h3>
-              <p class="project-desc">A comprehensive fitness tracking application featuring exercise builder, progress predictions, workout planning, and real-time analytics. Optimized database queries resulting in 42% faster performance.</p>
+              <h3 class="project-title">
+                GymApp — Fitness Tracker<span class="project-arrow">→</span>
+              </h3>
+              <p class="project-desc">
+                A comprehensive fitness tracking application featuring exercise
+                builder, progress predictions, workout planning, and real-time
+                analytics. Optimized database queries resulting in 42% faster
+                performance.
+              </p>
               <div class="project-stack">
                 <span class="stack-item">Flask</span>
                 <span class="stack-item">React</span>
@@ -317,11 +765,37 @@
                 <span class="stack-item">JWT</span>
               </div>
               <div class="project-meta">
-                <span class="meta-item"><span class="meta-icon">📅</span> 2023</span>
-                <span class="meta-item"><span class="meta-icon">⏱️</span> 3 months</span>
+                <span class="meta-item"
+                  ><span class="meta-icon">📅</span> 2023</span
+                >
+                <span class="meta-item"
+                  ><span class="meta-icon">⏱️</span> 3 months</span
+                >
                 <div class="project-links">
-                  <a href="#" class="project-link" title="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
-                  <a href="#" class="project-link" title="Live Demo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+                  <a href="#" class="project-link" title="GitHub"
+                    ><svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                      /></svg
+                  ></a>
+                  <a href="#" class="project-link" title="Live Demo"
+                    ><svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
+                      /></svg
+                  ></a>
                 </div>
               </div>
             </div>
@@ -330,7 +804,10 @@
           <!-- ResumeAI Tool -->
           <article class="project-card tall">
             <div class="project-image">
-              <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop" alt="AI resume parsing visualization" />
+              <img
+                src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop"
+                alt="AI resume parsing visualization"
+              />
               <div class="project-image-overlay"></div>
             </div>
             <div class="project-content">
@@ -338,8 +815,14 @@
                 <span class="project-tag ai">AI / ML</span>
                 <span class="project-tag backend">Python</span>
               </div>
-              <h3 class="project-title">ResumeAI Tool<span class="project-arrow">→</span></h3>
-              <p class="project-desc">AI-powered resume parsing leveraging OpenAI for intelligent data extraction, achieving 85% improved accuracy across multiple document formats including PDF, DOCX, and plain text.</p>
+              <h3 class="project-title">
+                ResumeAI Tool<span class="project-arrow">→</span>
+              </h3>
+              <p class="project-desc">
+                AI-powered resume parsing leveraging OpenAI for intelligent data
+                extraction, achieving 85% improved accuracy across multiple
+                document formats including PDF, DOCX, and plain text.
+              </p>
               <div class="project-stack">
                 <span class="stack-item">OpenAI</span>
                 <span class="stack-item">Python</span>
@@ -347,9 +830,21 @@
                 <span class="stack-item">PyPDF2</span>
               </div>
               <div class="project-meta">
-                <span class="meta-item"><span class="meta-icon">📅</span> 2024</span>
+                <span class="meta-item"
+                  ><span class="meta-icon">📅</span> 2024</span
+                >
                 <div class="project-links">
-                  <a href="#" class="project-link" title="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                  <a href="#" class="project-link" title="GitHub"
+                    ><svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                      /></svg
+                  ></a>
                 </div>
               </div>
             </div>
@@ -358,7 +853,10 @@
           <!-- Pollen Atlas Widget -->
           <article class="project-card">
             <div class="project-image">
-              <img src="https://images.unsplash.com/photo-1530908295418-a12e326966ba?w=600&h=300&fit=crop" alt="Weather and air quality dashboard" />
+              <img
+                src="https://images.unsplash.com/photo-1530908295418-a12e326966ba?w=600&h=300&fit=crop"
+                alt="Weather and air quality dashboard"
+              />
               <div class="project-image-overlay"></div>
             </div>
             <div class="project-content">
@@ -366,17 +864,36 @@
                 <span class="project-tag">WordPress</span>
                 <span class="project-tag">API Integration</span>
               </div>
-              <h3 class="project-title">Pollen Atlas Widget<span class="project-arrow">→</span></h3>
-              <p class="project-desc">Elementor widget combining Google Pollen & Air Quality APIs with accessible, interactive Chart.js visualizations.</p>
+              <h3 class="project-title">
+                Pollen Atlas Widget<span class="project-arrow">→</span>
+              </h3>
+              <p class="project-desc">
+                Elementor widget combining Google Pollen & Air Quality APIs with
+                accessible, interactive Chart.js visualizations.
+              </p>
               <div class="project-stack">
                 <span class="stack-item">PHP</span>
                 <span class="stack-item">JavaScript</span>
                 <span class="stack-item">Chart.js</span>
               </div>
               <div class="project-meta">
-                <span class="meta-item"><span class="meta-icon">📅</span> 2025</span>
+                <span class="meta-item"
+                  ><span class="meta-icon">📅</span> 2025</span
+                >
                 <div class="project-links">
-                  <a href="#" class="project-link" title="Live Demo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+                  <a href="#" class="project-link" title="Live Demo"
+                    ><svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
+                      /></svg
+                  ></a>
                 </div>
               </div>
             </div>
@@ -385,7 +902,10 @@
           <!-- ProductivityHelper -->
           <article class="project-card">
             <div class="project-image">
-              <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=300&fit=crop" alt="Task management application" />
+              <img
+                src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=300&fit=crop"
+                alt="Task management application"
+              />
               <div class="project-image-overlay"></div>
             </div>
             <div class="project-content">
@@ -393,18 +913,48 @@
                 <span class="project-tag">Productivity</span>
                 <span class="project-tag">React</span>
               </div>
-              <h3 class="project-title">ProductivityHelper<span class="project-arrow">→</span></h3>
-              <p class="project-desc">Task management application featuring focus mode, weekly planning, and productivity analytics with a clean, distraction-free interface.</p>
+              <h3 class="project-title">
+                ProductivityHelper<span class="project-arrow">→</span>
+              </h3>
+              <p class="project-desc">
+                Task management application featuring focus mode, weekly
+                planning, and productivity analytics with a clean,
+                distraction-free interface.
+              </p>
               <div class="project-stack">
                 <span class="stack-item">React</span>
                 <span class="stack-item">Node.js</span>
                 <span class="stack-item">SQLite</span>
               </div>
               <div class="project-meta">
-                <span class="meta-item"><span class="meta-icon">📅</span> 2023</span>
+                <span class="meta-item"
+                  ><span class="meta-icon">📅</span> 2023</span
+                >
                 <div class="project-links">
-                  <a href="#" class="project-link" title="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
-                  <a href="#" class="project-link" title="Live Demo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+                  <a href="#" class="project-link" title="GitHub"
+                    ><svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                      /></svg
+                  ></a>
+                  <a href="#" class="project-link" title="Live Demo"
+                    ><svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
+                      /></svg
+                  ></a>
                 </div>
               </div>
             </div>
@@ -413,7 +963,10 @@
           <!-- Portfolio Website -->
           <article class="project-card">
             <div class="project-image">
-              <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&h=300&fit=crop" alt="Portfolio website design" />
+              <img
+                src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&h=300&fit=crop"
+                alt="Portfolio website design"
+              />
               <div class="project-image-overlay"></div>
             </div>
             <div class="project-content">
@@ -421,17 +974,35 @@
                 <span class="project-tag">Frontend</span>
                 <span class="project-tag">Astro</span>
               </div>
-              <h3 class="project-title">Portfolio 2025<span class="project-arrow">→</span></h3>
-              <p class="project-desc">This very website! Built with Astro for optimal performance, featuring glass-morphism design, matrix rain animations, and silky-smooth interactions.</p>
+              <h3 class="project-title">
+                Portfolio 2025<span class="project-arrow">→</span>
+              </h3>
+              <p class="project-desc">
+                This very website! Built with Astro for optimal performance,
+                featuring glass-morphism design, matrix rain animations, and
+                silky-smooth interactions.
+              </p>
               <div class="project-stack">
                 <span class="stack-item">Astro</span>
                 <span class="stack-item">TypeScript</span>
                 <span class="stack-item">CSS</span>
               </div>
               <div class="project-meta">
-                <span class="meta-item"><span class="meta-icon">📅</span> 2025</span>
+                <span class="meta-item"
+                  ><span class="meta-icon">📅</span> 2025</span
+                >
                 <div class="project-links">
-                  <a href="#" class="project-link" title="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                  <a href="#" class="project-link" title="GitHub"
+                    ><svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                      /></svg
+                  ></a>
                 </div>
               </div>
             </div>
@@ -440,7 +1011,10 @@
           <!-- API Experiments -->
           <article class="project-card">
             <div class="project-image">
-              <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=300&fit=crop" alt="API and backend development" />
+              <img
+                src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=300&fit=crop"
+                alt="API and backend development"
+              />
               <div class="project-image-overlay"></div>
             </div>
             <div class="project-content">
@@ -448,17 +1022,34 @@
                 <span class="project-tag backend">Backend</span>
                 <span class="project-tag">Spring Boot</span>
               </div>
-              <h3 class="project-title">API Experiments<span class="project-arrow">→</span></h3>
-              <p class="project-desc">Collection of RESTful APIs built with Spring Boot, featuring authentication, rate limiting, and comprehensive test coverage.</p>
+              <h3 class="project-title">
+                API Experiments<span class="project-arrow">→</span>
+              </h3>
+              <p class="project-desc">
+                Collection of RESTful APIs built with Spring Boot, featuring
+                authentication, rate limiting, and comprehensive test coverage.
+              </p>
               <div class="project-stack">
                 <span class="stack-item">Spring Boot</span>
                 <span class="stack-item">Java</span>
                 <span class="stack-item">PostgreSQL</span>
               </div>
               <div class="project-meta">
-                <span class="meta-item"><span class="meta-icon">📅</span> 2024</span>
+                <span class="meta-item"
+                  ><span class="meta-icon">📅</span> 2024</span
+                >
                 <div class="project-links">
-                  <a href="#" class="project-link" title="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                  <a href="#" class="project-link" title="GitHub"
+                    ><svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                      /></svg
+                  ></a>
                 </div>
               </div>
             </div>
@@ -467,10 +1058,22 @@
 
         <!-- Stats Bar -->
         <div class="stats-bar">
-          <div class="stat-item"><div class="stat-value">6+</div><div class="stat-label">Projects Completed</div></div>
-          <div class="stat-item"><div class="stat-value">15K+</div><div class="stat-label">Lines of Code</div></div>
-          <div class="stat-item"><div class="stat-value">8</div><div class="stat-label">Technologies Used</div></div>
-          <div class="stat-item"><div class="stat-value">100%</div><div class="stat-label">Passion Invested</div></div>
+          <div class="stat-item">
+            <div class="stat-value">6+</div>
+            <div class="stat-label">Projects Completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">15K+</div>
+            <div class="stat-label">Lines of Code</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Technologies Used</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Passion Invested</div>
+          </div>
         </div>
       </div>
     </section>
@@ -479,9 +1082,22 @@
     <section class="cta-section">
       <div class="cta-card">
         <h2 class="cta-title">Have a Project in Mind?</h2>
-        <p class="cta-desc">I'm always excited to collaborate on interesting projects. Let's build something amazing together.</p>
+        <p class="cta-desc">
+          I'm always excited to collaborate on interesting projects. Let's build
+          something amazing together.
+        </p>
         <div class="cta-buttons">
-          <a href="#" class="btn btn-primary">Get in Touch<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="#" class="btn btn-primary"
+            >Get in Touch<svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" /></svg
+          ></a>
           <a href="#" class="btn btn-secondary">View GitHub</a>
         </div>
       </div>
@@ -490,7 +1106,9 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-inner">
-        <p class="footer-text">© 2025 Nicholas Chan. Built with ♥ and lots of coffee.</p>
+        <p class="footer-text">
+          © 2025 Nicholas Chan. Built with ♥ and lots of coffee.
+        </p>
         <div class="footer-links">
           <a href="#" class="footer-link">GitHub</a>
           <a href="#" class="footer-link">LinkedIn</a>
@@ -502,4 +1120,3 @@
     <div class="design-label">Projects Page Proposal</div>
   </body>
 </html>
-
