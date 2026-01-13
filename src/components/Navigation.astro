@@ -262,4 +262,29 @@ const currentPath = Astro.url.pathname;
   darkBtn?.addEventListener('click', () => {
     setTheme('dark');
   });
+
+  // Handle contact link click to prevent page reload if already on homepage
+  const contactLink = document.querySelector('a[href="/#contact"]');
+  if (contactLink) {
+    contactLink.addEventListener('click', (e) => {
+      // Check if we're on the homepage
+      if (window.location.pathname === '/' || window.location.pathname === '') {
+        e.preventDefault(); // this is the correct method to prevent reload
+        
+        // Check if contact section exists (fail safe, not really needed but is included so might as well)
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+          // Smooth scroll to contact section
+          const navHeight = nav?.offsetHeight || 0;
+          const contactTop = contactSection.offsetTop - navHeight - 20;
+          
+          window.scrollTo({
+            top: contactTop,
+            behavior: 'smooth'
+          });
+        }
+      }
+      // If not on homepage, let the default behavior happen (navigate to /#contact)
+    });
+  }
 </script>

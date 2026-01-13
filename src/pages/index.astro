@@ -573,6 +573,32 @@ import Footer from '../components/Footer.astro';
 
     if (!intro) return; // Exit if not on homepage
 
+    // Check if animation has already been shown in this session
+    const animationShown = sessionStorage.getItem('introAnimationShown');
+    
+    // If animation was already shown, hide it immediately
+    if (animationShown === 'true') {
+      intro.classList.add('hidden');
+      
+      // If there's a hash in the URL (e.g., #contact), scroll to it after a brief delay
+      if (window.location.hash) {
+        setTimeout(() => {
+          const targetId = window.location.hash.substring(1);
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            const nav = document.getElementById('nav');
+            const navHeight = nav?.offsetHeight || 0;
+            const targetTop = targetElement.offsetTop - navHeight - 20;
+            window.scrollTo({
+              top: targetTop,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
+      }
+      return;
+    }
+
     let animationComplete = false;
 
     // Create sparkle particles
@@ -605,6 +631,9 @@ import Footer from '../components/Footer.astro';
     function skipAnimation() {
       if (animationComplete) return;
       animationComplete = true;
+      
+      // Mark animation as shown in session storage
+      sessionStorage.setItem('introAnimationShown', 'true');
 
       intro.classList.add('fade-out');
 
@@ -639,6 +668,8 @@ import Footer from '../components/Footer.astro';
       setTimeout(() => {
         if (!animationComplete) {
           animationComplete = true;
+          // Mark animation as shown in session storage
+          sessionStorage.setItem('introAnimationShown', 'true');
           intro.classList.add('fade-out');
         }
       }, 2200);
