@@ -242,27 +242,170 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
     margin-bottom: 0;
   }
 
-  /* ================== Contact Section (kept from original) ================== */
+  /* ================== Contact Section ================== */
   #contact {
-    margin-top: 48px;
-    padding: 0 32px;
+    margin-top: 64px;
     position: relative;
     z-index: 1;
   }
 
-  #contact h2 {
-    font-size: 28px;
-    margin: 0 0 12px;
-    color: var(--text-primary);
+  #contact.wrap {
+    padding: 0 32px;
   }
 
-  #contact a.link {
-    color: var(--accent-blue);
+  .contact-header {
+    margin-bottom: 24px;
+  }
+
+  .contact-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin: 0 0 8px;
+  }
+
+  .contact-subtitle {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0;
+  }
+
+  .contact-content {
+    padding: 28px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .contact-content:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  [data-theme="light"] .contact-content:hover {
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+
+  .contact-column {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .contact-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .contact-value {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
     transition: color 0.3s ease;
   }
 
-  #contact a.link:hover {
+  .contact-value a {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .contact-value a:hover {
+    color: var(--accent-blue);
+    transform: translateX(4px);
+  }
+
+  .contact-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--accent-blue);
+  }
+
+  /* Email - Primary Emphasis */
+  .contact-item:first-child .contact-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent-blue);
+  }
+
+  .contact-item:first-child .contact-value a:hover {
     color: var(--accent-purple);
+  }
+
+  /* Phone - Secondary Emphasis */
+  .contact-item:nth-child(2) .contact-value {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  /* Phone number - easily copyable */
+  .phone-number {
+    user-select: all;
+    cursor: pointer;
+  }
+
+  /* Social Links */
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 8px 0;
+  }
+
+  .social-link:hover {
+    color: var(--accent-blue);
+    transform: translateX(4px);
+  }
+
+  .social-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  /* Location - Subtle */
+  .contact-item:last-child .contact-value {
+    font-size: 16px;
+    color: var(--text-secondary);
   }
 
   /* ================== Modal Styles (kept from original) ================== */
@@ -430,8 +573,25 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
       padding: 20px;
     }
 
-    #contact {
+    #contact.wrap {
       padding: 0 20px;
+    }
+
+    .contact-content {
+      padding: 20px;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .contact-column {
+      gap: 24px;
+    }
+
+    .contact-header {
+      margin-bottom: 20px;
     }
 
     .dialog {
