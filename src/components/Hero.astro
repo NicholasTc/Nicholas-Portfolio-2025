@@ -571,18 +571,17 @@
     opacity: 0;
     pointer-events: none;
     z-index: 15;
-    background: var(--bg-secondary);
   }
 
   .dissolve-container.active {
     opacity: 1;
   }
 
-  .dissolve-char {
+  :global(.dissolve-char) {
     display: inline-block;
   }
 
-  .dissolve-char.falling {
+  :global(.dissolve-char.falling) {
     animation: charFall 2.2s cubic-bezier(0.32, 0, 0.67, 0) forwards;
   }
 
@@ -618,14 +617,14 @@
     }
   }
 
-  .dissolve-line-number {
+  :global(.dissolve-line-number) {
     display: inline-block;
     min-width: 24px;
     text-align: right;
     color: var(--text-muted);
   }
 
-  .dissolve-line-number.falling {
+  :global(.dissolve-line-number.falling) {
     animation: lineNumFall 2s cubic-bezier(0.32, 0, 0.67, 0) forwards;
   }
 
@@ -810,359 +809,540 @@
 </style>
 
 <script>
-  // ================== STATE ================== //
-  let currentView = 'details';
-  let autoSwitchTimeout: number | null = null;
-  let hasAutoSwitched = false;
-  let hasPlayedDissolve = false;
-  let matrixAnimationId: number | null = null;
+  document.addEventListener('DOMContentLoaded', () => {
+    // ================== STATE ================== //
+    let currentView = 'details';
+    let autoSwitchTimeout: number | null = null;
+    let hasAutoSwitched = false;
+    let hasPlayedDissolve = false;
+    let matrixAnimationId: number | null = null;
+    let matrixInitialized = false;
 
-  // Elements
-  const staticCode = document.getElementById('staticCode');
-  const dissolveContainer = document.getElementById('dissolveContainer');
-  const matrixView = document.getElementById('matrixView');
-  const matrixCanvas = document.getElementById('matrixCanvas') as HTMLCanvasElement;
-  const tabDetails = document.getElementById('tabDetails');
-  const tabMatrix = document.getElementById('tabMatrix');
+    // Elements
+    const staticCode = document.getElementById('staticCode');
+    const dissolveContainer = document.getElementById('dissolveContainer');
+    const matrixView = document.getElementById('matrixView');
+    const matrixCanvas = document.getElementById('matrixCanvas') as HTMLCanvasElement;
+    const tabDetails = document.getElementById('tabDetails');
+    const tabMatrix = document.getElementById('tabMatrix');
 
-  // ================== SIMPLE MATRIX RAIN ================== //
-  const ctx = matrixCanvas?.getContext('2d');
-
-  const codeWords = [
-    'const', 'function', 'React', 'import', 'export', 'return', '=>',
-    'useState', 'useEffect', 'props', 'async', 'await', 'fetch',
-    'Flask', 'class', 'def', 'Python', 'map', 'filter', 'API', 'JSON'
-  ];
-
-  const columns = [
-    { x: 0.08, speed: 0.4, delay: 0 },
-    { x: 0.22, speed: 0.55, delay: 2000 },
-    { x: 0.38, speed: 0.45, delay: 1000 },
-    { x: 0.55, speed: 0.5, delay: 3000 },
-    { x: 0.72, speed: 0.42, delay: 1500 },
-    { x: 0.88, speed: 0.48, delay: 500 }
-  ];
-
-  let drops: Array<{ x: number; y: number; speed: number; chars: Array<{ text: string; isBright: boolean }> }> = [];
-  const fontSize = 14;
-  const lineHeight = 24;
-
-  function initMatrix() {
-    if (!matrixCanvas || !ctx) return;
-    const rect = matrixCanvas.parentElement?.getBoundingClientRect();
-    if (!rect) return;
+    if (!staticCode || !dissolveContainer || !matrixView || !matrixCanvas || !tabDetails || !tabMatrix) {
+      console.error('❌ [INIT] Hero animation elements not found');
+      console.error('❌ [INIT] staticCode:', staticCode);
+      console.error('❌ [INIT] dissolveContainer:', dissolveContainer);
+      console.error('❌ [INIT] matrixView:', matrixView);
+      console.error('❌ [INIT] matrixCanvas:', matrixCanvas);
+      console.error('❌ [INIT] tabDetails:', tabDetails);
+      console.error('❌ [INIT] tabMatrix:', tabMatrix);
+      return;
+    }
     
-    matrixCanvas.width = rect.width;
-    matrixCanvas.height = rect.height;
+    console.log('✅ [INIT] All elements found');
+    console.log('✅ [INIT] staticCode:', staticCode);
+    console.log('✅ [INIT] dissolveContainer:', dissolveContainer);
+    console.log('✅ [INIT] matrixView:', matrixView);
 
-    drops = columns.map(col => {
-      const chars = [];
-      const charCount = 8 + Math.floor(Math.random() * 5);
-      for (let j = 0; j < charCount; j++) {
-        chars.push({
-          text: codeWords[Math.floor(Math.random() * codeWords.length)],
-          isBright: Math.random() > 0.85
-        });
+    // ================== SIMPLE MATRIX RAIN ================== //
+    const ctx = matrixCanvas.getContext('2d');
+
+    const codeWords = [
+      'const', 'function', 'React', 'import', 'export', 'return', '=>',
+      'useState', 'useEffect', 'props', 'async', 'await', 'fetch',
+      'Flask', 'class', 'def', 'Python', 'map', 'filter', 'API', 'JSON'
+    ];
+
+    const columns = [
+      { x: 0.08, speed: 0.4, delay: 0 },
+      { x: 0.22, speed: 0.55, delay: 2000 },
+      { x: 0.38, speed: 0.45, delay: 1000 },
+      { x: 0.55, speed: 0.5, delay: 3000 },
+      { x: 0.72, speed: 0.42, delay: 1500 },
+      { x: 0.88, speed: 0.48, delay: 500 }
+    ];
+
+    let drops: Array<{ x: number; y: number; speed: number; chars: Array<{ text: string; isBright: boolean }> }> = [];
+    const fontSize = 14;
+    const lineHeight = 24;
+
+    function initMatrix(): boolean {
+      if (!matrixCanvas || !ctx) return false;
+      
+      // Get dimensions from code-body
+      const codeBody = matrixCanvas.closest('.code-body');
+      const rect = codeBody?.getBoundingClientRect();
+      
+      if (!rect || rect.width === 0 || rect.height === 0) return false;
+      
+      matrixCanvas.width = rect.width;
+      matrixCanvas.height = rect.height;
+
+      drops = columns.map((col, idx) => {
+        const chars = [];
+        const charCount = 8 + Math.floor(Math.random() * 5);
+        for (let j = 0; j < charCount; j++) {
+          chars.push({
+            text: codeWords[Math.floor(Math.random() * codeWords.length)],
+            isBright: Math.random() > 0.85
+          });
+        }
+        // Start columns at staggered positions so some are immediately visible
+        const startY = -charCount * lineHeight + (idx * 60);
+        return {
+          x: col.x * matrixCanvas.width,
+          y: startY,
+          speed: col.speed,
+          chars: chars
+        };
+      });
+      
+      matrixInitialized = true;
+      return true;
+    }
+
+    function drawMatrix() {
+      if (!ctx || !matrixCanvas) return;
+      
+      // Try to initialize if not done yet
+      if (!matrixInitialized || matrixCanvas.width === 0 || matrixCanvas.height === 0) {
+        if (!initMatrix()) {
+          matrixAnimationId = requestAnimationFrame(drawMatrix);
+          return;
+        }
       }
-      return {
-        x: col.x * matrixCanvas.width,
-        y: -charCount * lineHeight - col.delay * 0.1,
-        speed: col.speed,
-        chars: chars
-      };
-    });
-  }
+      
+      // Don't draw if no drops
+      if (drops.length === 0) {
+        matrixAnimationId = requestAnimationFrame(drawMatrix);
+        return;
+      }
+      
+      ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
 
-  function drawMatrix() {
-    if (!ctx || !matrixCanvas) return;
-    
-    ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-    ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
 
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      drops.forEach(drop => {
+        drop.chars.forEach((char, charIndex) => {
+          const y = drop.y + charIndex * lineHeight;
 
-    drops.forEach(drop => {
-      drop.chars.forEach((char, charIndex) => {
-        const y = drop.y + charIndex * lineHeight;
+          if (y > -lineHeight && y < matrixCanvas.height + lineHeight) {
+            let opacity = 0.6;
+            if (y < 50) opacity *= y / 50;
+            if (y > matrixCanvas.height - 50) opacity *= (matrixCanvas.height - y) / 50;
 
-        if (y > -lineHeight && y < matrixCanvas.height + lineHeight) {
-          let opacity = 0.6;
-          if (y < 50) opacity *= y / 50;
-          if (y > matrixCanvas.height - 50) opacity *= (matrixCanvas.height - y) / 50;
-
-          if (char.isBright) {
-            if (isLight) {
-              ctx.fillStyle = `rgba(15, 23, 42, ${opacity + 0.3})`;
-              ctx.shadowColor = '#2563eb';
+            if (char.isBright) {
+              if (isLight) {
+                ctx.fillStyle = `rgba(15, 23, 42, ${opacity + 0.3})`;
+                ctx.shadowColor = '#2563eb';
+              } else {
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity + 0.3})`;
+                ctx.shadowColor = '#60a5fa';
+              }
+              ctx.shadowBlur = 3;
             } else {
-              ctx.fillStyle = `rgba(255, 255, 255, ${opacity + 0.3})`;
-              ctx.shadowColor = '#60a5fa';
+              if (isLight) {
+                ctx.fillStyle = `rgba(37, 99, 235, ${opacity})`;
+                ctx.shadowColor = '#2563eb';
+              } else {
+                ctx.fillStyle = `rgba(96, 165, 250, ${opacity})`;
+                ctx.shadowColor = '#60a5fa';
+              }
+              ctx.shadowBlur = 2;
             }
-            ctx.shadowBlur = 3;
-          } else {
-            if (isLight) {
-              ctx.fillStyle = `rgba(37, 99, 235, ${opacity})`;
-              ctx.shadowColor = '#2563eb';
-            } else {
-              ctx.fillStyle = `rgba(96, 165, 250, ${opacity})`;
-              ctx.shadowColor = '#60a5fa';
-            }
-            ctx.shadowBlur = 2;
+
+            ctx.fillText(char.text, drop.x, y);
+            ctx.shadowBlur = 0;
           }
+        });
 
-          ctx.fillText(char.text, drop.x, y);
-          ctx.shadowBlur = 0;
+        drop.y += drop.speed;
+
+        if (drop.y > matrixCanvas.height + 50) {
+          drop.y = -drop.chars.length * lineHeight - Math.random() * 100;
+          drop.chars.forEach(char => {
+            if (Math.random() > 0.5) {
+              char.text = codeWords[Math.floor(Math.random() * codeWords.length)];
+              char.isBright = Math.random() > 0.85;
+            }
+          });
         }
       });
 
-      drop.y += drop.speed;
+      matrixAnimationId = requestAnimationFrame(drawMatrix);
+    }
 
-      if (drop.y > matrixCanvas.height + 50) {
-        drop.y = -drop.chars.length * lineHeight - Math.random() * 100;
-        drop.chars.forEach(char => {
-          if (Math.random() > 0.5) {
-            char.text = codeWords[Math.floor(Math.random() * codeWords.length)];
-            char.isBright = Math.random() > 0.85;
+    function startMatrix() {
+      if (!matrixCanvas || !ctx) return;
+      
+      // Stop any existing animation
+      stopMatrix();
+      
+      // Reset initialization flag to force re-init
+      matrixInitialized = false;
+      drops = [];
+      
+      // Start the animation loop
+      function animateMatrix() {
+        if (!ctx || !matrixCanvas) return;
+        
+        // Initialize if needed
+        if (!matrixInitialized || matrixCanvas.width === 0 || matrixCanvas.height === 0) {
+          if (!initMatrix()) {
+            matrixAnimationId = requestAnimationFrame(animateMatrix);
+            return;
+          }
+        }
+        
+        if (drops.length === 0) {
+          matrixAnimationId = requestAnimationFrame(animateMatrix);
+          return;
+        }
+        
+        ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+        ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+        drops.forEach(drop => {
+          drop.chars.forEach((char, charIndex) => {
+            const y = drop.y + charIndex * lineHeight;
+
+            if (y > -lineHeight && y < matrixCanvas.height + lineHeight) {
+              let opacity = 0.6;
+              if (y < 50) opacity *= y / 50;
+              if (y > matrixCanvas.height - 50) opacity *= (matrixCanvas.height - y) / 50;
+
+              if (char.isBright) {
+                if (isLight) {
+                  ctx.fillStyle = `rgba(15, 23, 42, ${opacity + 0.3})`;
+                  ctx.shadowColor = '#2563eb';
+                } else {
+                  ctx.fillStyle = `rgba(255, 255, 255, ${opacity + 0.3})`;
+                  ctx.shadowColor = '#60a5fa';
+                }
+                ctx.shadowBlur = 3;
+              } else {
+                if (isLight) {
+                  ctx.fillStyle = `rgba(37, 99, 235, ${opacity})`;
+                  ctx.shadowColor = '#2563eb';
+                } else {
+                  ctx.fillStyle = `rgba(96, 165, 250, ${opacity})`;
+                  ctx.shadowColor = '#60a5fa';
+                }
+                ctx.shadowBlur = 2;
+              }
+
+              ctx.fillText(char.text, drop.x, y);
+              ctx.shadowBlur = 0;
+            }
+          });
+
+          drop.y += drop.speed;
+
+          if (drop.y > matrixCanvas.height + 50) {
+            drop.y = -drop.chars.length * lineHeight - Math.random() * 100;
+            drop.chars.forEach(char => {
+              if (Math.random() > 0.5) {
+                char.text = codeWords[Math.floor(Math.random() * codeWords.length)];
+                char.isBright = Math.random() > 0.85;
+              }
+            });
           }
         });
+
+        matrixAnimationId = requestAnimationFrame(animateMatrix);
       }
-    });
-
-    matrixAnimationId = requestAnimationFrame(drawMatrix);
-  }
-
-  function startMatrix() {
-    initMatrix();
-    drawMatrix();
-  }
-
-  function stopMatrix() {
-    if (matrixAnimationId) {
-      cancelAnimationFrame(matrixAnimationId);
-      matrixAnimationId = null;
+      
+      // Start animation
+      animateMatrix();
     }
-    if (ctx && matrixCanvas) {
-      ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+    function stopMatrix() {
+      if (matrixAnimationId) {
+        cancelAnimationFrame(matrixAnimationId);
+        matrixAnimationId = null;
+      }
+      if (ctx && matrixCanvas) {
+        ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      }
     }
-  }
 
-  // ================== DISSOLVE EFFECT ================== //
-  function createDissolveEffect() {
-    if (!staticCode || !dissolveContainer) return { totalChars: 0, maxCharDelay: 0 };
-    
-    const codeLines = staticCode.querySelectorAll('.code-line');
-    dissolveContainer.innerHTML = '';
+    // ================== DISSOLVE EFFECT ================== //
+    function createDissolveEffect() {
+      console.log("🔍 [DISSOLVE] createDissolveEffect called");
+      const codeLines = staticCode.querySelectorAll(".code-line");
+      console.log("🔍 [DISSOLVE] Found code lines:", codeLines.length);
+      dissolveContainer.innerHTML = "";
 
-    let totalChars = 0;
-    let maxCharDelay = 0;
+      let totalChars = 0;
+      let maxCharDelay = 0;
 
-    codeLines.forEach((line, lineIndex) => {
-      const lineClone = document.createElement('div');
-      lineClone.className = 'code-line';
-      lineClone.style.display = 'flex';
-      lineClone.style.gap = '16px';
+      codeLines.forEach((line, lineIndex) => {
+        const lineClone = document.createElement("div");
+        lineClone.className = "code-line";
+        lineClone.style.display = "flex";
+        lineClone.style.gap = "16px";
 
-      const lineNumber = line.querySelector('.line-number');
-      const lineContent = line.querySelector('.code-content');
+        const lineNumber = line.querySelector(".line-number");
+        const lineContent = line.querySelector(".code-content");
 
-      const numSpan = document.createElement('span');
-      numSpan.className = 'dissolve-line-number';
-      numSpan.textContent = lineNumber ? lineNumber.textContent : '';
-      numSpan.dataset.lineIndex = String(lineIndex);
-      lineClone.appendChild(numSpan);
+        const numSpan = document.createElement("span");
+        numSpan.className = "dissolve-line-number";
+        numSpan.textContent = lineNumber ? lineNumber.textContent : "";
+        numSpan.dataset.lineIndex = lineIndex;
+        lineClone.appendChild(numSpan);
 
-      const contentSpan = document.createElement('span');
+        const contentSpan = document.createElement("span");
 
-      if (lineContent) {
-        const html = lineContent.innerHTML;
-        let charIndex = 0;
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
+        if (lineContent) {
+          const html = lineContent.innerHTML;
+          let charIndex = 0;
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = html;
 
-        function processNode(node: Node): DocumentFragment | HTMLSpanElement | Text {
-          if (node.nodeType === Node.TEXT_NODE) {
-            const text = node.textContent || '';
-            const fragment = document.createDocumentFragment();
+          function processNode(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+              const text = node.textContent;
+              const fragment = document.createDocumentFragment();
 
-            for (let i = 0; i < text.length; i++) {
-              const char = text[i];
-              if (char === ' ') {
-                fragment.appendChild(document.createTextNode(' '));
-              } else {
-                const charSpan = document.createElement('span');
-                charSpan.className = 'dissolve-char';
-                charSpan.textContent = char;
-                const delay = lineIndex * 60 + charIndex * 25;
-                charSpan.dataset.delay = String(delay);
-                maxCharDelay = Math.max(maxCharDelay, delay);
-                charIndex++;
-                totalChars++;
-                fragment.appendChild(charSpan);
+              for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char === " ") {
+                  fragment.appendChild(document.createTextNode(" "));
+                } else {
+                  const charSpan = document.createElement("span");
+                  charSpan.className = "dissolve-char";
+                  charSpan.textContent = char;
+                  const delay = lineIndex * 60 + charIndex * 25;
+                  charSpan.dataset.delay = delay;
+                  maxCharDelay = Math.max(maxCharDelay, delay);
+                  charIndex++;
+                  totalChars++;
+                  fragment.appendChild(charSpan);
+                }
               }
+              return fragment;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+              const newNode = document.createElement("span");
+              newNode.className = node.className;
+              node.childNodes.forEach((child) => {
+                newNode.appendChild(processNode(child));
+              });
+              return newNode;
             }
-            return fragment;
-          } else if (node.nodeType === Node.ELEMENT_NODE) {
-            const element = node as Element;
-            const newNode = document.createElement('span');
-            newNode.className = element.className;
-            element.childNodes.forEach(child => {
-              newNode.appendChild(processNode(child));
-            });
-            return newNode;
+            return document.createTextNode("");
           }
-          return document.createTextNode('');
+
+          tempDiv.childNodes.forEach((child) => {
+            contentSpan.appendChild(processNode(child));
+          });
         }
 
-        tempDiv.childNodes.forEach(child => {
-          contentSpan.appendChild(processNode(child));
-        });
+        lineClone.appendChild(contentSpan);
+        dissolveContainer.appendChild(lineClone);
+      });
+
+      console.log("🔍 [DISSOLVE] Created elements - Total chars:", totalChars, "Max delay:", maxCharDelay);
+      console.log("🔍 [DISSOLVE] Dissolve container children:", dissolveContainer.children.length);
+      console.log("🔍 [DISSOLVE] Dissolve chars found:", dissolveContainer.querySelectorAll(".dissolve-char").length);
+      
+      return { totalChars, maxCharDelay };
+    }
+
+    function triggerDissolve() {
+      console.log("🎬 [DISSOLVE] triggerDissolve called");
+      const { totalChars, maxCharDelay } = createDissolveEffect();
+
+      console.log("🎬 [DISSOLVE] Adding active class to dissolve container");
+      dissolveContainer.classList.add("active");
+      console.log("🎬 [DISSOLVE] Dissolve container classes:", dissolveContainer.className);
+      console.log("🎬 [DISSOLVE] Dissolve container opacity:", window.getComputedStyle(dissolveContainer).opacity);
+      
+      console.log("🎬 [DISSOLVE] Adding hidden class to static code");
+      staticCode.classList.add("hidden");
+      console.log("🎬 [DISSOLVE] Static code classes:", staticCode.className);
+
+      const chars = dissolveContainer.querySelectorAll(".dissolve-char");
+      console.log("🎬 [DISSOLVE] Found chars to animate:", chars.length);
+      let maxDelay = 0;
+      let validDelays = 0;
+      let invalidDelays = 0;
+
+      chars.forEach((char, index) => {
+        const delay = parseInt(char.dataset.delay);
+        if (isNaN(delay)) {
+          invalidDelays++;
+          console.warn("⚠️ [DISSOLVE] Invalid delay for char", index, "dataset.delay:", char.dataset.delay);
+        } else {
+          validDelays++;
+          maxDelay = Math.max(maxDelay, delay);
+          if (index < 5) {
+            console.log(`🎬 [DISSOLVE] Char ${index}: delay=${delay}, text="${char.textContent}"`);
+          }
+        }
+
+        setTimeout(() => {
+          char.classList.add("falling");
+          if (index < 5) {
+            console.log(`🎬 [DISSOLVE] Added 'falling' class to char ${index} after ${delay}ms`);
+            console.log(`🎬 [DISSOLVE] Char ${index} classes:`, char.className);
+            const computedStyle = window.getComputedStyle(char);
+            console.log(`🎬 [DISSOLVE] Char ${index} animation:`, computedStyle.animation);
+          }
+        }, delay);
+      });
+      
+      console.log("🎬 [DISSOLVE] Delay stats - Valid:", validDelays, "Invalid:", invalidDelays, "Max delay:", maxDelay);
+
+      const lineNumbers = dissolveContainer.querySelectorAll(
+        ".dissolve-line-number"
+      );
+      console.log("🎬 [DISSOLVE] Found line numbers to animate:", lineNumbers.length);
+      const lineNumberStartDelay = maxDelay + 50;
+      console.log("🎬 [DISSOLVE] Line number start delay:", lineNumberStartDelay);
+
+      lineNumbers.forEach((num, index) => {
+        const delay = lineNumberStartDelay + index * 60;
+        setTimeout(() => {
+          num.classList.add("falling");
+          if (index < 3) {
+            console.log(`🎬 [DISSOLVE] Added 'falling' class to line number ${index} after ${delay}ms`);
+          }
+        }, delay);
+      });
+
+      const lastNumberDelay = lineNumberStartDelay + lineNumbers.length * 60;
+      const dissolveCompleteTime = lastNumberDelay + 2200;
+      console.log("🎬 [DISSOLVE] Dissolve complete time:", dissolveCompleteTime, "ms");
+
+      setTimeout(() => {
+        console.log("🎬 [DISSOLVE] Showing matrix view");
+        matrixView.classList.add("visible");
+        startMatrix();
+      }, dissolveCompleteTime);
+
+      setTimeout(() => {
+        console.log("🎬 [DISSOLVE] Cleaning up dissolve container");
+        dissolveContainer.classList.remove("active");
+        dissolveContainer.innerHTML = "";
+      }, dissolveCompleteTime + 500);
+    }
+
+    // ================== VIEW SWITCHING ================== //
+    function showMatrix() {
+      console.log("🔄 [VIEW] showMatrix called, currentView:", currentView, "hasPlayedDissolve:", hasPlayedDissolve);
+      if (currentView === "matrix") {
+        console.log("🔄 [VIEW] Already in matrix view, returning");
+        return;
+      }
+      currentView = "matrix";
+
+      tabDetails.classList.remove("active");
+      tabMatrix.classList.add("active");
+
+      if (autoSwitchTimeout) {
+        clearTimeout(autoSwitchTimeout);
+        autoSwitchTimeout = null;
       }
 
-      lineClone.appendChild(contentSpan);
-      dissolveContainer.appendChild(lineClone);
+      if (!hasPlayedDissolve) {
+        console.log("🔄 [VIEW] First time switching - triggering dissolve");
+        hasPlayedDissolve = true;
+        triggerDissolve();
+      } else {
+        console.log("🔄 [VIEW] Dissolve already played - direct switch");
+        staticCode.classList.add("hidden");
+        matrixView.classList.add("visible");
+        startMatrix();
+      }
+    }
+
+    function showDetails() {
+      if (currentView === "details") return;
+      currentView = "details";
+
+      tabMatrix.classList.remove("active");
+      tabDetails.classList.add("active");
+
+      stopMatrix();
+
+      matrixView.style.transition = "none";
+      matrixView.classList.remove("visible");
+      matrixView.offsetHeight;
+      matrixView.style.transition = "";
+
+      staticCode.classList.remove("hidden");
+      staticCode.style.opacity = "1";
+
+      dissolveContainer.classList.remove("active");
+      dissolveContainer.innerHTML = "";
+    }
+
+    // ================== AUTO-SWITCH AFTER 2 SECONDS ================== //
+    function startAutoSwitch() {
+      autoSwitchTimeout = setTimeout(() => {
+        if (!hasAutoSwitched && currentView === "details") {
+          hasAutoSwitched = true;
+          showMatrix();
+        }
+      }, 2000);
+    }
+
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      if (currentView === "matrix") {
+        initMatrix();
+      }
     });
 
-    return { totalChars, maxCharDelay };
-  }
+    // Tab click handlers
+    tabDetails.addEventListener('click', showDetails);
+    tabMatrix.addEventListener('click', showMatrix);
 
-  function triggerDissolve() {
-    if (!dissolveContainer || !staticCode || !matrixView) return;
+    // Check if CSS animations are available
+    const testChar = document.createElement('span');
+    testChar.className = 'dissolve-char';
+    const charFallStyle = window.getComputedStyle(testChar, '::before');
+    const charFallAnimation = window.getComputedStyle(testChar).animationName;
+    console.log('🎨 [CSS] Checking animations...');
+    console.log('🎨 [CSS] charFall animation available:', charFallAnimation);
     
-    const { maxCharDelay } = createDissolveEffect();
-
-    dissolveContainer.classList.add('active');
-    staticCode.classList.add('hidden');
-
-    const chars = dissolveContainer.querySelectorAll('.dissolve-char');
-    let maxDelay = 0;
-
-    chars.forEach(char => {
-      const el = char as HTMLElement;
-      const delay = parseInt(el.dataset.delay || '0');
-      maxDelay = Math.max(maxDelay, delay);
-
-      setTimeout(() => {
-        char.classList.add('falling');
-      }, delay);
-    });
-
-    const lineNumbers = dissolveContainer.querySelectorAll('.dissolve-line-number');
-    const lineNumberStartDelay = maxDelay + 50;
-
-    lineNumbers.forEach((num, index) => {
-      const delay = lineNumberStartDelay + index * 60;
-      setTimeout(() => {
-        num.classList.add('falling');
-      }, delay);
-    });
-
-    const lastNumberDelay = lineNumberStartDelay + lineNumbers.length * 60;
-    const dissolveCompleteTime = lastNumberDelay + 2200;
-
-    setTimeout(() => {
-      matrixView.classList.add('visible');
-      startMatrix();
-    }, dissolveCompleteTime);
-
-    setTimeout(() => {
-      dissolveContainer.classList.remove('active');
-      dissolveContainer.innerHTML = '';
-    }, dissolveCompleteTime + 500);
-  }
-
-  // ================== VIEW SWITCHING ================== //
-  function showMatrix() {
-    if (currentView === 'matrix') return;
-    currentView = 'matrix';
-
-    tabDetails?.classList.remove('active');
-    tabMatrix?.classList.add('active');
-
-    if (autoSwitchTimeout) {
-      clearTimeout(autoSwitchTimeout);
-      autoSwitchTimeout = null;
-    }
-
-    if (!hasPlayedDissolve) {
-      hasPlayedDissolve = true;
-      triggerDissolve();
-    } else {
-      staticCode?.classList.add('hidden');
-      matrixView?.classList.add('visible');
-      startMatrix();
-    }
-  }
-
-  function showDetails() {
-    if (currentView === 'details') return;
-    currentView = 'details';
-
-    tabMatrix?.classList.remove('active');
-    tabDetails?.classList.add('active');
-
-    stopMatrix();
-
-    if (matrixView) {
-      matrixView.style.transition = 'none';
-      matrixView.classList.remove('visible');
-      matrixView.offsetHeight; // Force reflow
-      matrixView.style.transition = '';
-    }
-
-    if (staticCode) {
-      staticCode.classList.remove('hidden');
-    }
-
-    if (dissolveContainer) {
-      dissolveContainer.classList.remove('active');
-      dissolveContainer.innerHTML = '';
-    }
-  }
-
-  // ================== AUTO-SWITCH AFTER 2 SECONDS ================== //
-  function startAutoSwitch() {
-    autoSwitchTimeout = window.setTimeout(() => {
-      if (!hasAutoSwitched && currentView === 'details') {
-        hasAutoSwitched = true;
-        showMatrix();
+    // Test if animation is defined
+    const styleSheet = Array.from(document.styleSheets).find(sheet => {
+      try {
+        return Array.from(sheet.cssRules || []).some(rule => 
+          rule.name === 'charFall' || (rule.cssText && rule.cssText.includes('charFall'))
+        );
+      } catch (e) {
+        return false;
       }
-    }, 2000);
-  }
+    });
+    console.log('🎨 [CSS] charFall keyframes found:', styleSheet ? 'Yes' : 'No');
+    
+    // Start auto-switch on page load
+    console.log('⏰ [AUTO] Starting auto-switch timer (2 seconds)');
+    startAutoSwitch();
 
-  // Handle window resize
-  window.addEventListener('resize', () => {
-    if (currentView === 'matrix') {
-      initMatrix();
-    }
-  });
+    // Parallax effect on mouse move
+    const codeDisplay = document.querySelector('.code-display') as HTMLElement;
 
-  // Tab click handlers
-  tabDetails?.addEventListener('click', showDetails);
-  tabMatrix?.addEventListener('click', showMatrix);
+    document.addEventListener('mousemove', (e) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
 
-  // Start auto-switch on page load
-  startAutoSwitch();
+      const xPercent = (clientX / innerWidth - 0.5) * 2;
+      const yPercent = (clientY / innerHeight - 0.5) * 2;
 
-  // Parallax effect on mouse move
-  const heroVisual = document.querySelector('.hero-visual') as HTMLElement;
-  const codeDisplay = document.querySelector('.code-display') as HTMLElement;
+      if (codeDisplay) {
+        codeDisplay.style.transform = `rotateY(${-8 + xPercent * 4}deg) rotateX(${4 + yPercent * 2}deg)`;
+      }
 
-  document.addEventListener('mousemove', (e) => {
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-
-    const xPercent = (clientX / innerWidth - 0.5) * 2;
-    const yPercent = (clientY / innerHeight - 0.5) * 2;
-
-    if (codeDisplay) {
-      codeDisplay.style.transform = `rotateY(${-8 + xPercent * 4}deg) rotateX(${4 + yPercent * 2}deg)`;
-    }
-
-    const badges = document.querySelectorAll('.floating-badges .badge');
-    badges.forEach((badge, i) => {
-      const el = badge as HTMLElement;
-      const offset = (i + 1) * 2;
-      el.style.transform = `translateY(${Math.sin(Date.now() / 1000 + i) * 6}px) translateX(${xPercent * offset}px)`;
+      const badges = document.querySelectorAll('.floating-badges .badge');
+      badges.forEach((badge, i) => {
+        const el = badge as HTMLElement;
+        const offset = (i + 1) * 2;
+        el.style.transform = `translateY(${Math.sin(Date.now() / 1000 + i) * 6}px) translateX(${xPercent * offset}px)`;
+      });
     });
   });
 </script>
