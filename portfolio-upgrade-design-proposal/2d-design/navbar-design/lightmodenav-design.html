@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Light Mode Navigation Design Proposal — Nicholas Chan Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ================== CSS Variables ================== */
+      :root {
+        --bg-primary: #06080d;
+        --bg-secondary: #0a0e17;
+        --bg-tertiary: #0f1520;
+        --surface: rgba(255, 255, 255, 0.03);
+        --surface-hover: rgba(255, 255, 255, 0.06);
+        --glass: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --accent-blue: #60a5fa;
+        --accent-purple: #a78bfa;
+        --accent-cyan: #22d3ee;
+        --accent-green: #22c55e;
+        --accent-amber: #f59e0b;
+        --accent-rose: #fb7185;
+        --glow-blue: rgba(96, 165, 250, 0.4);
+        --glow-purple: rgba(167, 139, 250, 0.4);
+        --gradient-text: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #a78bfa 50%,
+          #60a5fa 100%
+        );
+        --gradient-bg: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #818cf8 50%,
+          #a78bfa 100%
+        );
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 20px;
+        --radius-xl: 28px;
+        --shadow-glow: 0 0 60px -12px var(--glow-blue);
+        --font-sans: "Outfit", system-ui, -apple-system, sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+
+      /* ================== Light Mode Variables ================== */
+      [data-theme="light"] {
+        --bg-primary: #fafbfc;
+        --bg-secondary: #ffffff;
+        --bg-tertiary: #f7f9fc;
+        --surface: rgba(0, 0, 0, 0.02);
+        --surface-hover: rgba(0, 0, 0, 0.04);
+        --glass: rgba(0, 0, 0, 0.02);
+        --glass-border: rgba(0, 0, 0, 0.08);
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+
+        /* IMPROVED: Lighter, softer accent colors for light mode */
+        --accent-blue: #3b82f6;
+        --accent-purple: #8b5cf6;
+        --accent-cyan: #06b6d4;
+        --accent-green: #10b981;
+        --accent-amber: #f59e0b;
+        --accent-rose: #f43f5e;
+
+        /* IMPROVED: Softer glow colors for light mode */
+        --glow-blue: rgba(59, 130, 246, 0.12);
+        --glow-purple: rgba(139, 92, 246, 0.12);
+
+        /* IMPROVED: Lighter gradient text for better readability */
+        --gradient-text: linear-gradient(
+          135deg,
+          #3b82f6 0%,
+          #8b5cf6 50%,
+          #3b82f6 100%
+        );
+
+        /* IMPROVED: Balanced gradient for logos - more visible but not too dark/contrasting */
+        --gradient-bg-light: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #818cf8 50%,
+          #a78bfa 100%
+        );
+
+        /* IMPROVED: Even lighter gradient option for very subtle elements */
+        --gradient-bg-subtle: linear-gradient(
+          135deg,
+          #dbeafe 0%,
+          #e0e7ff 50%,
+          #ede9fe 100%
+        );
+      }
+
+      /* ================== Reset & Base ================== */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        padding: 0;
+        min-height: 100vh;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+
+      /* ================== Background Effects ================== */
+      .bg-grid {
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.015) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.015) 1px, transparent 1px);
+        background-size: 60px 60px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ================== Navigation ================== */
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 16px 32px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav.scrolled {
+        /* IMPROVED: Much lighter background when scrolled in light mode */
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+
+      .nav-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--text-primary);
+      }
+
+      /* IMPROVED: Balanced gradient for N logo - more visible but not too dark/contrasting */
+      .logo-mark {
+        width: 42px;
+        height: 42px;
+        background: var(--gradient-bg-light);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        box-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .logo-mark::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: var(--gradient-bg-light);
+        border-radius: inherit;
+        z-index: -1;
+        animation: logoGlow 3s ease-in-out infinite;
+      }
+
+      @keyframes logoGlow {
+        0%,
+        100% {
+          opacity: 0.4;
+          filter: blur(8px);
+        }
+        50% {
+          opacity: 0.6;
+          filter: blur(12px);
+        }
+      }
+
+      .logo-text {
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: -0.02em;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-link {
+        padding: 10px 18px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--text-primary);
+        background: var(--surface-hover);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* IMPROVED: Lighter toggle button styling in light mode */
+      .mode-toggle {
+        display: flex;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-sm);
+        padding: 4px;
+        gap: 4px;
+      }
+
+      .mode-btn {
+        padding: 8px 10px;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* IMPROVED: Balanced gradient for active toggle button - matches logo */
+      .mode-btn.active {
+        background: var(--gradient-bg-light);
+        color: white;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+      }
+
+      .mode-btn:not(.active):hover {
+        color: var(--text-secondary);
+        background: var(--surface-hover);
+      }
+
+      /* ================== Hero Section ================== */
+      .hero {
+        padding: 120px 32px 80px;
+        max-width: 1400px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-content {
+        max-width: 600px;
+      }
+
+      .hero-heading {
+        font-size: clamp(48px, 7vw, 80px);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin-bottom: 24px;
+      }
+
+      .gradient-text {
+        background: var(--gradient-text);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero-description {
+        font-size: 18px;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 32px;
+      }
+
+      .hero-cta {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      /* IMPROVED: Less contrasting button style for light mode */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        font-family: var(--font-sans);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* IMPROVED: Outline style for primary button in light mode - less contrasting */
+      .btn-primary {
+        background: transparent;
+        color: var(--accent-blue);
+        border: 2px solid var(--accent-blue);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+      }
+
+      .btn-primary:hover {
+        background: var(--accent-blue);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+      }
+
+      .btn-secondary {
+        background: var(--surface);
+        color: var(--text-primary);
+        border: 1px solid var(--glass-border);
+      }
+
+      .btn-secondary:hover {
+        background: var(--surface-hover);
+        border-color: var(--glass-border);
+      }
+
+      /* ================== Comparison Section ================== */
+      .comparison {
+        padding: 60px 32px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .comparison h2 {
+        font-size: 32px;
+        margin-bottom: 40px;
+        text-align: center;
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+
+      .comparison-item {
+        padding: 24px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+      }
+
+      .comparison-item h3 {
+        font-size: 20px;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+      }
+
+      .comparison-item p {
+        color: var(--text-secondary);
+        line-height: 1.7;
+      }
+
+      .demo-nav {
+        padding: 16px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-md);
+        margin-bottom: 16px;
+      }
+
+      .demo-nav.scrolled {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+
+      /* ================== Scroll Indicator ================== */
+      .scroll-indicator {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-muted);
+        font-size: 14px;
+        z-index: 100;
+      }
+
+      /* ================== Responsive ================== */
+      @media (max-width: 768px) {
+        .nav {
+          padding: 12px 16px;
+        }
+
+        .comparison-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-grid"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <div class="logo-mark">N</div>
+          <span class="logo-text">Nicholas Chan</span>
+        </a>
+
+        <div class="nav-links">
+          <a href="#" class="nav-link active">Home</a>
+          <a href="#" class="nav-link">Projects</a>
+          <a href="#" class="nav-link">About</a>
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="lightModeBtn" aria-label="Light mode">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="5" />
+                <path
+                  d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                />
+              </svg>
+            </button>
+            <button class="mode-btn" id="darkModeBtn" aria-label="Dark mode">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-heading">
+          <span>Hi, I'm</span><br />
+          <span class="gradient-text">Nicholas.</span>
+        </h1>
+
+        <p class="hero-description">
+          Senior CS @ UCSD who ships clean, testable products. I build fast
+          interfaces, solid backends, and sweat the tiny UX details that make
+          apps feel "done".
+        </p>
+
+        <div class="hero-cta">
+          <a href="#" class="btn btn-primary">Download Résumé →</a>
+          <a href="#" class="btn btn-secondary">Email Me</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison">
+      <h2>Design Improvements</h2>
+      <div class="comparison-grid">
+        <div class="comparison-item">
+          <h3>Issue 1: N Logo & Toggle Colors</h3>
+          <p>
+            <strong>Before:</strong> Dark blue-purple gradient (#2563eb → #7c3aed) that was too dark and complex for light mode.
+          </p>
+          <p>
+            <strong>After:</strong> Balanced gradient using medium-toned blues (#60a5fa → #a78bfa) that shows up well on light backgrounds without being too dark or contrasting.
+          </p>
+          <div class="demo-nav">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div
+                style="width: 42px; height: 42px; background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; box-shadow: 0 2px 12px rgba(59, 130, 246, 0.15);"
+              >
+                N
+              </div>
+              <div
+                style="display: flex; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 4px; gap: 4px;"
+              >
+                <button
+                  style="padding: 8px 10px; background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%); border: none; border-radius: 6px; color: white; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);"
+                >
+                  ☀
+                </button>
+                <button
+                  style="padding: 8px 10px; background: transparent; border: none; border-radius: 6px; color: #64748b;"
+                >
+                  ☾
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comparison-item">
+          <h3>Issue 2: Scrolled Navbar Darkness</h3>
+          <p>
+            <strong>Before:</strong> Background of rgba(250, 251, 252, 0.85) created too much contrast and made content hard to see when scrolled.
+          </p>
+          <p>
+            <strong>After:</strong> Lighter background of rgba(255, 255, 255, 0.95) with subtle shadow for better visibility and reduced contrast. Content remains clearly visible.
+          </p>
+          <div class="demo-nav scrolled">
+            <div style="padding: 8px 0;">
+              <div
+                style="width: 42px; height: 42px; background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;"
+              >
+                N
+              </div>
+              <div style="margin-top: 8px; color: var(--text-primary); font-size: 14px;">
+                Navigation content is clearly visible with improved contrast
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="comparison-item">
+          <h3>Issue 3: Download Resume Button</h3>
+          <p>
+            <strong>Before:</strong> Full gradient background button that was too contrasting and heavy in light mode.
+          </p>
+          <p>
+            <strong>After:</strong> Outline style button with subtle border and hover state. Less visually heavy while maintaining clear call-to-action visibility.
+          </p>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <a
+              href="#"
+              style="padding: 14px 24px; background: transparent; color: #3b82f6; border: 2px solid #3b82f6; border-radius: 12px; text-decoration: none; font-weight: 600; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);"
+            >
+              Download Résumé →
+            </a>
+            <a
+              href="#"
+              style="padding: 14px 24px; background: rgba(0,0,0,0.02); color: #0f172a; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; text-decoration: none; font-weight: 600;"
+            >
+              Email Me
+            </a>
+          </div>
+        </div>
+
+        <div class="comparison-item">
+          <h3>Summary of Changes</h3>
+          <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
+            <li>N Logo: Changed from dark gradient to balanced medium-toned gradient (#60a5fa → #a78bfa) - more visible without being too dark</li>
+            <li>Toggle Button: Uses same lighter gradient for active state</li>
+            <li>Scrolled Navbar: Increased opacity to 0.95 and added subtle shadow for better visibility</li>
+            <li>Download Button: Changed from filled gradient to outline style with hover fill</li>
+            <li>All changes maintain brand identity while improving light mode readability</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="scroll-indicator">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M12 5v14M19 12l-7 7-7-7" />
+      </svg>
+      <span>Scroll to see scrolled state</span>
+    </div>
+
+    <script>
+      // Navbar scroll effect
+      const nav = document.getElementById("nav");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          nav?.classList.add("scrolled");
+        } else {
+          nav?.classList.remove("scrolled");
+        }
+      });
+
+      // Theme toggle (demo only - doesn't actually change theme)
+      const lightBtn = document.getElementById("lightModeBtn");
+      const darkBtn = document.getElementById("darkModeBtn");
+
+      lightBtn?.addEventListener("click", () => {
+        lightBtn.classList.add("active");
+        darkBtn.classList.remove("active");
+      });
+
+      darkBtn?.addEventListener("click", () => {
+        darkBtn.classList.add("active");
+        lightBtn.classList.remove("active");
+      });
+    </script>
+  </body>
+</html>

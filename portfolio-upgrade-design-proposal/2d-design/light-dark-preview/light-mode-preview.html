@@ -33,6 +33,7 @@
         --glow-purple: rgba(124, 58, 237, 0.15);
         --gradient-text: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #2563eb 100%);
         --gradient-bg: linear-gradient(135deg, #2563eb 0%, #5b21b6 50%, #7c3aed 100%);
+        --gradient-bg-light: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
         --radius-sm: 8px;
         --radius-md: 12px;
         --radius-lg: 20px;
@@ -157,9 +158,9 @@
       }
 
       .nav.scrolled {
-        background: rgba(250, 251, 252, 0.85);
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--glass-border);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       }
 
       .nav-inner {
@@ -181,7 +182,7 @@
       .logo-mark {
         width: 42px;
         height: 42px;
-        background: var(--gradient-bg);
+        background: var(--gradient-bg-light);
         border-radius: var(--radius-md);
         display: flex;
         align-items: center;
@@ -189,7 +190,7 @@
         font-weight: 700;
         font-size: 18px;
         color: white;
-        box-shadow: var(--shadow-glow);
+        box-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
         position: relative;
         overflow: hidden;
       }
@@ -198,7 +199,7 @@
         content: "";
         position: absolute;
         inset: -2px;
-        background: var(--gradient-bg);
+        background: var(--gradient-bg-light);
         border-radius: inherit;
         z-index: -1;
         animation: logoGlow 3s ease-in-out infinite;
@@ -207,11 +208,11 @@
       @keyframes logoGlow {
         0%,
         100% {
-          opacity: 0.5;
+          opacity: 0.4;
           filter: blur(8px);
         }
         50% {
-          opacity: 0.8;
+          opacity: 0.6;
           filter: blur(12px);
         }
       }
@@ -291,9 +292,9 @@
       }
 
       .mode-btn.active {
-        background: var(--gradient-bg);
+        background: var(--gradient-bg-light);
         color: white;
-        box-shadow: 0 2px 12px var(--glow-blue);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
       }
 
       .mode-btn:not(.active):hover {
@@ -491,27 +492,17 @@
       }
 
       .btn-primary {
-        background: var(--gradient-bg);
-        color: white;
-        box-shadow: 0 4px 24px var(--glow-blue);
+        background: transparent;
+        color: var(--accent-blue);
+        border: 2px solid var(--accent-blue);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
       }
 
       .btn-primary:hover {
+        background: var(--accent-blue);
+        color: white;
         transform: translateY(-2px);
-        box-shadow: 0 8px 40px var(--glow-blue);
-      }
-
-      .btn-primary::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .btn-primary:hover::before {
-        opacity: 1;
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
       }
 
       .btn-secondary {

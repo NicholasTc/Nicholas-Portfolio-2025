@@ -72,7 +72,8 @@ const currentPath = Astro.url.pathname;
   }
 
   [data-theme="light"] .nav.scrolled {
-    background: rgba(250, 251, 252, 0.85);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   }
 
   .nav-inner {
@@ -116,9 +117,27 @@ const currentPath = Astro.url.pathname;
     animation: logoGlow 3s ease-in-out infinite;
   }
 
+  [data-theme="light"] .logo-mark {
+    background: var(--gradient-bg-light);
+    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
+  }
+
+  [data-theme="light"] .logo-mark::before {
+    background: var(--gradient-bg-light);
+  }
+
   @keyframes logoGlow {
     0%, 100% { opacity: 0.5; filter: blur(8px); }
     50% { opacity: 0.8; filter: blur(12px); }
+  }
+
+  [data-theme="light"] .logo-mark::before {
+    animation: logoGlowLight 3s ease-in-out infinite;
+  }
+
+  @keyframes logoGlowLight {
+    0%, 100% { opacity: 0.4; filter: blur(8px); }
+    50% { opacity: 0.6; filter: blur(12px); }
   }
 
   .logo-text {
@@ -199,6 +218,11 @@ const currentPath = Astro.url.pathname;
     background: var(--gradient-bg);
     color: white;
     box-shadow: 0 2px 12px var(--glow-blue);
+  }
+
+  [data-theme="light"] .mode-btn.active {
+    background: var(--gradient-bg-light);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
   }
 
   .mode-btn:not(.active):hover {

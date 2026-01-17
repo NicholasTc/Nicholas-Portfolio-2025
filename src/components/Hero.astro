@@ -352,9 +352,22 @@
     box-shadow: 0 4px 24px var(--glow-blue);
   }
 
+  [data-theme="light"] .btn-primary {
+    background: transparent;
+    color: var(--accent-blue);
+    border: 2px solid var(--accent-blue);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  }
+
   .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 40px var(--glow-blue);
+  }
+
+  [data-theme="light"] .btn-primary:hover {
+    background: var(--accent-blue);
+    color: white;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
   }
 
   .btn-primary::before {
@@ -368,6 +381,10 @@
 
   .btn-primary:hover::before {
     opacity: 1;
+  }
+
+  [data-theme="light"] .btn-primary::before {
+    display: none;
   }
 
   .btn-secondary {
