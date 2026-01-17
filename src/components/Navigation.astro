@@ -69,7 +69,6 @@ const currentPath = Astro.url.pathname;
   .nav.scrolled {
     background: rgba(6, 8, 13, 0.8);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
   }
 
   [data-theme="light"] .nav.scrolled {
@@ -252,7 +251,7 @@ const currentPath = Astro.url.pathname;
     left: 0;
     right: 0;
     background: var(--bg-secondary);
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 0;
     backdrop-filter: blur(20px);
     z-index: 999;
     max-height: 0;
@@ -262,6 +261,7 @@ const currentPath = Astro.url.pathname;
 
   .mobile-menu.active {
     max-height: 400px;
+    border-bottom: 1px solid var(--glass-border);
   }
 
   .mobile-menu-links {
