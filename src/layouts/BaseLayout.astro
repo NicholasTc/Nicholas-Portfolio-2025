@@ -463,6 +463,17 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
     margin: 0;
   }
 
+  .dialog .modal-preview {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border);
+    margin-bottom: 16px;
+    display: block;
+  }
+
   .dialog .muted {
     margin-bottom: 16px;
     line-height: 1.6;
@@ -623,16 +634,23 @@ const { title, description = "Nicholas Chan — Full-Stack Developer. Senior CS 
     const openers = document.querySelectorAll('.quick');
     const closeBtns = document.querySelectorAll('.modal-close');
     
+    function openQuickModal(opener: HTMLElement) {
+      const id = opener.dataset.modal;
+      const dlg = document.getElementById(id || '') as HTMLDialogElement;
+      if (dlg && dlg.showModal) {
+        dlg.showModal();
+        dlg.querySelector('.modal-close')?.focus();
+      } else if (dlg) {
+        dlg.setAttribute('open', '');
+      }
+    }
+
     openers.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const element = btn as HTMLElement;
-        const id = element.dataset.modal;
-        const dlg = document.getElementById(id || '') as HTMLDialogElement;
-        if (dlg && dlg.showModal) {
-          dlg.showModal();
-          dlg.querySelector('.modal-close')?.focus();
-        } else if (dlg) {
-          dlg.setAttribute('open', '');
+      btn.addEventListener('click', () => openQuickModal(btn as HTMLElement));
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openQuickModal(btn as HTMLElement);
         }
       });
     });

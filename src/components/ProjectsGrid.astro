@@ -11,12 +11,20 @@
       <h2 class="section-title">Featured Projects</h2>
       <p class="section-description">
         A collection of projects I've built, from AI tools to full-stack applications.
+        <a href="/projects" class="section-projects-link">View all projects →</a>
       </p>
     </div>
 
     <div class="bento-grid">
       <!-- Featured Project: GymApp -->
-      <article class="bento-card featured" data-kind="backend web">
+      <article
+        class="bento-card featured quick"
+        data-kind="backend web"
+        data-modal="m1"
+        tabindex="0"
+        role="button"
+        aria-label="Open quick view: GymApp"
+      >
         <div class="card-image">
           <img src="/GymAppScreenshot.png" alt="GymApp Dashboard Screenshot" loading="lazy" />
         </div>
@@ -36,7 +44,14 @@
       </article>
 
       <!-- ResumeAI Tool -->
-      <article class="bento-card" data-kind="backend ml">
+      <article
+        class="bento-card quick"
+        data-kind="backend ml"
+        data-modal="m3"
+        tabindex="0"
+        role="button"
+        aria-label="Open quick view: ResumeAI Tool"
+      >
         <div class="card-image-small">
           <img src="/ResumeAITool.png" alt="ResumeAI Tool Screenshot" loading="lazy" />
         </div>
@@ -55,7 +70,14 @@
       </article>
 
       <!-- Pollen Atlas Widget -->
-      <article class="bento-card" data-kind="wordpress web">
+      <article
+        class="bento-card quick"
+        data-kind="wordpress web"
+        data-modal="m2"
+        tabindex="0"
+        role="button"
+        aria-label="Open quick view: Pollen Atlas Widget"
+      >
         <div class="card-image-small">
           <img src="/PollenAtlas.png" alt="Pollen Atlas Widget Screenshot" loading="lazy" />
         </div>
@@ -74,7 +96,14 @@
       </article>
 
       <!-- ProductivityHelper -->
-      <article class="bento-card" data-kind="web">
+      <article
+        class="bento-card quick"
+        data-kind="web"
+        data-modal="m4"
+        tabindex="0"
+        role="button"
+        aria-label="Open quick view: ProductivityHelper"
+      >
         <div class="card-image-small">
           <img src="/ProductivityHelper.png" alt="ProductivityHelper Screenshot" loading="lazy" />
         </div>
@@ -140,6 +169,27 @@
     color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto;
+  }
+
+  .section-projects-link {
+    display: block;
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .section-projects-link:hover {
+    opacity: 0.85;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .bento-card.quick:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 3px;
   }
 
   /* Bento Grid */
