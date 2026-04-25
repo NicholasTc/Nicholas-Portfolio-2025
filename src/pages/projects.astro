@@ -64,10 +64,10 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="project-meta">
               <span class="meta-item">
-                <span class="meta-icon">📅</span> 2026
+                <ion-icon class="meta-icon" name="calendar-outline" aria-hidden="true"></ion-icon> 2026
               </span>
               <span class="meta-item">
-                <span class="meta-icon">⏱️</span> 3 months
+                <ion-icon class="meta-icon" name="time-outline" aria-hidden="true"></ion-icon> 3 months
               </span>
               <div class="project-links">
                 <a href="https://github.com/NicholasTc/fitness-tracker.git" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub">
@@ -105,7 +105,7 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="project-meta">
               <span class="meta-item">
-                <span class="meta-icon">📅</span> 2024
+                <ion-icon class="meta-icon" name="calendar-outline" aria-hidden="true"></ion-icon> 2024
               </span>
               <div class="project-links">
                 <a href="#" class="project-link" title="GitHub">
@@ -139,7 +139,7 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="project-meta">
               <span class="meta-item">
-                <span class="meta-icon">📅</span> 2025
+                <ion-icon class="meta-icon" name="calendar-outline" aria-hidden="true"></ion-icon> 2025
               </span>
               <div class="project-links">
                 <a href="#" class="project-link" title="Live Demo">
@@ -173,7 +173,7 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="project-meta">
               <span class="meta-item">
-                <span class="meta-icon">📅</span> 2023
+                <ion-icon class="meta-icon" name="calendar-outline" aria-hidden="true"></ion-icon> 2023
               </span>
               <div class="project-links">
                 <a href="#" class="project-link" title="GitHub">
@@ -210,7 +210,7 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="project-meta">
               <span class="meta-item">
-                <span class="meta-icon">📅</span> 2026
+                <ion-icon class="meta-icon" name="calendar-outline" aria-hidden="true"></ion-icon> 2026
               </span>
               <div class="project-links">
                 <a href="https://github.com/NicholasTc/TaskPilot.git" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub">
@@ -224,7 +224,9 @@ import Footer from '../components/Footer.astro';
         <!-- Portfolio Website -->
         <article class="project-card" data-category="frontend">
           <div class="project-image placeholder">
-            <div class="placeholder-icon">🎨</div>
+            <div class="placeholder-icon" aria-hidden="true">
+              <ion-icon name="color-palette-outline"></ion-icon>
+            </div>
             <div class="project-image-overlay"></div>
           </div>
           <div class="project-content">
@@ -244,7 +246,7 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="project-meta">
               <span class="meta-item">
-                <span class="meta-icon">📅</span> 2025
+                <ion-icon class="meta-icon" name="calendar-outline" aria-hidden="true"></ion-icon> 2025
               </span>
               <div class="project-links">
                 <a href="#" class="project-link" title="GitHub">
@@ -280,7 +282,7 @@ import Footer from '../components/Footer.astro';
             </div>
             <div class="project-meta">
               <span class="meta-item">
-                <span class="meta-icon">📅</span> 2023
+                <ion-icon class="meta-icon" name="calendar-outline" aria-hidden="true"></ion-icon> 2023
               </span>
               <div class="project-links">
                 <a href="https://github.com/NicholasTc/GymApp" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub">
@@ -517,8 +519,16 @@ import Footer from '../components/Footer.astro';
   }
 
   .placeholder-icon {
-    font-size: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     opacity: 0.5;
+  }
+
+  .placeholder-icon ion-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--text-muted);
   }
 
   .project-image-overlay {
@@ -649,7 +659,10 @@ import Footer from '../components/Footer.astro';
   }
 
   .meta-icon {
-    font-size: 16px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--text-muted);
   }
 
   .project-links {
