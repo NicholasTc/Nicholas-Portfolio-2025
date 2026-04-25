@@ -6,7 +6,7 @@
 // No stat cards (per design decision).
 ---
 
-<section class="about" id="about" aria-labelledby="about-title">
+<section class="about-section" id="about" aria-labelledby="about-title">
   <div class="about-inner">
     <div class="about-grid">
 
@@ -108,7 +108,7 @@
 </section>
 
 <style>
-  .about {
+  .about-section {
     position: relative;
     z-index: 1;
     padding: 80px 0;
@@ -137,16 +137,6 @@
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     backdrop-filter: blur(12px);
-    transition: border-color .25s ease, transform .25s ease;
-  }
-
-  .profile-card:hover {
-    border-color: rgba(255, 255, 255, 0.14);
-    transform: translateY(-3px);
-  }
-
-  [data-theme="light"] .profile-card:hover {
-    border-color: rgba(0, 0, 0, 0.14);
   }
 
   .profile-photo {
@@ -264,24 +254,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    position: relative;
-    overflow: hidden;
   }
-
-  /* Subtle accent gradient in the corner for depth */
-  .about-card::after {
-    content: "";
-    position: absolute;
-    top: -120px;
-    right: -120px;
-    width: 320px;
-    height: 320px;
-    background: radial-gradient(circle, rgba(167, 139, 250, 0.18) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .about-card > * { position: relative; z-index: 1; }
 
   .about-eyebrow {
     display: inline-flex;
@@ -348,7 +321,7 @@
   }
 
   @media (max-width: 768px) {
-    .about { padding: 60px 0; }
+    .about-section { padding: 60px 0; }
     .about-inner { padding: 0 20px; }
     .about-card { padding: 24px; }
     .profile-card {
