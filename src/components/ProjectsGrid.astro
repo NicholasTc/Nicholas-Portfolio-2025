@@ -16,30 +16,32 @@
     </div>
 
     <div class="bento-grid">
-      <!-- Featured Project: GymApp -->
+      <!-- Featured Project: FitFlow -->
       <article
         class="bento-card featured quick"
         data-kind="backend web"
         data-modal="m1"
         tabindex="0"
         role="button"
-        aria-label="Open quick view: GymApp"
+        aria-label="Open quick view: FitFlow"
       >
         <div class="card-image">
-          <img src="/GymAppScreenshot.png" alt="GymApp Dashboard Screenshot" loading="lazy" />
+          <img src="/FitFlowScreenshot.png" alt="FitFlow dashboard screenshot" loading="lazy" />
         </div>
         <div class="card-tag">Full-Stack</div>
         <h3 class="card-title">
-          GymApp — Flask + React
+          FitFlow — MERN + JWT
           <span class="card-arrow">→</span>
         </h3>
         <p class="card-description">
-          A comprehensive fitness tracker with exercise builder, progress predictions, and workout planning. Features real-time analytics and personalized training programs.
+          A full-stack fitness platform with auth, weekly workout planning, unified nutrition logging, calendar flow, and progress tracking with AI meal draft assistance.
         </p>
         <div class="card-stack">
-          <span class="stack-item">Flask</span>
           <span class="stack-item">React</span>
+          <span class="stack-item">Express</span>
+          <span class="stack-item">Node.js</span>
           <span class="stack-item">MongoDB</span>
+          <span class="stack-item">JWT</span>
         </div>
       </article>
 
@@ -120,6 +122,33 @@
           <span class="stack-item">Node.js</span>
         </div>
       </article>
+
+      <!-- TaskPilot -->
+      <article
+        class="bento-card quick"
+        data-kind="backend web"
+        data-modal="m5"
+        tabindex="0"
+        role="button"
+        aria-label="Open quick view: TaskPilot"
+      >
+        <div class="card-image-small">
+          <img src="/TaskPilot/taskpilot-dashboard.png" alt="TaskPilot scheduler app screenshot" loading="lazy" />
+        </div>
+        <div class="card-tag">Full-Stack</div>
+        <h3 class="card-title">
+          TaskPilot
+          <span class="card-arrow">→</span>
+        </h3>
+        <p class="card-description">
+          Automated scheduling so you spend less time planning and more time doing focused work.
+        </p>
+        <div class="card-stack">
+          <span class="stack-item">Next.js</span>
+          <span class="stack-item">React</span>
+          <span class="stack-item">MongoDB</span>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -196,7 +225,7 @@
   .bento-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 280px);
+    grid-auto-rows: minmax(260px, auto);
     gap: 24px;
   }
 

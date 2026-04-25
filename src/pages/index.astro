@@ -151,19 +151,19 @@ import Footer from '../components/Footer.astro';
 <dialog id="m1" class="modal">
   <div class="dialog" role="document" aria-labelledby="m1-title">
     <header>
-      <h3 id="m1-title">GymApp — Flask + React</h3>
+      <h3 id="m1-title">FitFlow — MERN + JWT</h3>
       <button class="modal-close" data-close="m1" aria-label="Close">✕</button>
     </header>
-    <img class="modal-preview" src="/GymAppScreenshot.png" alt="" width="672" height="220" />
-    <p class="muted">A fitness tracker with exercise builder, weekly insights, and predictions.</p>
+    <img class="modal-preview" src="/FitFlowScreenshot.png" alt="" width="672" height="220" />
+    <p class="muted">A full-stack fitness tracker with unified workout planning, nutrition logging, and progress tracking.</p>
     <ul class="list">
-      <li>Reduced query time by 42% via indexed joins + caching layer.</li>
-      <li>Clean module split: Deck/Player/Game; CI on PRs.</li>
-      <li>JWT auth, role-based endpoints, and seed scripts.</li>
+      <li>JWT-protected auth flow with user-scoped workout, meal, and quick food log routes.</li>
+      <li>Unified nutrition UX: day summary, quick log + meal builder, grouped Today logs, and ingredient scaling behavior.</li>
+      <li>AI meal helper using Gemini with graceful fallback parsing and explicit user confirmation before saving.</li>
     </ul>
     <div class="actions">
-      <a class="btn primary" href="#"><span class="shine"></span>Case Study →</a>
-      <a class="btn" href="https://github.com/NicholasTc/GymApp" target="_blank" rel="noopener noreferrer"><span class="shine"></span>Repository</a>
+      <a class="btn primary" href="https://fitness-tracker-islq.onrender.com" target="_blank" rel="noopener noreferrer"><span class="shine"></span>Live Demo →</a>
+      <a class="btn" href="https://github.com/NicholasTc/fitness-tracker.git" target="_blank" rel="noopener noreferrer"><span class="shine"></span>Repository</a>
     </div>
   </div>
 </dialog>
@@ -224,6 +224,25 @@ import Footer from '../components/Footer.astro';
     <div class="actions">
       <a class="btn primary" href="#"><span class="shine"></span>Live Demo →</a>
       <a class="btn" href="#"><span class="shine"></span>Repository</a>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="m5" class="modal">
+  <div class="dialog" role="document" aria-labelledby="m5-title">
+    <header>
+      <h3 id="m5-title">TaskPilot — Automated Scheduler</h3>
+      <button class="modal-close" data-close="m5" aria-label="Close">✕</button>
+    </header>
+    <img class="modal-preview" src="/TaskPilot/taskpilot-dashboard.png" alt="" width="672" height="220" />
+    <p class="muted">Automated scheduling so you spend less time planning and more time on productive work.</p>
+    <ul class="list">
+      <li>Built with Next.js, React, and MongoDB for a full-stack scheduling workflow.</li>
+      <li>Reduces cognitive load by automating plan generation instead of manual calendar juggling.</li>
+      <li>Designed to keep you in execution mode with a clear, modern UI.</li>
+    </ul>
+    <div class="actions">
+      <a class="btn primary" href="https://github.com/NicholasTc/TaskPilot.git" target="_blank" rel="noopener noreferrer"><span class="shine"></span>Repository →</a>
     </div>
   </div>
 </dialog>
