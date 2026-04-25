@@ -16,8 +16,13 @@ const currentPath = Astro.url.pathname;
     <div class="nav-links">
       <a href="/" class={`nav-link ${currentPath === '/' ? 'active' : ''}`}>Home</a>
       <a href="/projects" class={`nav-link ${currentPath === '/projects' || currentPath === '/projects/' ? 'active' : ''}`}>Projects</a>
-      <a href="/about" class={`nav-link ${currentPath === '/about' || currentPath === '/about/' ? 'active' : ''}`}>About</a>
-      <a href="/#contact" class="nav-link">Contact</a>
+      <a href="/resume.pdf" class="nav-link nav-link--accent" target="_blank" rel="noopener" aria-label="Open resume in new tab">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        Resume
+      </a>
     </div>
 
     <div class="nav-actions">
@@ -49,8 +54,7 @@ const currentPath = Astro.url.pathname;
     <div class="mobile-menu-links">
       <a href="/" class={`mobile-menu-link ${currentPath === '/' ? 'active' : ''}`}>Home</a>
       <a href="/projects" class={`mobile-menu-link ${currentPath === '/projects' || currentPath === '/projects/' ? 'active' : ''}`}>Projects</a>
-      <a href="/about" class={`mobile-menu-link ${currentPath === '/about' || currentPath === '/about/' ? 'active' : ''}`}>About</a>
-      <a href="/#contact" class="mobile-menu-link">Contact</a>
+      <a href="/resume.pdf" class="mobile-menu-link mobile-menu-link--accent" target="_blank" rel="noopener">Resume</a>
     </div>
   </div>
 </nav>
@@ -153,6 +157,9 @@ const currentPath = Astro.url.pathname;
   }
 
   .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 10px 18px;
     color: var(--text-secondary);
     text-decoration: none;
@@ -167,6 +174,34 @@ const currentPath = Astro.url.pathname;
   .nav-link.active {
     color: var(--text-primary);
     background: var(--surface-hover);
+  }
+
+  /* Resume gets a subtle gradient pill so recruiters spot it instantly */
+  .nav-link--accent {
+    color: var(--text-primary);
+    background: linear-gradient(135deg, rgba(96,165,250,0.18) 0%, rgba(167,139,250,0.18) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .nav-link--accent:hover {
+    background: linear-gradient(135deg, rgba(96,165,250,0.28) 0%, rgba(167,139,250,0.28) 100%);
+    color: var(--text-primary);
+  }
+
+  [data-theme="light"] .nav-link--accent {
+    background: linear-gradient(135deg, rgba(37,99,235,0.10) 0%, rgba(124,58,237,0.10) 100%);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+  }
+
+  [data-theme="light"] .nav-link--accent:hover {
+    background: linear-gradient(135deg, rgba(37,99,235,0.18) 0%, rgba(124,58,237,0.18) 100%);
+  }
+
+  .nav-link--accent::after { display: none !important; }
+
+  .mobile-menu-link--accent {
+    background: linear-gradient(135deg, rgba(96,165,250,0.18) 0%, rgba(167,139,250,0.18) 100%);
+    color: var(--text-primary) !important;
   }
 
   .nav-link::after {
@@ -416,31 +451,6 @@ const currentPath = Astro.url.pathname;
     setTheme('dark');
   });
 
-  // Handle contact link click to prevent page reload if already on homepage
-  const contactLink = document.querySelector('a[href="/#contact"]');
-  if (contactLink) {
-    contactLink.addEventListener('click', (e) => {
-      // Check if we're on the homepage
-      if (window.location.pathname === '/' || window.location.pathname === '') {
-        e.preventDefault(); // this is the correct method to prevent reload
-        
-        // Check if contact section exists (fail safe, not really needed but is included so might as well)
-        const contactSection = document.getElementById('contact');
-        if (contactSection) {
-          // Smooth scroll to contact section
-          const navHeight = nav?.offsetHeight || 0;
-          const contactTop = contactSection.offsetTop - navHeight - 20;
-          
-          window.scrollTo({
-            top: contactTop,
-            behavior: 'smooth'
-          });
-        }
-      }
-      // If not on homepage, let the default behavior happen (navigate to /#contact)
-    });
-  }
-
   // ================== Mobile Navigation ================== //
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
@@ -452,27 +462,10 @@ const currentPath = Astro.url.pathname;
   });
 
   mobileLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      
-      // Close mobile menu
+    link.addEventListener('click', () => {
+      // Close mobile menu on any link click
       hamburger?.classList.remove('active');
       mobileMenu?.classList.remove('active');
-
-      // Handle contact link smooth scroll
-      if (href === '/#contact' || href?.startsWith('#contact')) {
-        e.preventDefault();
-        const contactSection = document.getElementById('contact');
-        if (contactSection) {
-          const navHeight = nav?.offsetHeight || 0;
-          const contactTop = contactSection.offsetTop - navHeight - 20;
-          
-          window.scrollTo({
-            top: contactTop,
-            behavior: 'smooth'
-          });
-        }
-      }
     });
   });
 </script>

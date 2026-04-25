@@ -1,0 +1,361 @@
+---
+// About Me — sits between Featured Projects and the Skills snapshot.
+// Layout (matches the proposal mockup image):
+//   LEFT  → small profile card (headshot, name, role, location, status, socials)
+//   RIGHT → "About Me" pill, headline, narrative paragraphs
+// No stat cards (per design decision).
+---
+
+<section class="about" id="about" aria-labelledby="about-title">
+  <div class="about-inner">
+    <div class="about-grid">
+
+      <!-- ===== LEFT: Profile card ===== -->
+      <aside class="profile-card" aria-label="Profile">
+        <div class="profile-photo">
+          <img
+            src="/nicholas-chan-headshot.png"
+            alt="Portrait of Nicholas Theodorus Chan"
+            loading="lazy"
+            width="320"
+            height="320"
+          />
+        </div>
+
+        <div class="profile-meta">
+          <h3 class="profile-name">Nicholas Chan</h3>
+          <p class="profile-role">Full-Stack Developer</p>
+
+          <div class="profile-location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span>San Diego, CA</span>
+          </div>
+
+          <span class="profile-status">
+            <span class="profile-status__dot" aria-hidden="true"></span>
+            Open to opportunities
+          </span>
+
+          <div class="profile-socials" aria-label="Connect">
+            <a href="https://github.com/NicholasTc" class="profile-social" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 .5C5.73.5.99 5.24.99 11.51c0 4.86 3.15 8.98 7.52 10.43.55.1.75-.24.75-.53v-1.86c-3.06.66-3.71-1.47-3.71-1.47-.5-1.27-1.22-1.61-1.22-1.61-1-.68.07-.67.07-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.71.38-1.2.69-1.48-2.44-.28-5.01-1.22-5.01-5.42 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.91 0 0 .92-.29 3.02 1.12a10.5 10.5 0 0 1 5.5 0c2.1-1.41 3.02-1.12 3.02-1.12.6 1.51.22 2.63.11 2.91.7.77 1.13 1.75 1.13 2.95 0 4.21-2.58 5.13-5.03 5.4.39.34.74 1 .74 2.02v3c0 .29.2.64.76.53A11.02 11.02 0 0 0 23 11.51C23 5.24 18.27.5 12 .5z"/>
+              </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/nictc/" class="profile-social" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8 19H5V8h3v11zM6.5 6.73A1.77 1.77 0 1 1 6.5 3.2a1.77 1.77 0 0 1 0 3.53zM20 19h-3v-5.6c0-3.37-4-3.11-4 0V19h-3V8h3v1.77c1.4-2.59 7-2.78 7 2.48V19z"/>
+              </svg>
+            </a>
+            <a href="mailto:nicholastheodoruschan@gmail.com" class="profile-social" aria-label="Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </a>
+            <a href="/resume.pdf" class="profile-social" target="_blank" rel="noopener" aria-label="Resume">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ===== RIGHT: Narrative card ===== -->
+      <div class="about-card">
+        <span class="about-eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          About Me
+        </span>
+
+        <h2 id="about-title" class="about-title">
+          Turning complex problems into elegant solutions
+        </h2>
+
+        <div class="about-body">
+          <p>
+            I'm a senior Computer Science student at <strong>UC San Diego</strong>
+            with internship experience building fast, reliable web apps end-to-end.
+            I believe great software is born at the intersection of solid engineering
+            and thoughtful design.
+          </p>
+          <p>
+            I've shipped AI résumé tools (Flask + React + MongoDB), built Spring
+            Boot REST APIs with solid validation and low latency, and launched
+            production sites with WordPress / Elementor, JavaScript, and Cloudflare
+            &mdash; cutting load times and errors while collaborating in small teams.
+          </p>
+          <p>
+            I work test-first, write clear docs, and care about clean, practical
+            interfaces. I'm eager to learn, open to feedback, and excited to grow
+            into an SWE / SDE role while exploring scalable backends, workflow
+            automation, and data-aware UX for real users.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    position: relative;
+    z-index: 1;
+    padding: 80px 0;
+  }
+
+  .about-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 28px;
+    align-items: stretch;
+  }
+
+  /* ====== Profile card (left) ====== */
+  .profile-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(12px);
+    transition: border-color .25s ease, transform .25s ease;
+  }
+
+  .profile-card:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+    transform: translateY(-3px);
+  }
+
+  [data-theme="light"] .profile-card:hover {
+    border-color: rgba(0, 0, 0, 0.14);
+  }
+
+  .profile-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--glass-border);
+  }
+
+  .profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+
+  .profile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .profile-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .profile-role {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-purple);
+    margin: 0;
+  }
+
+  .profile-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .profile-location svg { width: 14px; height: 14px; color: var(--text-muted); }
+
+  .profile-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    margin-top: 6px;
+    width: fit-content;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--accent-green);
+    background: rgba(34, 197, 94, 0.10);
+    border: 1px solid rgba(34, 197, 94, 0.22);
+    border-radius: 999px;
+  }
+
+  .profile-status__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    box-shadow: 0 0 8px var(--accent-green);
+  }
+
+  .profile-socials {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .profile-social {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+
+  .profile-social svg { width: 16px; height: 16px; }
+
+  .profile-social:hover {
+    color: var(--accent-blue);
+    background: var(--surface-hover);
+    border-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+  }
+
+  [data-theme="light"] .profile-social:hover {
+    border-color: rgba(0, 0, 0, 0.16);
+  }
+
+  /* ====== About narrative card (right) ====== */
+  .about-card {
+    padding: 36px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle accent gradient in the corner for depth */
+  .about-card::after {
+    content: "";
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(167, 139, 250, 0.18) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .about-card > * { position: relative; z-index: 1; }
+
+  .about-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--accent-blue);
+    width: fit-content;
+  }
+
+  .about-eyebrow svg { width: 14px; height: 14px; }
+
+  .about-title {
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .about-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .about-body p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .about-body strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* ====== Responsive ====== */
+  @media (max-width: 1024px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+    .profile-card {
+      flex-direction: row;
+      align-items: center;
+      gap: 24px;
+    }
+    .profile-photo {
+      width: 180px;
+      height: 180px;
+      flex-shrink: 0;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .about { padding: 60px 0; }
+    .about-inner { padding: 0 20px; }
+    .about-card { padding: 24px; }
+    .profile-card {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 22px;
+    }
+    .profile-photo { width: 100%; height: auto; }
+  }
+</style>

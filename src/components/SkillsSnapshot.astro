@@ -1,0 +1,231 @@
+---
+// Compact 4-column skills snapshot. Grouped by domain so a recruiter can
+// JD-match in <2 seconds without parsing a paragraph.
+---
+
+<section class="skills" id="skills" aria-labelledby="skills-title">
+  <div class="skills-inner">
+
+    <div class="skills-head">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+        </svg>
+        Skills Snapshot
+      </span>
+      <h2 id="skills-title" class="skills-title">What I work with daily</h2>
+    </div>
+
+    <div class="skills-grid">
+
+      <div class="skill-card">
+        <div class="skill-card__head">
+          <span class="skill-icon skill-icon--blue" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </span>
+          <h3 class="skill-title">Frontend</h3>
+        </div>
+        <ul class="skill-list">
+          <li>React</li><li>TypeScript</li><li>HTML / CSS</li><li>Astro</li><li>Elementor</li>
+        </ul>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-card__head">
+          <span class="skill-icon skill-icon--purple" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 6c0-1.66 3.58-3 8-3s8 1.34 8 3-3.58 3-8 3-8-1.34-8-3z"/>
+              <path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/>
+              <path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/>
+            </svg>
+          </span>
+          <h3 class="skill-title">Backend</h3>
+        </div>
+        <ul class="skill-list">
+          <li>Node.js / Express</li><li>Spring Boot</li><li>Flask</li><li>Django</li><li>PHP</li>
+        </ul>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-card__head">
+          <span class="skill-icon skill-icon--cyan" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v6c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              <path d="M3 11v6c0 1.66 4 3 9 3s9-1.34 9-3v-6"/>
+            </svg>
+          </span>
+          <h3 class="skill-title">Data &amp; Infra</h3>
+        </div>
+        <ul class="skill-list">
+          <li>MongoDB</li><li>MySQL / SQLite</li><li>Docker</li><li>Cloudflare</li><li>Linux / Bash</li>
+        </ul>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-card__head">
+          <span class="skill-icon skill-icon--rose" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4z"/>
+              <path d="M5 22v-4a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v4"/>
+            </svg>
+          </span>
+          <h3 class="skill-title">AI &amp; APIs</h3>
+        </div>
+        <ul class="skill-list">
+          <li>OpenAI</li><li>Gemini</li><li>REST APIs</li><li>JWT Auth</li><li>Webhooks</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills {
+    position: relative;
+    z-index: 1;
+    padding: 56px 0;
+  }
+
+  .skills-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .skills-head {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+  }
+
+  .eyebrow svg { width: 14px; height: 14px; color: var(--accent-blue); }
+
+  .skills-title {
+    font-size: clamp(28px, 3.4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .skill-card {
+    padding: 22px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(12px);
+    transition: border-color .25s ease, transform .25s ease, background .25s ease;
+  }
+
+  .skill-card:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+  }
+
+  [data-theme="light"] .skill-card:hover {
+    border-color: rgba(0, 0, 0, 0.14);
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .skill-card__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .skill-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(96,165,250,0.18) 0%, rgba(167,139,250,0.18) 100%);
+    border: 1px solid var(--glass-border);
+  }
+
+  .skill-icon svg { width: 18px; height: 18px; }
+
+  .skill-icon--blue   { color: var(--accent-blue);   }
+  .skill-icon--purple { color: var(--accent-purple); }
+  .skill-icon--cyan   { color: var(--accent-cyan);   }
+  .skill-icon--rose   { color: var(--accent-rose);   }
+
+  .skill-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .skill-list li {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .skill-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    opacity: 0.7;
+  }
+
+  /* ====== Responsive ====== */
+  @media (max-width: 1024px) {
+    .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 768px) {
+    .skills { padding: 44px 0; }
+    .skills-inner { padding: 0 20px; }
+  }
+
+  @media (max-width: 460px) {
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>
