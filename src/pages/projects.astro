@@ -51,7 +51,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <h3 class="project-title">
               FitFlow — Fitness Tracker
-              <span class="project-arrow">→</span>
             </h3>
             <p class="project-desc">A full-stack fitness platform that unifies workout planning, calendar scheduling, nutrition logging, and progress tracking with JWT-protected user data. Nutrition includes quick-log + meal-builder modes, grouped daily logs, USDA/Open Food Facts ingredient search, and a Gemini-powered meal draft helper with graceful fallback parsing.</p>
             <div class="project-stack">
@@ -94,7 +93,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <h3 class="project-title">
               FitAI — Readiness Intelligence
-              <span class="project-arrow">→</span>
             </h3>
             <p class="project-desc">Pulls biometric data from the newly released Fitbit Air (May 2026) via the Google Fit API, then computes a personalised readiness score using a rolling statistical model that learns from your own baselines — so every metric is compared to <em>you</em>, not a population average. The score improves as more data is collected. Integrated with Gemini AI to explain what each signal means in plain language and generate a daily strategy (Explain / Plan Today / Set up Tomorrow) tailored to your exact readiness level and limiting factors.</p>
             <div class="project-stack">
@@ -137,7 +135,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <h3 class="project-title">
               ResumeAI Tool
-              <span class="project-arrow">→</span>
             </h3>
             <p class="project-desc">AI-powered resume parsing leveraging OpenAI for intelligent data extraction, achieving 85% improved accuracy across multiple document formats including PDF, DOCX, and plain text.</p>
             <div class="project-stack">
@@ -172,7 +169,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <h3 class="project-title">
               Pollen Atlas Widget
-              <span class="project-arrow">→</span>
             </h3>
             <p class="project-desc">Elementor widget combining Google Pollen & Air Quality APIs with accessible, interactive Chart.js visualizations.</p>
             <div class="project-stack">
@@ -206,7 +202,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <h3 class="project-title">
               ProductivityHelper
-              <span class="project-arrow">→</span>
             </h3>
             <p class="project-desc">Task management application featuring focus mode, weekly planning, and productivity analytics with a clean, distraction-free interface.</p>
             <div class="project-stack">
@@ -243,7 +238,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <h3 class="project-title">
               TaskPilot
-              <span class="project-arrow">→</span>
             </h3>
             <p class="project-desc">An automated scheduler that cuts planning time and cognitive load so you can stay in execution mode instead of constantly re-planning your day.</p>
             <div class="project-stack">
@@ -279,7 +273,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <h3 class="project-title">
               Portfolio 2025
-              <span class="project-arrow">→</span>
             </h3>
             <p class="project-desc">This very website! Built with Astro for optimal performance, featuring glass-morphism design, matrix rain animations, and silky-smooth interactions.</p>
             <div class="project-stack">
@@ -313,7 +306,6 @@ import Footer from '../components/Footer.astro';
             </div>
             <h3 class="project-title">
               GymApp — Fitness Tracker
-              <span class="project-arrow">→</span>
             </h3>
             <p class="project-desc">Comprehensive fitness tracking application featuring exercise builder, progress predictions, workout planning, and real-time analytics with an optimized data layer.</p>
             <div class="project-stack">
@@ -503,9 +495,18 @@ import Footer from '../components/Footer.astro';
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     cursor: pointer;
+    /* Pre-promote to GPU layer to prevent the repaint flash artifact
+       that occurs when overflow:hidden + border-radius + transform
+       fire at the same time on hover */
+    transform: translateZ(0);
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
   .project-card::before {
@@ -518,7 +519,7 @@ import Footer from '../components/Footer.astro';
   }
 
   .project-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) translateZ(0);
     border-color: rgba(255, 255, 255, 0.15);
     box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.5), 0 0 50px -15px var(--glow-blue);
   }
@@ -560,7 +561,7 @@ import Footer from '../components/Footer.astro';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    transition: transform 0.6s ease, filter 0.3s ease;
   }
 
   .project-card:hover .project-image img {
@@ -642,32 +643,10 @@ import Footer from '../components/Footer.astro';
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
   }
 
   .project-card.featured .project-title {
     font-size: 32px;
-  }
-
-  .project-arrow {
-    width: 40px;
-    height: 40px;
-    background: var(--surface);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-    transition: all 0.3s ease;
-  }
-
-  .project-card:hover .project-arrow {
-    background: var(--gradient-bg);
-    transform: translateX(4px);
   }
 
   .project-desc {
