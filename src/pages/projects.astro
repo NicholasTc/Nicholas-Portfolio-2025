@@ -81,6 +81,49 @@ import Footer from '../components/Footer.astro';
           </div>
         </article>
 
+        <!-- FitAI — Readiness Intelligence -->
+        <article class="project-card tall" data-category="ai">
+          <div class="project-image">
+            <img src="/FitAI/fitai-dashboard.png" alt="FitAI readiness dashboard showing a score of 70 and Maintain Day recommendation" />
+            <div class="project-image-overlay"></div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag ai">AI / ML</span>
+              <span class="project-tag backend">Next.js</span>
+            </div>
+            <h3 class="project-title">
+              FitAI — Readiness Intelligence
+              <span class="project-arrow">→</span>
+            </h3>
+            <p class="project-desc">Pulls biometric data from the newly released Fitbit Air (May 2026) via the Google Fit API, then computes a personalised readiness score using a rolling statistical model that learns from your own baselines — so every metric is compared to <em>you</em>, not a population average. The score improves as more data is collected. Integrated with Gemini AI to explain what each signal means in plain language and generate a daily strategy (Explain / Plan Today / Set up Tomorrow) tailored to your exact readiness level and limiting factors.</p>
+            <div class="project-stack">
+              <span class="stack-item">Next.js</span>
+              <span class="stack-item">SQL</span>
+              <span class="stack-item">Fitbit Air API</span>
+              <span class="stack-item">Google Fit API</span>
+              <span class="stack-item">Gemini API</span>
+              <span class="stack-item">Railway</span>
+            </div>
+            <div class="project-meta">
+              <span class="meta-item">
+                <ion-icon class="meta-icon" name="calendar-outline" aria-hidden="true"></ion-icon> 2026
+              </span>
+              <span class="meta-item">
+                <ion-icon class="meta-icon" name="time-outline" aria-hidden="true"></ion-icon> In progress
+              </span>
+              <div class="project-links">
+                <a href="https://github.com/NicholasTc/FitAI.git" target="_blank" rel="noopener noreferrer" class="project-link" title="GitHub">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="https://fitai-production-799a.up.railway.app/dashboard" target="_blank" rel="noopener noreferrer" class="project-link" title="Live Demo">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+
         <!-- ResumeAI Tool -->
         <article class="project-card tall" data-category="ai">
           <div class="project-image">
@@ -334,6 +377,18 @@ import Footer from '../components/Footer.astro';
   </section>
 
   <Footer />
+
+  <!-- Image Modal -->
+  <div class="img-modal-backdrop" id="imgModalBackdrop" aria-hidden="true">
+    <div class="img-modal" id="imgModal" role="dialog" aria-modal="true" aria-label="Full image view">
+      <button class="img-modal-close" id="imgModalClose" aria-label="Close image">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <img class="img-modal-img" id="imgModalImg" src="" alt="" />
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
@@ -871,6 +926,110 @@ import Footer from '../components/Footer.astro';
       flex-direction: column;
     }
   }
+
+  /* ── View Full Image hover button ── */
+  /* :global() is required because the button is injected by JS and
+     won't carry Astro's scoped attribute */
+  :global(.view-image-btn) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.88);
+    z-index: 10;
+    padding: 10px 22px;
+    background: rgba(10, 12, 20, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    font-family: var(--font-sans);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+    white-space: nowrap;
+  }
+
+  .project-image:hover :global(.view-image-btn) {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+  }
+
+  .project-image:hover img {
+    filter: brightness(0.5);
+  }
+
+  /* ── Image Modal ── */
+  .img-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+  }
+
+  :global(.img-modal-backdrop.open) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .img-modal {
+    position: relative;
+    transform: scale(0.93);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  :global(.img-modal-backdrop.open) .img-modal {
+    transform: scale(1);
+  }
+
+  .img-modal-img {
+    display: block;
+    max-width: min(88vw, 1100px);
+    max-height: 88vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 14px;
+    box-shadow: 0 48px 100px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.06);
+  }
+
+  .img-modal-close {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 38px;
+    height: 38px;
+    background: var(--surface, #1a1f2e);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary, #f1f5f9);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+
+  .img-modal-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: rotate(90deg);
+  }
 </style>
 
 <script>
@@ -897,6 +1056,52 @@ import Footer from '../components/Footer.astro';
         }
       });
     });
+  });
+
+  // ── Image modal ── //
+  const backdrop = document.getElementById('imgModalBackdrop') as HTMLElement;
+  const modalImg = document.getElementById('imgModalImg') as HTMLImageElement;
+  const closeBtn = document.getElementById('imgModalClose') as HTMLElement;
+
+  function openModal(src: string, alt: string) {
+    modalImg.src = src;
+    modalImg.alt = alt;
+    backdrop.classList.add('open');
+    backdrop.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('open');
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Inject "View Full Image" button into every image container that has an <img>
+  document.querySelectorAll('.project-image').forEach(container => {
+    const img = container.querySelector('img');
+    if (!img) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'view-image-btn';
+    btn.textContent = 'View Full Image';
+    btn.setAttribute('aria-label', 'View full image');
+    container.appendChild(btn);
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openModal(img.src, img.alt);
+    });
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+
+  backdrop.addEventListener('click', (e) => {
+    if (e.target === backdrop) closeModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
   });
 </script>
 
