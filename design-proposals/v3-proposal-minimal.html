@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>v3 Proposal — Minimal Hero</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #08090a;
+      --ink: #f4f5f6;
+      --soft: rgba(244,245,246,0.56);
+      --mute: rgba(244,245,246,0.34);
+      --line: rgba(244,245,246,0.14);
+      --font: "Inter", system-ui, -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .hero { max-width: 640px; }
+
+    /* Quiet availability note — plain text, no pill */
+    .avail {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12.5px; letter-spacing: 0.04em; color: var(--mute);
+      margin-bottom: 30px;
+      opacity: 0; animation: fade 1s 0.1s ease forwards;
+    }
+    .avail .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--soft); }
+
+    /* Name — refined, calm, NOT overwhelming */
+    .name {
+      font-size: clamp(30px, 5vw, 52px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 18px;
+      opacity: 0; transform: translateY(12px);
+      animation: rise 1s 0.18s cubic-bezier(.2,.7,.2,1) forwards;
+    }
+
+    /* Role — single quiet line */
+    .role {
+      font-size: clamp(14px, 1.6vw, 16px);
+      font-weight: 400;
+      color: var(--soft);
+      line-height: 1.6;
+      margin-bottom: 40px;
+      opacity: 0; transform: translateY(12px);
+      animation: rise 1s 0.3s cubic-bezier(.2,.7,.2,1) forwards;
+    }
+
+    /* One understated action */
+    .cta {
+      opacity: 0; transform: translateY(12px);
+      animation: rise 1s 0.42s cubic-bezier(.2,.7,.2,1) forwards;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 12px 26px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px; font-weight: 500;
+      color: var(--ink);
+      text-decoration: none;
+      transition: border-color .35s ease, background .35s ease, transform .35s ease;
+    }
+    .btn svg { width: 15px; height: 15px; transition: transform .35s ease; }
+    .btn:hover { border-color: var(--soft); background: rgba(255,255,255,0.03); transform: translateY(-2px); }
+    .btn:hover svg { transform: translateY(2px); }
+
+    @keyframes fade { to { opacity: 1; } }
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .avail, .name, .role, .cta { animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="hero">
+    <span class="avail"><span class="dot"></span> Open to Summer 2026 roles</span>
+
+    <h1 class="name">Nicholas Theodorus Chan</h1>
+
+    <p class="role">Full-Stack Software Engineer · UC San Diego</p>
+
+    <div class="cta">
+      <a href="#" class="btn">
+        View Work
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

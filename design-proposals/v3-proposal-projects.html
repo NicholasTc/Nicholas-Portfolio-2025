@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>v3 Proposal — Mono Store Grid (Projects)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --ink: #f4f5f6;
+      --soft: rgba(244,245,246,0.60);
+      --mute: rgba(244,245,246,0.34);
+      --line: rgba(244,245,246,0.10);
+      --line2: rgba(244,245,246,0.20);
+      --glass: rgba(255,255,255,0.035);
+      --font: "Inter", system-ui, -apple-system, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    .amb {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(60% 40% at 50% -8%, rgba(255,255,255,0.05), transparent 60%),
+        radial-gradient(120% 90% at 50% 20%, transparent 50%, rgba(0,0,0,0.4) 100%);
+    }
+
+    /* Annotation banner (proposal context only — not part of the design) */
+    .note {
+      position: relative; z-index: 2; max-width: 1160px; margin: 0 auto;
+      padding: 26px 28px 0; display: flex; align-items: center; gap: 12px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute);
+    }
+    .note .tag { border: 1px solid var(--line2); border-radius: 999px; padding: 4px 11px; color: var(--soft); }
+
+    .section { position: relative; z-index: 2; max-width: 1160px; margin: 0 auto; padding: 60px 28px 110px; }
+
+    /* Section head */
+    .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding-bottom: 22px; margin-bottom: 30px; border-bottom: 1px solid var(--line); }
+    .head .left .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); margin-bottom: 14px;
+    }
+    .head .left .eyebrow svg { width: 13px; height: 13px; }
+    .head h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 700; letter-spacing: -0.03em; }
+    .head .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); white-space: nowrap; }
+
+    /* Grid: 1 big featured tile + 2 equal tiles */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .tile { grid-column: span 1; }
+    .tile.feature { grid-column: span 2; }
+
+    .card {
+      position: relative; display: block; height: 100%;
+      border-radius: 18px; overflow: hidden;
+      background: linear-gradient(180deg, #141517, #0e0f11);
+      border: 1px solid var(--line);
+      box-shadow: 0 26px 60px -30px rgba(0,0,0,0.9);
+      transition: transform .5s cubic-bezier(.2,.7,.2,1), border-color .5s ease, box-shadow .5s ease;
+    }
+    .card:hover { transform: translateY(-6px); border-color: var(--line2); box-shadow: 0 40px 80px -28px rgba(0,0,0,0.95); }
+
+    /* Media — image-first, grayscale by default, color on hover */
+    .media { position: relative; overflow: hidden; background: #0a0b0c; }
+    .feature .media { height: 380px; }
+    .tile:not(.feature) .media { height: 230px; }
+    .media img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+      filter: grayscale(1) contrast(1.05) brightness(0.82);
+      transition: filter .6s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+    }
+    .card:hover .media img { filter: grayscale(0) contrast(1.02) brightness(1); transform: scale(1.035); }
+    /* subtle dark gradient so text/idx stays legible over any image */
+    .media::after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(10,11,12,0.35) 0%, transparent 30%, transparent 60%, rgba(10,11,12,0.5) 100%); pointer-events:none; }
+
+    .idx { position: absolute; top: 14px; left: 16px; z-index: 2; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.85); text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
+
+    /* Body */
+    .body { padding: 20px 22px 22px; }
+    .feature .body { padding: 26px 28px 28px; }
+    .row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 9px; }
+    .row .cat { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); }
+    .row .yr { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--mute); }
+    .card h3 { font-size: clamp(18px, 2vw, 22px); font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .feature h3 { font-size: clamp(22px, 2.6vw, 30px); }
+    .card p { color: var(--soft); font-size: 14px; line-height: 1.55; margin-bottom: 16px; max-width: 52ch; }
+
+    /* Stack chips (light recruiter info — small, mono, outlined) */
+    .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .stack span { font-family: var(--mono); font-size: 10.5px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--soft); }
+
+    /* Actions — white primary + ghost secondary (matches hero buttons) */
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: transform .25s ease, background .25s ease, border-color .25s ease; }
+    .btn svg { width: 15px; height: 15px; }
+    .btn-primary { background: var(--ink); color: #0a0b0b; }
+    .btn-primary:hover { transform: translateY(-2px); background: #fff; }
+    .btn-ghost { background: rgba(255,255,255,0.04); border: 1px solid var(--line2); color: var(--ink); }
+    .btn-ghost:hover { transform: translateY(-2px); border-color: var(--soft); }
+
+    /* "See all" footer link */
+    .more { margin-top: 30px; display: flex; justify-content: center; }
+    .more a { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 11px 20px; transition: border-color .25s ease, color .25s ease; }
+    .more a:hover { color: var(--ink); border-color: var(--line2); }
+    .more svg { width: 15px; height: 15px; }
+
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .tile.feature { grid-column: span 1; }
+      .feature .media { height: 260px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .card, .media img { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="amb" aria-hidden="true"></div>
+
+  <div class="note">
+    <span class="tag">Proposal</span>
+    Mono Store Grid · Apple-style layout on your dark monochrome system
+  </div>
+
+  <section class="section" id="projects">
+    <div class="head">
+      <div class="left">
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Selected Work
+        </span>
+        <h2>Hand-picked projects</h2>
+      </div>
+      <span class="meta">3 featured · 2025–2026</span>
+    </div>
+
+    <div class="grid">
+
+      <!-- FEATURED (large, image-first) -->
+      <article class="tile feature">
+        <a class="card" href="#">
+          <div class="media">
+            <span class="idx">01</span>
+            <img src="../public/FitFlowScreenshot.png" alt="FitFlow dashboard" />
+          </div>
+          <div class="body">
+            <div class="row"><span class="cat">Full-Stack Web App</span><span class="yr">2026</span></div>
+            <h3>FitFlow — Fitness &amp; Nutrition Platform</h3>
+            <p>MERN + JWT platform with weekly planning, nutrition logging, and an AI meal helper.</p>
+            <div class="stack"><span>React</span><span>Node</span><span>MongoDB</span><span>JWT</span><span>Gemini</span></div>
+            <div class="actions">
+              <span class="btn btn-primary">View project
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+              <span class="btn btn-ghost">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Live demo
+              </span>
+            </div>
+          </div>
+        </a>
+      </article>
+
+      <!-- Secondary tile -->
+      <article class="tile">
+        <a class="card" href="#">
+          <div class="media">
+            <span class="idx">02</span>
+            <img src="../public/ResumeAITool.png" alt="ResumeAI Tool" />
+          </div>
+          <div class="body">
+            <div class="row"><span class="cat">AI / API</span><span class="yr">2025</span></div>
+            <h3>ResumeAI Tool</h3>
+            <p>OpenAI resume parser with 85% better extraction across PDF, Word, and text.</p>
+            <div class="stack"><span>Python</span><span>OpenAI</span><span>Flask</span></div>
+            <div class="actions">
+              <span class="btn btn-primary">View project</span>
+              <span class="btn btn-ghost">GitHub</span>
+            </div>
+          </div>
+        </a>
+      </article>
+
+      <!-- Secondary tile -->
+      <article class="tile">
+        <a class="card" href="#">
+          <div class="media">
+            <span class="idx">03</span>
+            <img src="../public/PollenAtlas.png" alt="Pollen Atlas widget" />
+          </div>
+          <div class="body">
+            <div class="row"><span class="cat">WordPress Widget</span><span class="yr">2025</span></div>
+            <h3>Pollen Atlas Widget</h3>
+            <p>Pollen + Air Quality APIs with accessible charts; serverless cache cut calls ~65%.</p>
+            <div class="stack"><span>PHP</span><span>JavaScript</span><span>Cloudflare</span></div>
+            <div class="actions">
+              <span class="btn btn-primary">View project</span>
+              <span class="btn btn-ghost">Live demo</span>
+            </div>
+          </div>
+        </a>
+      </article>
+
+    </div>
+
+    <div class="more">
+      <a href="#">See all projects
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+</body>
+</html>

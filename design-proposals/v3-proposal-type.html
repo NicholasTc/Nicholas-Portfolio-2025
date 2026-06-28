@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>v3 Proposal — Type in the Void</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080909;
+      --ink: #f2f4f6;
+      --soft: rgba(242,244,246,0.55);
+      --mute: rgba(242,244,246,0.30);
+      --line: rgba(242,244,246,0.10);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      height: 100vh; overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* === Ambient glow === */
+    .glow {
+      position: fixed; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(55% 55% at 30% 40%, rgba(200,190,255,0.07) 0%, transparent 70%),
+        radial-gradient(45% 45% at 72% 60%, rgba(180,230,210,0.06) 0%, transparent 68%);
+    }
+
+    /* === Hero === */
+    .hero {
+      display: grid; place-items: center;
+      height: 100vh;
+      perspective: 1200px;
+      overflow: hidden;
+    }
+
+    /* === Orbiting tiles === */
+    .orbit-ring {
+      position: absolute;
+      width: 100%; height: 100%;
+      top: 0; left: 0;
+      pointer-events: none;
+    }
+    .tile {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 200px;
+      transform-origin: center center;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .tile__face {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #111314;
+      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.9);
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s ease;
+    }
+    .tile:hover .tile__face {
+      transform: scale(1.06) translateZ(30px);
+      box-shadow: 0 36px 70px -18px rgba(0,0,0,0.95);
+    }
+    .tile__face img {
+      display: block; width: 100%; height: 120px;
+      object-fit: cover; object-position: top;
+    }
+    .tile__label {
+      padding: 9px 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; font-weight: 600; color: var(--soft);
+    }
+    .tile__label span {
+      font-size: 10px; color: var(--mute);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* === Central type block (no card, no box) === */
+    .type-block {
+      position: relative; z-index: 10;
+      text-align: center;
+      user-select: none;
+    }
+    .status-line {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--mute); margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.8s 0.1s ease forwards;
+    }
+    .status-line .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #8fe6ab;
+      box-shadow: 0 0 0 0 rgba(143,230,171,0.6);
+      animation: ping 2.5s ease-in-out infinite;
+    }
+
+    /* Reveal lines — each word clips up from below */
+    .line { display: block; overflow: hidden; }
+    .line span {
+      display: inline-block;
+      transform: translateY(110%);
+      animation: clipUp 1s cubic-bezier(.15,.85,.15,1) forwards;
+    }
+
+    .name {
+      font-size: clamp(56px, 10vw, 112px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.92;
+      margin-bottom: 20px;
+    }
+    .name .line:nth-child(1) span { animation-delay: 0.18s; }
+    .name .line:nth-child(2) span { animation-delay: 0.28s; color: var(--soft); font-weight: 300; font-style: italic; }
+
+    /* Animated underline drawn after text arrives */
+    .underline-wrap {
+      position: relative; display: inline-block;
+    }
+    .underline-wrap::after {
+      content: "";
+      position: absolute; left: 0; bottom: -4px;
+      width: 100%; height: 1.5px;
+      background: var(--ink);
+      transform-origin: left;
+      transform: scaleX(0);
+      animation: drawLine 0.6s 0.88s cubic-bezier(.4,0,.2,1) forwards;
+    }
+
+    .role {
+      font-size: clamp(13px, 1.5vw, 16px);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--mute); margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .role span { display: inline-block; transform: translateY(110%); animation: clipUp 0.9s 0.4s cubic-bezier(.15,.85,.15,1) forwards; }
+
+    .cta-row {
+      display: flex; gap: 12px; justify-content: center;
+      opacity: 0; animation: fadeUp 0.8s 0.6s ease forwards;
+    }
+    .btn {
+      padding: 11px 20px; border-radius: 999px;
+      font-size: 13px; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-solid { background: var(--ink); color: #0a0b0b; }
+    .btn-ghost { border: 1px solid var(--line); color: var(--soft); }
+
+    /* === Bottom micro info === */
+    .bottom-label {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--mute);
+      opacity: 0; animation: fadeUp 0.9s 1s ease forwards;
+    }
+
+    /* === Keyframes === */
+    @keyframes clipUp { to { transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes drawLine { to { transform: scaleX(1); } }
+    @keyframes ping {
+      0% { box-shadow: 0 0 0 0 rgba(143,230,171,0.55); }
+      70% { box-shadow: 0 0 0 8px rgba(143,230,171,0); }
+      100% { box-shadow: 0 0 0 0 rgba(143,230,171,0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .line span, .status-line, .cta-row, .bottom-label {
+        animation-duration: 0.001s !important; animation-delay: 0s !important;
+        transform: none !important; opacity: 1 !important;
+      }
+      .underline-wrap::after { animation-duration: 0.001s !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <main class="hero">
+
+    <!-- Tiles orbit in JS -->
+    <div class="orbit-ring" id="ring">
+      <div class="tile" data-i="0"><div class="tile__face"><img src="../public/FitFlowScreenshot.png" alt="FitFlow"/><div class="tile__label">FitFlow <span>MERN</span></div></div></div>
+      <div class="tile" data-i="1"><div class="tile__face"><img src="../public/ResumeAITool.png" alt="ResumeAI"/><div class="tile__label">ResumeAI <span>OpenAI</span></div></div></div>
+      <div class="tile" data-i="2"><div class="tile__face"><img src="../public/PollenAtlas.png" alt="Pollen Atlas"/><div class="tile__label">Pollen Atlas <span>API</span></div></div></div>
+      <div class="tile" data-i="3"><div class="tile__face"><img src="../public/ProductivityHelper.png" alt="Productivity"/><div class="tile__label">Productivity <span>Tool</span></div></div></div>
+      <div class="tile" data-i="4"><div class="tile__face"><img src="../public/GymAppScreenshot.png" alt="Gym App"/><div class="tile__label">Gym App <span>Mobile</span></div></div></div>
+      <div class="tile" data-i="5"><div class="tile__face"><img src="../public/FitAI/fitai-dashboard.png" alt="FitAI"/><div class="tile__label">FitAI <span>Health</span></div></div></div>
+    </div>
+
+    <!-- No card — just text in the void -->
+    <div class="type-block">
+      <div class="status-line"><span class="dot"></span> Open to Summer 2026 roles</div>
+
+      <h1 class="name">
+        <span class="line"><span class="underline-wrap">Nicholas</span></span>
+        <span class="line"><span>Chan</span></span>
+      </h1>
+
+      <p class="role"><span>Full-Stack Software Engineer &nbsp;·&nbsp; UC San Diego</span></p>
+
+      <div class="cta-row">
+        <a href="#" class="btn btn-solid">View Work</a>
+        <a href="#" class="btn btn-ghost">Download Résumé</a>
+      </div>
+    </div>
+
+    <div class="bottom-label">Hover a project · Scroll to explore</div>
+  </main>
+
+  <script>
+    const tiles = [...document.querySelectorAll('.tile')];
+    const N = tiles.length;
+    const RADIUS_X = Math.min(window.innerWidth * 0.36, 440);
+    const RADIUS_Y = Math.min(window.innerHeight * 0.30, 200);
+    const ORBIT_SPEED = 0.00016; // radians per ms
+    let paused = new Set();
+    let t0 = performance.now();
+    let mx = 0, my = 0;
+
+    function setRadii() {
+      return {
+        rx: Math.min(window.innerWidth * 0.36, 440),
+        ry: Math.min(window.innerHeight * 0.30, 200),
+      };
+    }
+
+    tiles.forEach((tile, i) => {
+      tile.addEventListener('pointerenter', () => paused.add(i));
+      tile.addEventListener('pointerleave', () => paused.delete(i));
+    });
+
+    window.addEventListener('pointermove', e => {
+      mx = (e.clientX / window.innerWidth - 0.5) * 2;
+      my = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    function frame(now) {
+      const elapsed = now - t0;
+      const { rx, ry } = setRadii();
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+
+      tiles.forEach((tile, i) => {
+        const baseAngle = (i / N) * Math.PI * 2;
+        const angle = paused.has(i)
+          ? baseAngle + elapsed * 0
+          : baseAngle + elapsed * ORBIT_SPEED;
+
+        const x = Math.cos(angle) * rx + cx - 100; // 100 = half tile width
+        const y = Math.sin(angle) * ry + cy - 70;
+
+        // depth from angle → scale + opacity for pseudo-3D
+        const depth = Math.sin(angle); // -1 back, +1 front
+        const sc = 0.78 + depth * 0.22;
+        const op = 0.4 + (depth + 1) * 0.28;
+        const zIndex = Math.round(depth * 10 + 10);
+
+        // subtle parallax toward cursor
+        const px = mx * 10 * (i % 2 === 0 ? 1 : -1);
+        const py = my * 6 * (i % 3 === 0 ? 1 : -1);
+
+        tile.style.cssText = `
+          left: ${x + px}px; top: ${y + py}px;
+          transform: scale(${sc});
+          opacity: ${Math.max(0.18, Math.min(1, op))};
+          z-index: ${zIndex};
+          transition: opacity 0.6s ease;
+        `;
+      });
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>

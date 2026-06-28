@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>v3 Proposal — Deck of Cards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07080a;
+      --ink: #f1f3f5;
+      --soft: rgba(241,243,245,0.58);
+      --mute: rgba(241,243,245,0.30);
+      --line: rgba(241,243,245,0.10);
+      --line2: rgba(241,243,245,0.16);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      height: 100vh; overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .glow {
+      position: fixed; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(50% 50% at 20% 30%, rgba(210,190,255,0.07), transparent 72%),
+        radial-gradient(40% 40% at 78% 65%, rgba(160,220,200,0.06), transparent 70%);
+    }
+
+    .hero {
+      height: 100vh; display: flex;
+      align-items: center; justify-content: center;
+      gap: clamp(60px, 8vw, 130px);
+      perspective: 1400px;
+      position: relative; overflow: hidden;
+    }
+
+    /* ===================== DECK ===================== */
+    .deck {
+      position: relative;
+      width: 340px; height: 220px;
+      transform-style: preserve-3d;
+      flex-shrink: 0;
+    }
+
+    /*
+      Three identity cards stacked with depth.
+      Bottom → top: Status, Role, Name
+      On hover, the deck fans them apart.
+    */
+    .id-card {
+      position: absolute; inset: 0;
+      border-radius: 20px;
+      padding: 28px 32px;
+      border: 1px solid var(--line2);
+      backdrop-filter: blur(10px);
+      transition: transform 0.7s cubic-bezier(.2,.8,.15,1), opacity 0.5s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+      display: flex; flex-direction: column;
+    }
+
+    /* Stacked resting state */
+    .id-card:nth-child(1) { /* Name — top */
+      background: linear-gradient(155deg, rgba(28,30,34,0.95), rgba(18,20,24,0.95));
+      transform: translateZ(28px) rotate(-1deg);
+      z-index: 3;
+    }
+    .id-card:nth-child(2) { /* Role — middle */
+      background: rgba(20,22,26,0.80);
+      transform: translateZ(14px) rotate(1.5deg) translateY(6px);
+      z-index: 2;
+    }
+    .id-card:nth-child(3) { /* Status — bottom */
+      background: rgba(14,16,18,0.65);
+      transform: translateZ(0) rotate(-2.5deg) translateY(12px);
+      z-index: 1; opacity: 0.7;
+    }
+
+    /* Fanned state on hover */
+    .deck:hover .id-card:nth-child(1) {
+      transform: translateZ(60px) translateY(-110px) rotate(-4deg);
+    }
+    .deck:hover .id-card:nth-child(2) {
+      transform: translateZ(34px) rotate(0deg);
+      opacity: 1;
+    }
+    .deck:hover .id-card:nth-child(3) {
+      transform: translateZ(10px) translateY(110px) rotate(3.5deg);
+      opacity: 1;
+    }
+
+    .card-eyebrow {
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--mute); margin-bottom: 12px;
+    }
+    .card-value {
+      font-size: clamp(20px, 3vw, 30px); font-weight: 700;
+      letter-spacing: -0.025em; margin-bottom: 4px;
+    }
+    .card-sub { font-size: 13px; color: var(--soft); }
+    .card-badge {
+      margin-top: auto;
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11px; color: var(--soft);
+    }
+    .card-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #8fe6ab;
+      animation: ping 2.5s ease-in-out infinite;
+    }
+
+    /* reveal line animation for card text */
+    .rl { overflow: hidden; }
+    .rl span {
+      display: inline-block; transform: translateY(110%);
+      animation: clipUp 0.9s cubic-bezier(.15,.85,.15,1) forwards;
+    }
+    .id-card:nth-child(1) .rl:nth-of-type(1) span { animation-delay: 0.18s; }
+    .id-card:nth-child(1) .rl:nth-of-type(2) span { animation-delay: 0.28s; }
+    .id-card:nth-child(2) .rl span { animation-delay: 0.30s; }
+    .id-card:nth-child(3) .rl span { animation-delay: 0.40s; }
+
+    /* underline on the name */
+    .ul { position: relative; display: inline-block; }
+    .ul::after {
+      content: ""; position: absolute; bottom: -2px; left: 0;
+      width: 100%; height: 1.5px; background: var(--ink);
+      transform-origin: left; transform: scaleX(0);
+      animation: drawLine 0.55s 0.84s cubic-bezier(.4,0,.2,1) forwards;
+    }
+
+    /* ===================== CTA below deck ===================== */
+    .deck-cta {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
+      opacity: 0; animation: fadeUp 0.9s 0.65s ease forwards;
+    }
+    .deck-hint {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--mute);
+    }
+    .btn-row { display: flex; gap: 10px; }
+    .btn {
+      padding: 11px 20px; border-radius: 999px;
+      font-size: 13px; font-weight: 500; text-decoration: none;
+      transition: transform 0.3s ease;
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-solid { background: var(--ink); color: #07080a; }
+    .btn-ghost { border: 1px solid var(--line2); color: var(--soft); }
+
+    /* ===================== Flip tiles ===================== */
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      perspective: 800px;
+    }
+    .flip-tile {
+      width: 182px; height: 140px;
+      perspective: 600px;
+      cursor: pointer;
+    }
+    .flip-tile__scene {
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.65s cubic-bezier(.25,.8,.25,1);
+      position: relative;
+    }
+    .flip-tile:hover .flip-tile__scene,
+    .flip-tile:focus-within .flip-tile__scene {
+      transform: rotateY(180deg);
+    }
+    .flip-tile__face {
+      position: absolute; inset: 0;
+      border-radius: 14px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Back face (default visible) — colored with project name */
+    .flip-tile__back {
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 14px;
+      border: 1px solid var(--line2);
+    }
+    .flip-tile__back .tile-name { font-size: 13px; font-weight: 600; }
+    .flip-tile__back .tile-tag { font-size: 10px; color: var(--mute); margin-top: 2px; }
+
+    /* Front face (revealed on hover) — screenshot */
+    .flip-tile__front {
+      transform: rotateY(180deg);
+      overflow: hidden;
+    }
+    .flip-tile__front img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top;
+    }
+
+    /* Tile tint colors */
+    .t0 .flip-tile__back { background: linear-gradient(145deg, #1a2e1c, #10180f); }
+    .t1 .flip-tile__back { background: linear-gradient(145deg, #2a1e30, #18101e); }
+    .t2 .flip-tile__back { background: linear-gradient(145deg, #1c2438, #101420); }
+    .t3 .flip-tile__back { background: linear-gradient(145deg, #2e2218, #1c150e); }
+    .t4 .flip-tile__back { background: linear-gradient(145deg, #2a1c28, #180f18); }
+    .t5 .flip-tile__back { background: linear-gradient(145deg, #1c2c2a, #0e1a18); }
+
+    /* Tiles enter on load with staggered reveal */
+    .flip-tile { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .flip-tile:nth-child(1) { animation-delay: 0.2s; }
+    .flip-tile:nth-child(2) { animation-delay: 0.28s; }
+    .flip-tile:nth-child(3) { animation-delay: 0.36s; }
+    .flip-tile:nth-child(4) { animation-delay: 0.44s; }
+    .flip-tile:nth-child(5) { animation-delay: 0.52s; }
+    .flip-tile:nth-child(6) { animation-delay: 0.60s; }
+
+    /* ===================== Bottom hint ===================== */
+    .page-hint {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--mute);
+      opacity: 0; animation: fadeUp 0.9s 1s ease forwards;
+    }
+
+    /* ===================== Keyframes ===================== */
+    @keyframes clipUp { to { transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes drawLine { to { transform: scaleX(1); } }
+    @keyframes ping {
+      0% { box-shadow: 0 0 0 0 rgba(143,230,171,0.55); }
+      70% { box-shadow: 0 0 0 8px rgba(143,230,171,0); }
+      100% { box-shadow: 0 0 0 0 rgba(143,230,171,0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rl span, .deck-cta, .flip-tile, .page-hint { animation-duration: 0.001s !important; animation-delay: 0s !important; transform: none !important; opacity: 1 !important; }
+      .ul::after { animation-duration: 0.001s !important; }
+      .flip-tile__scene { transition: none !important; }
+      .deck .id-card { transition: none !important; }
+    }
+
+    @media (max-width: 820px) {
+      .hero { flex-direction: column; gap: 48px; }
+      .tile-grid { grid-template-columns: repeat(3, 1fr); }
+      .flip-tile { width: 130px; height: 100px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <main class="hero">
+
+    <!-- Left: stacked deck + CTAs -->
+    <div>
+      <div class="deck" tabindex="0" aria-label="Nicholas Chan identity cards — hover to fan">
+        <!-- Card 1: Name (top of stack) -->
+        <div class="id-card" role="presentation">
+          <span class="card-eyebrow">Portfolio — 2026</span>
+          <div class="rl"><span><span class="ul">Nicholas</span></span></div>
+          <div class="rl"><span style="color:var(--soft); font-weight:300;">Chan</span></div>
+        </div>
+        <!-- Card 2: Role (middle) -->
+        <div class="id-card" role="presentation">
+          <span class="card-eyebrow">Current role</span>
+          <div class="rl card-value"><span>Full-Stack Engineer</span></div>
+          <p class="card-sub">React · Node · Flask · Spring Boot</p>
+        </div>
+        <!-- Card 3: Status (bottom) -->
+        <div class="id-card" role="presentation">
+          <span class="card-eyebrow">Education</span>
+          <div class="rl card-value"><span>UC San Diego</span></div>
+          <p class="card-sub">B.S. Computer Science · Class of 2025</p>
+          <div class="card-badge"><span class="dot"></span> Open to Summer 2026 roles</div>
+        </div>
+      </div>
+
+      <div style="height:36px;"></div>
+      <div class="deck-cta">
+        <span class="deck-hint">Hover the deck to reveal ↑</span>
+        <div class="btn-row">
+          <a href="#" class="btn btn-solid">View Work</a>
+          <a href="#" class="btn btn-ghost">Download Résumé</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: flip tiles -->
+    <div class="tile-grid" aria-label="Projects — hover to reveal screenshots">
+
+      <div class="flip-tile t0">
+        <div class="flip-tile__scene">
+          <div class="flip-tile__face flip-tile__back">
+            <div class="tile-name">FitFlow</div>
+            <div class="tile-tag">MERN · JWT · Gemini</div>
+          </div>
+          <div class="flip-tile__face flip-tile__front">
+            <img src="../public/FitFlowScreenshot.png" alt="FitFlow" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-tile t1">
+        <div class="flip-tile__scene">
+          <div class="flip-tile__face flip-tile__back">
+            <div class="tile-name">ResumeAI</div>
+            <div class="tile-tag">Python · OpenAI · Flask</div>
+          </div>
+          <div class="flip-tile__face flip-tile__front">
+            <img src="../public/ResumeAITool.png" alt="ResumeAI" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-tile t2">
+        <div class="flip-tile__scene">
+          <div class="flip-tile__face flip-tile__back">
+            <div class="tile-name">Pollen Atlas</div>
+            <div class="tile-tag">PHP · JS · Cloudflare</div>
+          </div>
+          <div class="flip-tile__face flip-tile__front">
+            <img src="../public/PollenAtlas.png" alt="Pollen Atlas" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-tile t3">
+        <div class="flip-tile__scene">
+          <div class="flip-tile__face flip-tile__back">
+            <div class="tile-name">Productivity</div>
+            <div class="tile-tag">Web App · Tool</div>
+          </div>
+          <div class="flip-tile__face flip-tile__front">
+            <img src="../public/ProductivityHelper.png" alt="Productivity" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-tile t4">
+        <div class="flip-tile__scene">
+          <div class="flip-tile__face flip-tile__back">
+            <div class="tile-name">Gym App</div>
+            <div class="tile-tag">Mobile · Fitness</div>
+          </div>
+          <div class="flip-tile__face flip-tile__front">
+            <img src="../public/GymAppScreenshot.png" alt="Gym App" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-tile t5">
+        <div class="flip-tile__scene">
+          <div class="flip-tile__face flip-tile__back">
+            <div class="tile-name">FitAI</div>
+            <div class="tile-tag">Health · AI</div>
+          </div>
+          <div class="flip-tile__face flip-tile__front">
+            <img src="../public/FitAI/fitai-dashboard.png" alt="FitAI" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <p class="page-hint">Hover the cards · Hover the tiles to flip</p>
+
+  <script>
+    // Subtle mouse parallax on the deck
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+      const deck = document.querySelector('.deck');
+      window.addEventListener('pointermove', e => {
+        const rx = (e.clientY / window.innerHeight - 0.5) * 14;
+        const ry = (e.clientX / window.innerWidth - 0.5) * 18;
+        deck.style.transform = `rotateX(${-rx}deg) rotateY(${ry}deg)`;
+      });
+    }
+  </script>
+</body>
+</html>

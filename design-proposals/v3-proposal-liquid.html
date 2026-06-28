@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>v3 Proposal — Liquid Cursor Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07080a;
+      --ink: #f1f3f5;
+      --soft: rgba(241,243,245,0.58);
+      --mute: rgba(241,243,245,0.32);
+      --line: rgba(241,243,245,0.09);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      height: 100vh; overflow: hidden;
+      cursor: none; /* custom cursor */
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* === Custom cursor === */
+    #cursor {
+      position: fixed; z-index: 100; pointer-events: none;
+      width: 14px; height: 14px;
+      border-radius: 50%; background: var(--ink);
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+      transition: width 0.3s ease, height 0.3s ease;
+      will-change: transform;
+    }
+    #cursor.big { width: 60px; height: 60px; }
+
+    /* === Cursor glow spotlight === */
+    #spotlight {
+      position: fixed; z-index: 0; pointer-events: none;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,195,255,0.09) 0%, transparent 68%);
+      transform: translate(-50%, -50%);
+      transition: opacity 0.6s ease;
+      opacity: 0;
+      will-change: transform;
+    }
+
+    /* === Hero layout === */
+    .hero {
+      display: grid; place-items: center;
+      height: 100vh; position: relative; overflow: hidden;
+    }
+
+    /* === Magnetic tiles — scattered, spring-physics pulled by cursor === */
+    .tile {
+      position: absolute;
+      width: 210px;
+      will-change: transform;
+    }
+    .tile__inner {
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--line);
+      background: #10121400;
+      box-shadow: 0 20px 50px -18px rgba(0,0,0,0.85);
+      transition: box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+    .tile:hover .tile__inner {
+      border-color: rgba(241,243,245,0.18);
+      box-shadow: 0 32px 64px -20px rgba(0,0,0,0.9);
+    }
+    .tile__inner img {
+      display: block; width: 100%; height: 125px;
+      object-fit: cover; object-position: top;
+    }
+    .tile__label {
+      padding: 9px 11px;
+      font-size: 11px; font-weight: 600; color: var(--soft);
+      display: flex; justify-content: space-between;
+    }
+    .tile__label span { color: var(--mute); font-size: 10px; }
+
+    /* === Card — no visible border, revealed by cursor glow + hover === */
+    .card {
+      position: relative; z-index: 10;
+      padding: 38px 46px 32px;
+      text-align: center;
+      border-radius: 24px;
+      /* border appears only via box-shadow on hover */
+      box-shadow: 0 0 0 1px transparent;
+      transition: box-shadow 0.5s ease;
+    }
+    .card:hover {
+      box-shadow: 0 0 0 1px rgba(241,243,245,0.10),
+                  0 40px 80px -30px rgba(0,0,0,0.7);
+      background: rgba(14,16,18,0.40);
+      backdrop-filter: blur(12px);
+    }
+
+    /* === Reveal lines === */
+    .line { display: block; overflow: hidden; }
+    .line span {
+      display: inline-block;
+      transform: translateY(110%);
+      animation: clipUp 1s cubic-bezier(.15,.85,.15,1) forwards;
+    }
+
+    .status {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--mute); margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.8s 0.05s ease forwards;
+    }
+    .status .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #8fe6ab;
+      animation: ping 2.5s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: clamp(46px, 7.5vw, 88px);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 0.94;
+      margin-bottom: 18px;
+    }
+    h1 .l1 span { animation-delay: 0.18s; }
+    h1 .l2 span { animation-delay: 0.28s; color: var(--soft); font-weight: 300; }
+
+    /* underline that draws itself */
+    .ul-word { position: relative; display: inline-block; }
+    .ul-word::after {
+      content: ""; position: absolute; bottom: -3px; left: 0;
+      width: 100%; height: 1.5px; background: currentColor;
+      transform-origin: left; transform: scaleX(0);
+      animation: drawLine 0.55s 0.85s cubic-bezier(.4,0,.2,1) forwards;
+    }
+
+    .role {
+      overflow: hidden; font-size: clamp(13px, 1.4vw, 15px);
+      letter-spacing: 0.05em; text-transform: uppercase; color: var(--mute);
+      margin-bottom: 30px;
+    }
+    .role span { display: inline-block; transform: translateY(110%); animation: clipUp 0.9s 0.38s cubic-bezier(.15,.85,.15,1) forwards; }
+
+    .cta {
+      display: flex; gap: 11px; justify-content: center;
+      opacity: 0; animation: fadeUp 0.8s 0.56s ease forwards;
+    }
+    .btn {
+      padding: 10px 20px; border-radius: 999px;
+      font-size: 13px; font-weight: 500; text-decoration: none;
+      transition: transform 0.3s ease;
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-solid { background: var(--ink); color: #08090a; }
+    .btn-ghost { border: 1px solid var(--line); color: var(--soft); }
+
+    .hint {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--mute); white-space: nowrap;
+      opacity: 0; animation: fadeUp 0.9s 1s ease forwards;
+    }
+
+    @keyframes clipUp { to { transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes drawLine { to { transform: scaleX(1); } }
+    @keyframes ping {
+      0% { box-shadow: 0 0 0 0 rgba(143,230,171,0.55); }
+      70% { box-shadow: 0 0 0 8px rgba(143,230,171,0); }
+      100% { box-shadow: 0 0 0 0 rgba(143,230,171,0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .line span, .status, .role span, .cta, .hint {
+        animation-duration: 0.001s !important; animation-delay: 0s !important;
+        transform: none !important; opacity: 1 !important;
+      }
+      .ul-word::after { animation-duration: 0.001s !important; }
+      body { cursor: auto; }
+      #cursor { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="spotlight" aria-hidden="true"></div>
+  <div id="cursor" aria-hidden="true"></div>
+
+  <main class="hero">
+
+    <!-- Magnetic tiles: initial positions defined via data attrs -->
+    <div class="tile" data-bx="-46" data-by="-40" data-ox="-420" data-oy="-160" data-rot="-7">
+      <div class="tile__inner"><img src="../public/FitFlowScreenshot.png" alt="FitFlow"/><div class="tile__label">FitFlow <span>MERN</span></div></div>
+    </div>
+    <div class="tile" data-bx="46" data-by="-40" data-ox="390" data-oy="-190" data-rot="6">
+      <div class="tile__inner"><img src="../public/ResumeAITool.png" alt="ResumeAI"/><div class="tile__label">ResumeAI <span>OpenAI</span></div></div>
+    </div>
+    <div class="tile" data-bx="-46" data-by="40" data-ox="-450" data-oy="130" data-rot="-5">
+      <div class="tile__inner"><img src="../public/PollenAtlas.png" alt="Pollen Atlas"/><div class="tile__label">Pollen Atlas <span>API</span></div></div>
+    </div>
+    <div class="tile" data-bx="46" data-by="40" data-ox="420" data-oy="110" data-rot="7">
+      <div class="tile__inner"><img src="../public/ProductivityHelper.png" alt="Productivity"/><div class="tile__label">Productivity <span>Tool</span></div></div>
+    </div>
+    <div class="tile" data-bx="-20" data-by="46" data-ox="-160" data-oy="310" data-rot="-3">
+      <div class="tile__inner"><img src="../public/GymAppScreenshot.png" alt="Gym App"/><div class="tile__label">Gym App <span>Mobile</span></div></div>
+    </div>
+    <div class="tile" data-bx="20" data-by="46" data-ox="190" data-oy="300" data-rot="4">
+      <div class="tile__inner"><img src="../public/FitAI/fitai-dashboard.png" alt="FitAI"/><div class="tile__label">FitAI <span>Health</span></div></div>
+    </div>
+
+    <!-- No visible card — just text floating, border appears on hover -->
+    <div class="card" id="card">
+      <div class="status"><span class="dot"></span> Open to Summer 2026 roles</div>
+      <h1>
+        <span class="line l1"><span><span class="ul-word">Nicholas</span></span></span>
+        <span class="line l2"><span>Chan</span></span>
+      </h1>
+      <p class="role"><span>Full-Stack Engineer · UC San Diego</span></p>
+      <div class="cta">
+        <a href="#" class="btn btn-solid">View Work</a>
+        <a href="#" class="btn btn-ghost">Résumé</a>
+      </div>
+    </div>
+
+    <div class="hint">Move the cursor · Hover a tile</div>
+  </main>
+
+  <script>
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cursor = document.getElementById('cursor');
+    const spotlight = document.getElementById('spotlight');
+    const card = document.getElementById('card');
+    const tiles = [...document.querySelectorAll('.tile')];
+
+    // --- Tile rest positions (relative to viewport center) ---
+    const tileState = tiles.map(t => {
+      const bx = parseFloat(t.dataset.bx) / 100;
+      const by = parseFloat(t.dataset.by) / 100;
+      const ox = parseFloat(t.dataset.ox);
+      const oy = parseFloat(t.dataset.oy);
+      const rot = parseFloat(t.dataset.rot);
+      return { bx, by, ox, oy, rot, cx: ox, cy: oy, vx: 0, vy: 0 };
+    });
+
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let cmx = mx, cmy = my; // smoothed cursor
+    let spotOpacity = 0;
+    let hasPointer = false;
+
+    window.addEventListener('pointermove', e => {
+      mx = e.clientX; my = e.clientY;
+      hasPointer = true;
+    });
+    card.addEventListener('pointerenter', () => {
+      if (!reduce) cursor.classList.add('big');
+    });
+    card.addEventListener('pointerleave', () => {
+      cursor.classList.remove('big');
+    });
+
+    function loop() {
+      // Smooth cursor
+      cmx += (mx - cmx) * 0.12;
+      cmy += (my - cmy) * 0.12;
+
+      if (!reduce) {
+        cursor.style.transform = `translate(${cmx}px, ${cmy}px) translate(-50%,-50%)`;
+        spotlight.style.transform = `translate(${cmx}px, ${cmy}px) translate(-50%,-50%)`;
+      }
+
+      // Spotlight fades in once user moves
+      if (hasPointer) {
+        spotOpacity = Math.min(1, spotOpacity + 0.04);
+        spotlight.style.opacity = spotOpacity;
+      }
+
+      // Magnetic tiles: each tile is attracted toward its rest position
+      // but slightly repelled when cursor is very close
+      const CX = window.innerWidth / 2;
+      const CY = window.innerHeight / 2;
+
+      tileState.forEach((s, i) => {
+        const restX = CX + s.ox - 105; // 105 = half tile width
+        const restY = CY + s.oy - 70;
+
+        // Distance from cursor to tile center
+        const tcx = s.cx + 105, tcy = s.cy + 70;
+        const dx = cmx - tcx, dy = cmy - tcy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        // Magnetic pull toward cursor (diminishes with distance)
+        const strength = Math.max(0, 1 - dist / 280) * 28;
+        const fx = dx / (dist || 1) * strength;
+        const fy = dy / (dist || 1) * strength;
+
+        // Spring back to rest
+        const sx = (restX - s.cx) * 0.055;
+        const sy = (restY - s.cy) * 0.055;
+
+        s.vx = (s.vx + sx + fx * 0.4) * 0.82;
+        s.vy = (s.vy + sy + fy * 0.4) * 0.82;
+        s.cx += s.vx;
+        s.cy += s.vy;
+
+        // Slight tilt toward cursor
+        const tx = ((cmx - tcx) / window.innerWidth) * 10;
+        const ty = ((cmy - tcy) / window.innerHeight) * 10;
+
+        tiles[i].style.cssText = `
+          left: ${s.cx}px; top: ${s.cy}px; position: absolute;
+          transform: rotate(${s.rot}deg) rotateX(${-ty}deg) rotateY(${tx}deg);
+        `;
+      });
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>

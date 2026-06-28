@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nicholas Chan — Portfolio Proposal</title>
+  <meta name="description" content="Recruiter-focused portfolio proposal mockup for Nicholas Chan, Full-Stack Software Engineer." />
+
+  <!-- Fonts (matches the existing portfolio's Outfit + JetBrains Mono pairing) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Proposal stylesheet (kept in a separate file per the brief — no inline CSS) -->
+  <link rel="stylesheet" href="portfolio-proposal.css" />
+</head>
+<body>
+
+  <!--
+    ============================================================
+    BACKGROUND LAYER
+    ============================================================
+    Why: Preserves the existing visual identity (dark theme,
+    grid background, soft blue/purple gradient orbs) so the
+    proposal looks like a natural evolution, not a redesign.
+  -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <!--
+    ============================================================
+    1. NAVBAR
+    ============================================================
+    Recruiter benefit:
+    - "Resume" is now a first-class nav item (recruiters look for
+      it within the first 3 seconds; the current site hides it).
+    - Section labels are explicit ("Projects", "Experience",
+      "Resume", "Contact") so visitors always know where they are.
+    - Theme toggle is preserved on the right.
+  -->
+  <header class="nav" role="banner">
+    <div class="nav-inner">
+      <a href="#top" class="nav-logo" aria-label="Nicholas Chan — home">
+        <span class="logo-mark" aria-hidden="true">N</span>
+        <span class="logo-text">Nicholas Chan</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="#resume" class="nav-link nav-link--accent">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Resume
+        </a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="mode-toggle" role="group" aria-label="Theme">
+          <button class="mode-btn" type="button" aria-label="Light mode">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          </button>
+          <button class="mode-btn is-active" type="button" aria-label="Dark mode" aria-pressed="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!--
+      ============================================================
+      2. HERO  —  Recruiter-focused, less decorative
+      ============================================================
+      Layout: Two columns. The LEFT side carries the recruiter
+      payload (who, role, value, CTAs, social, stack). The RIGHT
+      side keeps a small product preview card so the page still
+      feels alive — but it is intentionally secondary.
+
+      Hierarchy a recruiter scans in ~6 seconds:
+        Status pill  →  Name  →  Role  →  Value sentence
+        →  "View Projects" CTA  →  "Download Resume" CTA
+        →  Social row  →  Tech stack row.
+    -->
+    <section class="hero" aria-labelledby="hero-name">
+      <div class="hero-grid">
+
+        <div class="hero-left">
+          <!-- Status pill — signals availability immediately -->
+          <span class="status-pill">
+            <span class="status-dot" aria-hidden="true"></span>
+            Open to Summer 2026 SWE / SDE roles
+          </span>
+
+          <h1 id="hero-name" class="hero-name">
+            Nicholas <span class="gradient-text">Chan</span>
+          </h1>
+
+          <!-- Explicit role/title so recruiters can match instantly -->
+          <p class="hero-role">
+            Full-Stack Software Engineer
+            <span class="role-divider" aria-hidden="true">|</span>
+            <span class="role-school">UC San Diego CS</span>
+          </p>
+
+          <!-- Short value statement (1-2 sentences, no fluff) -->
+          <p class="hero-value">
+            I ship clean, testable products end-to-end — from React UIs to
+            Spring&nbsp;Boot APIs. I care about reliability, fast iteration,
+            and interfaces that respect the user.
+          </p>
+
+          <!--
+            CTAs — primary and secondary visually distinct so
+            recruiters don't have to think about which to click.
+          -->
+          <div class="cta-row">
+            <a href="#projects" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+              </svg>
+              View Projects
+            </a>
+            <a href="#resume" class="btn btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download Resume
+            </a>
+          </div>
+
+          <!--
+            Quick social row — explicit text labels (not icon-only)
+            so meaning is unambiguous and accessible.
+          -->
+          <ul class="social-row" aria-label="Profiles">
+            <li>
+              <a href="https://github.com/NicholasTc" class="social-chip" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 .5C5.73.5.99 5.24.99 11.51c0 4.86 3.15 8.98 7.52 10.43.55.1.75-.24.75-.53v-1.86c-3.06.66-3.71-1.47-3.71-1.47-.5-1.27-1.22-1.61-1.22-1.61-1-.68.07-.67.07-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.71.38-1.2.69-1.48-2.44-.28-5.01-1.22-5.01-5.42 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.91 0 0 .92-.29 3.02 1.12a10.5 10.5 0 0 1 5.5 0c2.1-1.41 3.02-1.12 3.02-1.12.6 1.51.22 2.63.11 2.91.7.77 1.13 1.75 1.13 2.95 0 4.21-2.58 5.13-5.03 5.4.39.34.74 1 .74 2.02v3c0 .29.2.64.76.53A11.02 11.02 0 0 0 23 11.51C23 5.24 18.27.5 12 .5z"/>
+                </svg>
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/nictc/" class="social-chip" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8 19H5V8h3v11zM6.5 6.73A1.77 1.77 0 1 1 6.5 3.2a1.77 1.77 0 0 1 0 3.53zM20 19h-3v-5.6c0-3.37-4-3.11-4 0V19h-3V8h3v1.77c1.4-2.59 7-2.78 7 2.48V19z"/>
+                </svg>
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <a href="mailto:nicholastheodoruschan@gmail.com" class="social-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                Email
+              </a>
+            </li>
+          </ul>
+
+          <!-- Tech stack row — fast skim of what I work with -->
+          <div class="stack-row" aria-label="Primary stack">
+            <span class="stack-label">Stack</span>
+            <span class="stack-pill">React</span>
+            <span class="stack-pill">Node.js</span>
+            <span class="stack-pill">Flask</span>
+            <span class="stack-pill">Spring Boot</span>
+            <span class="stack-pill">MongoDB</span>
+          </div>
+        </div>
+
+        <!--
+          Hero RIGHT — secondary visual.
+          Kept smaller and quieter than the current portfolio
+          so it doesn't compete with the message. It's a stylized
+          "now shipping" preview card with a faux code snippet.
+        -->
+        <aside class="hero-right" aria-label="Currently building">
+          <div class="preview-card">
+            <div class="preview-card__chrome">
+              <span class="dot dot-r"></span>
+              <span class="dot dot-y"></span>
+              <span class="dot dot-g"></span>
+              <span class="preview-card__file">fitflow / api / auth.ts</span>
+            </div>
+            <pre class="preview-card__code"><code><span class="cm">// JWT-protected route, user-scoped queries</span>
+<span class="kw">export const</span> <span class="fn">getWorkouts</span> = <span class="kw">async</span> (req, res) =&gt; {
+  <span class="kw">const</span> userId = req.user.id;
+  <span class="kw">const</span> data = <span class="kw">await</span> Workout.<span class="fn">find</span>({ userId })
+    .<span class="fn">sort</span>({ date: -<span class="num">1</span> })
+    .<span class="fn">limit</span>(<span class="num">20</span>);
+  res.<span class="fn">json</span>({ ok: <span class="kw">true</span>, data });
+};</code></pre>
+            <div class="preview-card__meta">
+              <span class="meta-pill">
+                <span class="meta-dot"></span>
+                Currently building
+              </span>
+              <span class="meta-text">FitFlow · MERN · JWT</span>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+
+    <!--
+      ============================================================
+      3. FEATURED PROJECTS  —  Top 3 only
+      ============================================================
+      Recruiter benefit:
+      - Homepage is now a curated highlight reel, not a duplicate
+        of /projects. Three cards = no decision paralysis.
+      - FitFlow is the FEATURED card (largest, image-forward),
+        because it shows full-stack range.
+      - Each card has explicit text buttons (Case Study, GitHub,
+        Live Demo) instead of relying on a small "→" icon.
+      - Tech tags + 1-line summary keep cards highly skimmable.
+    -->
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <div class="section-head">
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          Featured Work
+        </span>
+        <h2 id="projects-title" class="section-title">Top 3 projects, hand-picked</h2>
+        <p class="section-desc">
+          A quick look at my strongest work. <a href="#" class="inline-link">See all projects →</a>
+        </p>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- FEATURED CARD: FitFlow (largest) -->
+        <article class="project-card project-card--featured">
+          <div class="project-media">
+            <img src="../public/FitFlowScreenshot.png" alt="FitFlow dashboard preview" loading="lazy" />
+            <span class="project-badge">Featured</span>
+          </div>
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="project-cat">Full-Stack Web App</span>
+              <span class="project-year">2026</span>
+            </div>
+            <h3 class="project-title">FitFlow — Fitness &amp; Nutrition Platform</h3>
+            <p class="project-summary">
+              MERN + JWT app with weekly workout planning, unified nutrition logging,
+              and an AI meal helper. Ships with secure user-scoped routes and a clean,
+              calm dashboard.
+            </p>
+            <ul class="project-tags" aria-label="Tech stack">
+              <li>React</li><li>Node.js</li><li>Express</li><li>MongoDB</li><li>JWT</li><li>Gemini API</li>
+            </ul>
+            <div class="project-actions">
+              <a href="#" class="btn btn-primary btn-sm">
+                Case Study
+              </a>
+              <a href="https://github.com/NicholasTc/fitness-tracker.git" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 .5C5.73.5.99 5.24.99 11.51c0 4.86 3.15 8.98 7.52 10.43.55.1.75-.24.75-.53v-1.86c-3.06.66-3.71-1.47-3.71-1.47-.5-1.27-1.22-1.61-1.22-1.61-1-.68.07-.67.07-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.71.38-1.2.69-1.48-2.44-.28-5.01-1.22-5.01-5.42 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.91 0 0 .92-.29 3.02 1.12a10.5 10.5 0 0 1 5.5 0c2.1-1.41 3.02-1.12 3.02-1.12.6 1.51.22 2.63.11 2.91.7.77 1.13 1.75 1.13 2.95 0 4.21-2.58 5.13-5.03 5.4.39.34.74 1 .74 2.02v3c0 .29.2.64.76.53A11.02 11.02 0 0 0 23 11.51C23 5.24 18.27.5 12 .5z"/>
+                </svg>
+                GitHub
+              </a>
+              <a href="https://fitness-tracker-islq.onrender.com" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Live Demo
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Secondary card: ResumeAI -->
+        <article class="project-card">
+          <div class="project-media project-media--sm">
+            <img src="../public/ResumeAITool.png" alt="ResumeAI Tool preview" loading="lazy" />
+          </div>
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="project-cat">AI / API Integration</span>
+              <span class="project-year">2025</span>
+            </div>
+            <h3 class="project-title">ResumeAI Tool</h3>
+            <p class="project-summary">
+              Resume parser using OpenAI with 85% improved extraction accuracy
+              across PDF, Word, and plain-text formats.
+            </p>
+            <ul class="project-tags" aria-label="Tech stack">
+              <li>Python</li><li>OpenAI</li><li>Flask</li>
+            </ul>
+            <div class="project-actions">
+              <a href="#" class="btn btn-primary btn-sm">Case Study</a>
+              <a href="#" class="btn btn-ghost btn-sm">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Secondary card: Pollen Atlas -->
+        <article class="project-card">
+          <div class="project-media project-media--sm">
+            <img src="../public/PollenAtlas.png" alt="Pollen Atlas widget preview" loading="lazy" />
+          </div>
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="project-cat">WordPress Widget</span>
+              <span class="project-year">2025</span>
+            </div>
+            <h3 class="project-title">Pollen Atlas Widget</h3>
+            <p class="project-summary">
+              Elementor widget that combines Google Pollen + Air Quality APIs with
+              accessible charts. Serverless cache cut API calls ~65%.
+            </p>
+            <ul class="project-tags" aria-label="Tech stack">
+              <li>PHP</li><li>JavaScript</li><li>Cloudflare</li>
+            </ul>
+            <div class="project-actions">
+              <a href="#" class="btn btn-primary btn-sm">Case Study</a>
+              <a href="#" class="btn btn-ghost btn-sm">Live Demo</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+
+    <!--
+      ============================================================
+      4. SKILLS SNAPSHOT  —  Compact, grouped
+      ============================================================
+      Recruiter benefit:
+      - Skills are grouped (Frontend / Backend / Data &amp; Infra /
+        AI &amp; APIs) so a recruiter can match a JD line to a
+        bucket in <2 seconds.
+      - Compact 4-column grid keeps vertical space tight.
+      - Each group has a small icon + label for visual anchoring.
+    -->
+    <section class="section section--tight" id="skills" aria-labelledby="skills-title">
+      <div class="section-head section-head--center">
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+          Skills Snapshot
+        </span>
+        <h2 id="skills-title" class="section-title">What I work with daily</h2>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-card__head">
+            <span class="skill-icon skill-icon--blue" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </span>
+            <h3 class="skill-title">Frontend</h3>
+          </div>
+          <ul class="skill-list">
+            <li>React</li><li>TypeScript</li><li>HTML / CSS</li><li>Astro</li><li>Elementor</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__head">
+            <span class="skill-icon skill-icon--purple" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6c0-1.66 3.58-3 8-3s8 1.34 8 3-3.58 3-8 3-8-1.34-8-3z"/>
+                <path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/><path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/>
+              </svg>
+            </span>
+            <h3 class="skill-title">Backend</h3>
+          </div>
+          <ul class="skill-list">
+            <li>Node.js / Express</li><li>Spring Boot</li><li>Flask</li><li>Django</li><li>PHP</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__head">
+            <span class="skill-icon skill-icon--cyan" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                <path d="M3 11v6c0 1.66 4 3 9 3s9-1.34 9-3v-6"/>
+              </svg>
+            </span>
+            <h3 class="skill-title">Data &amp; Infra</h3>
+          </div>
+          <ul class="skill-list">
+            <li>MongoDB</li><li>MySQL / SQLite</li><li>Docker</li><li>Cloudflare</li><li>Linux / Bash</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__head">
+            <span class="skill-icon skill-icon--rose" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4z"/>
+                <path d="M5 22v-4a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v4"/>
+              </svg>
+            </span>
+            <h3 class="skill-title">AI &amp; APIs</h3>
+          </div>
+          <ul class="skill-list">
+            <li>OpenAI</li><li>Gemini</li><li>REST APIs</li><li>JWT Auth</li><li>Webhooks</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!--
+      ============================================================
+      5. EXPERIENCE SNAPSHOT  —  Three compact cards
+      ============================================================
+      Recruiter benefit:
+      - Translates abstract skills into "what I have actually done"
+        for someone who pays me / works with me.
+      - Three buckets cover the breadth of practical experience
+        without forcing the recruiter to read a wall of text.
+      - Numbered to convey timeline / progression at a glance.
+    -->
+    <section class="section section--tight" id="experience" aria-labelledby="experience-title">
+      <div class="section-head">
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          Experience Snapshot
+        </span>
+        <h2 id="experience-title" class="section-title">Where I've shipped real work</h2>
+      </div>
+
+      <div class="exp-grid">
+        <article class="exp-card">
+          <span class="exp-num">01</span>
+          <h3 class="exp-title">Full-Stack Projects</h3>
+          <p class="exp-desc">
+            Designed and shipped MERN apps end-to-end: schema design, JWT auth,
+            REST APIs, responsive UIs, and deployment to Render.
+          </p>
+          <div class="exp-tags">
+            <span>React</span><span>Node</span><span>MongoDB</span>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <span class="exp-num">02</span>
+          <h3 class="exp-title">AI Tools &amp; API Integrations</h3>
+          <p class="exp-desc">
+            Built OpenAI- and Gemini-powered features with graceful fallbacks,
+            structured-output parsing, and explicit user confirmation flows.
+          </p>
+          <div class="exp-tags">
+            <span>OpenAI</span><span>Gemini</span><span>Python</span>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <span class="exp-num">03</span>
+          <h3 class="exp-title">WordPress / Widget Work</h3>
+          <p class="exp-desc">
+            Production Elementor widgets backed by Cloudflare workers. Cut API
+            calls ~65% via serverless cache; ARIA-labelled, keyboard-friendly.
+          </p>
+          <div class="exp-tags">
+            <span>PHP</span><span>JS</span><span>Cloudflare</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+    <!--
+      ============================================================
+      6. CONTACT CTA  —  Simple, focused
+      ============================================================
+      Recruiter benefit:
+      - One sentence + three obvious buttons. No form to fill,
+        no second-guessing. Mirrors how recruiters actually
+        prefer to reach candidates (email + LinkedIn).
+    -->
+    <section class="section section--cta" id="contact" aria-labelledby="contact-title">
+      <div class="cta-card">
+        <h2 id="contact-title" class="cta-title">Interested in working together?</h2>
+        <p class="cta-sub">
+          I'm looking for SWE / SDE roles for Summer 2026 and full-time after graduation.
+          The fastest way to reach me is email — I reply within 24 hours.
+        </p>
+        <div class="cta-actions">
+          <a href="mailto:nicholastheodoruschan@gmail.com" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Email Me
+          </a>
+          <a href="https://www.linkedin.com/in/nictc/" class="btn btn-secondary" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8 19H5V8h3v11zM6.5 6.73A1.77 1.77 0 1 1 6.5 3.2a1.77 1.77 0 0 1 0 3.53zM20 19h-3v-5.6c0-3.37-4-3.11-4 0V19h-3V8h3v1.77c1.4-2.59 7-2.78 7 2.48V19z"/>
+            </svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/NicholasTc" class="btn btn-secondary" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.73.5.99 5.24.99 11.51c0 4.86 3.15 8.98 7.52 10.43.55.1.75-.24.75-.53v-1.86c-3.06.66-3.71-1.47-3.71-1.47-.5-1.27-1.22-1.61-1.22-1.61-1-.68.07-.67.07-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.71.38-1.2.69-1.48-2.44-.28-5.01-1.22-5.01-5.42 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.91 0 0 .92-.29 3.02 1.12a10.5 10.5 0 0 1 5.5 0c2.1-1.41 3.02-1.12 3.02-1.12.6 1.51.22 2.63.11 2.91.7.77 1.13 1.75 1.13 2.95 0 4.21-2.58 5.13-5.03 5.4.39.34.74 1 .74 2.02v3c0 .29.2.64.76.53A11.02 11.02 0 0 0 23 11.51C23 5.24 18.27.5 12 .5z"/>
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!--
+    ============================================================
+    FOOTER  —  Minimal, signals authorship of the proposal
+    ============================================================
+  -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© 2026 Nicholas Chan</span>
+      <span class="footer-mono">design proposal · v1</span>
+    </div>
+  </footer>
+
+</body>
+</html>

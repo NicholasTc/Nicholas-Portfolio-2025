@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>v3 Proposal — Business / Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #08090a;
+      --ink: #f2f4f6;
+      --soft: rgba(242,244,246,0.56);
+      --mute: rgba(242,244,246,0.32);
+      --line: rgba(242,244,246,0.10);
+      --line2: rgba(242,244,246,0.16);
+      --glass: rgba(255,255,255,0.035);
+      --font: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== Ambient (very restrained, business/monochrome) ===== */
+    .glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(50% 55% at 26% 18%, rgba(255,255,255,0.05), transparent 70%),
+        radial-gradient(45% 50% at 80% 78%, rgba(255,255,255,0.035), transparent 72%);
+    }
+
+    /* ===== Top + corner business-card marks ===== */
+    .brand {
+      position: fixed; top: 22px; left: 24px; z-index: 40;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+    }
+    .brand .mark { width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid var(--line2); border-radius: 8px; background: var(--glass); }
+    .corner {
+      position: fixed; z-index: 40; font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute);
+    }
+    .corner.tr { top: 26px; right: 26px; }
+    .corner.bl { bottom: 24px; left: 26px; }
+
+    /* ===== HERO (sticky pin, scroll opens the cards) ===== */
+    .hero { position: relative; height: 250vh; z-index: 2; }
+    .pin { position: sticky; top: 0; height: 100vh; display: grid; place-items: center; perspective: 1500px; }
+    .scene { position: relative; transform-style: preserve-3d; --open: 0; will-change: transform; }
+
+    /* Identity = big type, NOT a card */
+    .identity { position: relative; z-index: 10; text-align: center; transform: translateZ(60px); user-select: none; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute);
+      margin-bottom: 22px; opacity: 0; animation: fade 0.8s 0.1s ease forwards;
+    }
+    .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: #8fe6ab; animation: ping 2.6s ease-in-out infinite; }
+
+    .line { display: block; overflow: hidden; }
+    .line span { display: inline-block; transform: translateY(110%); animation: clipUp 1s cubic-bezier(.15,.85,.15,1) forwards; }
+    .name { font-size: clamp(46px, 8vw, 96px); font-weight: 700; letter-spacing: -0.04em; line-height: 0.9; }
+    .name .l1 span { animation-delay: 0.2s; }
+    .name .l2 span { animation-delay: 0.3s; color: var(--soft); font-weight: 300; }
+
+    .ul { position: relative; display: inline-block; }
+    .ul::after { content:""; position:absolute; left:0; bottom:-2px; width:100%; height:1.5px; background: var(--ink); transform-origin:left; transform: scaleX(0); animation: draw 0.55s 0.9s cubic-bezier(.4,0,.2,1) forwards; }
+
+    .role { overflow: hidden; margin: 20px 0 28px; }
+    .role span { display: inline-block; transform: translateY(110%); animation: clipUp 0.9s 0.42s cubic-bezier(.15,.85,.15,1) forwards;
+      font-family: var(--mono); font-size: clamp(11px, 1.4vw, 13.5px); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
+
+    .cta { display: flex; gap: 11px; justify-content: center; opacity: 0; animation: fade 0.8s 0.6s ease forwards; }
+    .btn { padding: 11px 22px; border-radius: 999px; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 7px; transition: transform .3s ease, background .3s ease, border-color .3s ease; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-solid { background: var(--ink); color: #08090a; }
+    .btn-solid:hover { background: #fff; }
+    .btn-ghost { border: 1px solid var(--line2); color: var(--soft); }
+    .btn-ghost:hover { border-color: var(--soft); color: var(--ink); }
+
+    /* ===== Business-card tiles that open from behind the type ===== */
+    .cards { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+    .tile {
+      position: absolute; top: 50%; left: 50%; width: 244px;
+      transform-style: preserve-3d;
+      opacity: var(--open);
+      transform:
+        translate(-50%,-50%)
+        translate3d(calc(var(--x) * var(--open)), calc(var(--y) * var(--open)), calc(var(--z) * var(--open)))
+        rotateX(calc(var(--rx) * var(--open))) rotateY(calc(var(--ry) * var(--open))) rotateZ(calc(var(--rot) * var(--open)))
+        scale(calc(0.5 + 0.5 * var(--open)));
+      will-change: transform, opacity;
+    }
+    .biz {
+      pointer-events: auto;
+      border-radius: 14px; overflow: hidden;
+      background: linear-gradient(180deg, #131517, #0e1012);
+      border: 1px solid var(--line2);
+      box-shadow: 0 26px 60px -24px rgba(0,0,0,0.9);
+      transition: transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
+    }
+    .biz:hover { transform: translateY(-6px); box-shadow: 0 36px 70px -22px rgba(0,0,0,0.95); }
+    .biz .thumb { height: 138px; overflow: hidden; background: #0a0c0d; }
+    .biz .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(1) contrast(1.04) brightness(0.92); transition: filter .55s ease; }
+    .biz:hover .thumb img { filter: none; }
+    .biz .row { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-top: 1px solid var(--line); }
+    .biz .idx { font-family: var(--mono); font-size: 11px; color: var(--mute); }
+    .biz .nm { font-size: 13.5px; font-weight: 600; }
+    .biz .tg { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--mute); }
+
+    /* Scroll cue */
+    .cue { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); z-index: 12; }
+    .cue .m { width: 20px; height: 32px; border: 1.5px solid var(--mute); border-radius: 11px; position: relative; }
+    .cue .m::after { content:""; position:absolute; left:50%; top:6px; width:3px; height:6px; background: var(--mute); border-radius:2px; transform: translateX(-50%); animation: wheel 1.6s ease-in-out infinite; }
+
+    /* ===== STORE GRID (the "opened" catalog) ===== */
+    .content { position: relative; z-index: 3; background: linear-gradient(180deg, transparent, var(--bg) 6%); }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 80px 26px 120px; }
+    .shead { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 38px; border-bottom: 1px solid var(--line); padding-bottom: 22px; }
+    .shead h2 { font-size: clamp(24px, 3.4vw, 36px); font-weight: 700; letter-spacing: -0.03em; }
+    .shead .meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); }
+
+    .store { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .item { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--glass); transition: transform .4s cubic-bezier(.2,.7,.2,1), border-color .4s ease; opacity: 0; transform: translateY(20px); }
+    .item.in { opacity: 1; transform: translateY(0); }
+    .item:hover { transform: translateY(-6px); border-color: var(--line2); }
+    .item .ph { height: 180px; overflow: hidden; background: #0a0c0d; }
+    .item .ph img { width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(1) contrast(1.04) brightness(0.9); transition: filter .55s ease, transform .6s ease; }
+    .item:hover .ph img { filter: none; transform: scale(1.04); }
+    .item .b { padding: 16px 18px 18px; }
+    .item .b .top { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
+    .item .b .idx { font-family: var(--mono); font-size: 11px; color: var(--mute); }
+    .item .b .tag { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--mute); border: 1px solid var(--line); padding: 3px 8px; border-radius: 999px; }
+    .item .b h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 6px; }
+    .item .b p { font-size: 13px; line-height: 1.55; color: var(--soft); }
+
+    footer { border-top: 1px solid var(--line); }
+    .foot { max-width: 1120px; margin: 0 auto; padding: 24px 26px; display: flex; justify-content: space-between; color: var(--mute); font-size: 12px; }
+    .foot .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; }
+
+    /* ===== Keyframes ===== */
+    @keyframes clipUp { to { transform: translateY(0); } }
+    @keyframes fade { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+    @keyframes draw { to { transform: scaleX(1); } }
+    @keyframes ping { 0%{box-shadow:0 0 0 0 rgba(143,230,171,.55)} 70%{box-shadow:0 0 0 8px rgba(143,230,171,0)} 100%{box-shadow:0 0 0 0 rgba(143,230,171,0)} }
+    @keyframes wheel { 0%,100%{transform:translate(-50%,0);opacity:1} 50%{transform:translate(-50%,7px);opacity:.3} }
+
+    @media (max-width: 880px) {
+      .store { grid-template-columns: repeat(2, 1fr); }
+      .tile { width: 170px; }
+    }
+    @media (max-width: 560px) {
+      .scene { transform: none !important; }
+      .store { grid-template-columns: 1fr; }
+      .tile { width: 134px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .line span, .eyebrow, .role span, .cta { animation-duration:.001s!important; animation-delay:0s!important; transform:none!important; opacity:1!important; }
+      .ul::after, .cue .m::after { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <a href="#top" class="brand"><span class="mark">N</span> Nicholas Chan</a>
+  <div class="corner tr">Portfolio — 2026</div>
+  <div class="corner bl">Full-Stack Engineer</div>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="top">
+    <div class="pin">
+      <div class="scene" id="scene">
+
+        <!-- Business-card tiles (behind the type) -->
+        <div class="cards" id="cards">
+          <div class="tile" style="--x:-430px; --y:-155px; --z:-40px; --rx:6deg;  --ry:18deg;  --rot:-6deg;">
+            <div class="biz"><div class="thumb"><img src="../public/FitFlowScreenshot.png" alt="FitFlow"></div><div class="row"><span class="idx">01</span><span class="nm">FitFlow</span><span class="tg">MERN</span></div></div>
+          </div>
+          <div class="tile" style="--x:440px; --y:-185px; --z:-90px; --rx:7deg;  --ry:-18deg; --rot:7deg;">
+            <div class="biz"><div class="thumb"><img src="../public/ResumeAITool.png" alt="ResumeAI"></div><div class="row"><span class="idx">02</span><span class="nm">ResumeAI</span><span class="tg">OpenAI</span></div></div>
+          </div>
+          <div class="tile" style="--x:-478px; --y:70px; --z:-30px; --rx:-4deg; --ry:22deg;  --rot:-5deg;">
+            <div class="biz"><div class="thumb"><img src="../public/PollenAtlas.png" alt="Pollen Atlas"></div><div class="row"><span class="idx">03</span><span class="nm">Pollen Atlas</span><span class="tg">API</span></div></div>
+          </div>
+          <div class="tile" style="--x:480px; --y:55px; --z:-120px; --rx:-4deg; --ry:-22deg; --rot:6deg;">
+            <div class="biz"><div class="thumb"><img src="../public/ProductivityHelper.png" alt="Productivity"></div><div class="row"><span class="idx">04</span><span class="nm">Productivity</span><span class="tg">Tool</span></div></div>
+          </div>
+          <div class="tile" style="--x:-235px; --y:300px; --z:10px;  --rx:-10deg; --ry:8deg;  --rot:-3deg;">
+            <div class="biz"><div class="thumb"><img src="../public/GymAppScreenshot.png" alt="Gym App"></div><div class="row"><span class="idx">05</span><span class="nm">Gym App</span><span class="tg">Mobile</span></div></div>
+          </div>
+          <div class="tile" style="--x:265px; --y:292px; --z:-50px; --rx:-9deg; --ry:-8deg; --rot:4deg;">
+            <div class="biz"><div class="thumb"><img src="../public/FitAI/fitai-dashboard.png" alt="FitAI"></div><div class="row"><span class="idx">06</span><span class="nm">FitAI</span><span class="tg">Health</span></div></div>
+          </div>
+        </div>
+
+        <!-- Identity: pure type, no card -->
+        <div class="identity">
+          <div class="eyebrow"><span class="dot"></span> Open to Summer 2026 roles</div>
+          <h1 class="name">
+            <span class="line l1"><span><span class="ul">Nicholas</span></span></span>
+            <span class="line l2"><span>Chan</span></span>
+          </h1>
+          <p class="role"><span>Full-Stack Engineer · UC San Diego</span></p>
+          <div class="cta">
+            <a href="#work" class="btn btn-solid">View Work</a>
+            <a href="#" class="btn btn-ghost">Download Résumé</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="cue" id="cue"><span class="m"></span> Scroll to open</div>
+    </div>
+  </section>
+
+  <!-- ===================== STORE GRID ===================== -->
+  <div class="content">
+    <section class="wrap" id="work">
+      <div class="shead">
+        <h2>Selected Work</h2>
+        <span class="meta">6 projects · 2025–2026</span>
+      </div>
+
+      <div class="store" id="store">
+        <article class="item"><div class="ph"><img src="../public/FitFlowScreenshot.png" alt="FitFlow"></div>
+          <div class="b"><div class="top"><span class="idx">01</span><span class="tag">Full-Stack</span></div><h3>FitFlow</h3><p>MERN + JWT fitness & nutrition platform with an AI meal helper and a calm dashboard.</p></div></article>
+        <article class="item"><div class="ph"><img src="../public/ResumeAITool.png" alt="ResumeAI"></div>
+          <div class="b"><div class="top"><span class="idx">02</span><span class="tag">AI / API</span></div><h3>ResumeAI</h3><p>OpenAI-powered resume parser with 85% improved extraction across PDF, Word, and text.</p></div></article>
+        <article class="item"><div class="ph"><img src="../public/PollenAtlas.png" alt="Pollen Atlas"></div>
+          <div class="b"><div class="top"><span class="idx">03</span><span class="tag">Widget</span></div><h3>Pollen Atlas</h3><p>Elementor widget combining Pollen + Air Quality APIs; serverless cache cut calls ~65%.</p></div></article>
+        <article class="item"><div class="ph"><img src="../public/ProductivityHelper.png" alt="Productivity"></div>
+          <div class="b"><div class="top"><span class="idx">04</span><span class="tag">Web App</span></div><h3>Productivity Helper</h3><p>A focused task workspace built for fast capture and a clean daily planning flow.</p></div></article>
+        <article class="item"><div class="ph"><img src="../public/GymAppScreenshot.png" alt="Gym App"></div>
+          <div class="b"><div class="top"><span class="idx">05</span><span class="tag">Mobile</span></div><h3>Gym App</h3><p>Workout tracking with progress charts and a streamlined logging experience.</p></div></article>
+        <article class="item"><div class="ph"><img src="../public/FitAI/fitai-dashboard.png" alt="FitAI"></div>
+          <div class="b"><div class="top"><span class="idx">06</span><span class="tag">Health AI</span></div><h3>FitAI</h3><p>Readiness scoring and daily check-ins surfaced through a minimal health dashboard.</p></div></article>
+      </div>
+    </section>
+
+    <footer><div class="foot"><span>© 2026 Nicholas Chan</span><span class="mono">design proposal · v3 · business/store</span></div></footer>
+  </div>
+
+  <script>
+    (function () {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const hero = document.getElementById('top');
+      const pin = document.querySelector('.pin');
+      const scene = document.getElementById('scene');
+      const cue = document.getElementById('cue');
+
+      const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+      const smooth = (t) => t*t*(3-2*t);
+
+      let p = 0, mx = 0, my = 0, cmx = 0, cmy = 0;
+      function computeP() {
+        const total = hero.offsetHeight - window.innerHeight;
+        p = total > 0 ? clamp(-hero.getBoundingClientRect().top / total, 0, 1) : 0;
+      }
+      window.addEventListener('scroll', computeP, { passive: true });
+      window.addEventListener('resize', computeP);
+      computeP();
+
+      if (!reduce) {
+        pin.addEventListener('pointermove', (e) => {
+          const r = pin.getBoundingClientRect();
+          mx = ((e.clientX - r.left)/r.width - 0.5) * 2;
+          my = ((e.clientY - r.top)/r.height - 0.5) * 2;
+        });
+      }
+
+      function loop() {
+        const open = smooth(clamp(p / 0.58, 0, 1));
+        const exit = smooth(clamp((p - 0.72) / 0.28, 0, 1));
+        cmx += (mx - cmx) * 0.06; cmy += (my - cmy) * 0.06;
+
+        scene.style.setProperty('--open', open.toFixed(4));
+        scene.style.transform =
+          `translateY(${(-exit*80).toFixed(1)}px) scale(${(1+exit*0.1).toFixed(3)}) ` +
+          `rotateX(${(-cmy*5).toFixed(2)}deg) rotateY(${(cmx*7).toFixed(2)}deg)`;
+        pin.style.opacity = (1 - exit).toFixed(3);
+        cue.style.opacity = (1 - clamp(p/0.12, 0, 1)).toFixed(3);
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+
+      // Store grid reveal on enter
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en, i) => { if (en.isIntersecting) { en.target.style.transitionDelay = (i*0.05)+'s'; en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { threshold: 0.2 });
+      document.querySelectorAll('.item').forEach(el => io.observe(el));
+    })();
+  </script>
+</body>
+</html>
